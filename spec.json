@@ -23,10 +23,45 @@
                 "type": "object",
                 "properties": {
                   "fields": {
-                    "description": "Arbitrary data of interest sent as JSON object",
-                    "type": "object"
+                    "description": "An array of user provided key-value pairs describing the demand. The keys within the array must be unique.",
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "key": {
+                          "type": "string"
+                        },
+                        "value": {
+                          "type": "string"
+                        }
+                      }
+                    }
                   }
                 }
+              },
+              "example": {
+                "fields": [
+                  {
+                    "key": "internalId",
+                    "value": "some-internal-id"
+                  },
+                  {
+                    "key": "name",
+                    "value": "Office Chairs"
+                  },
+                  {
+                    "key": "quantity",
+                    "value": "20"
+                  },
+                  {
+                    "key": "unit-of-measure",
+                    "value": "piece"
+                  },
+                  {
+                    "key": "delivery-date",
+                    "value": "2032-01-21"
+                  }
+                ]
               }
             }
           }
@@ -44,6 +79,9 @@
                       "type": "string"
                     }
                   }
+                },
+                "example": {
+                  "id": "83da61b6-e11e-495d-9808-3e1ff7869c19"
                 }
               }
             }
@@ -61,7 +99,8 @@
           "allowEmptyValue": false,
           "schema": {
             "type": "string"
-          }
+          },
+          "example": "/demands/83da61b6-e11e-495d-9808-3e1ff7869c19"
         }
       ],
       "get": {
@@ -85,10 +124,36 @@
                       "description": "The ID of the workflow to which the demand has been assigned. Null if the demand has not yet been assigned to a workflow."
                     },
                     "fields": {
-                      "type": "object",
-                      "description": "The fields data of the demand"
+                      "type": "array",
+                      "description": "An array of user provided key-value pairs describing the demand. The keys within the array must be unique."
                     }
                   }
+                },
+                "example": {
+                  "id": "83da61b6-e11e-495d-9808-3e1ff7869c19",
+                  "workflowId": "516c4b59-96c3-4bc9-8694-477890fc2543",
+                  "fields": [
+                    {
+                      "key": "internalId",
+                      "value": "some-internal-id"
+                    },
+                    {
+                      "key": "name",
+                      "value": "Office Chairs"
+                    },
+                    {
+                      "key": "quantity",
+                      "value": "20"
+                    },
+                    {
+                      "key": "unit-of-measure",
+                      "value": "piece"
+                    },
+                    {
+                      "key": "delivery-date",
+                      "value": "2032-01-21"
+                    }
+                  ]
                 }
               }
             }
@@ -109,7 +174,8 @@
           "allowEmptyValue": false,
           "schema": {
             "type": "string"
-          }
+          },
+          "example": "/workflow/516c4b59-96c3-4bc9-8694-477890fc2543"
         }
       ],
       "get": {
@@ -131,12 +197,13 @@
                     },
                     "phase": {
                       "type": "string",
-                      "description": "The current state of the workflow",
+                      "description": "The current state of the workflow.<ul><li>setup - The workflow is still being prepared and an RFP is has not yet been published.</li><li>collecting offers - An RFP has been published and offers are being collected.</li><li>negotiations - At least one negotiation has been published and has not yet ended or there are requested items which have not been assigned to a negotiation.</li><li>finished - All negotiations have finished and there are no request items not assigned to a negotiation.</li><li>archived - The workflow has been archived.</li></ul>",
                       "enum": [
                         "setup",
                         "collecting offers",
                         "negotiations",
-                        "finished"
+                        "finished",
+                        "archived"
                       ]
                     },
                     "requestFroProposals": {
@@ -150,18 +217,15 @@
                             "properties": {
                               "title": {
                                 "type": "string",
-                                "description": "The title/name of the item",
-                                "example": "Office chairs"
+                                "description": "The title/name of the item"
                               },
                               "amount": {
                                 "type": "number",
-                                "description": "The number/amount of the item sought to be procured",
-                                "example": 20
+                                "description": "The number/amount of the item sought to be procured"
                               },
                               "unitOfMeasure": {
                                 "type": "string",
-                                "description": "The unit in which the amount is measured",
-                                "example": "piece"
+                                "description": "The unit in which the amount is measured"
                               },
                               "demandIds": {
                                 "type": "array",
@@ -171,8 +235,22 @@
                                 }
                               },
                               "customFields": {
-                                "type": "object",
-                                "description": "Custom fields with arbitrary data"
+                                "type": "array",
+                                "description": "Custom fields with arbitrary data",
+                                "items": {
+                                  "type": "object",
+                                  "description": "A custom field",
+                                  "properties": {
+                                    "label": {
+                                      "type": "string",
+                                      "description": "The label of the field"
+                                    },
+                                    "value": {
+                                      "type": "string",
+                                      "description": "The value of the field"
+                                    }
+                                  }
+                                }
                               }
                             }
                           }
@@ -181,7 +259,7 @@
                     },
                     "invitedSuppliers": {
                       "type": "array",
-                      "description": "The suppliers which have been invited to submit responses to the request",
+                      "description": "The suppliers which have been invited to submit responses to the request.",
                       "items": {
                         "type": "object",
                         "properties": {
@@ -306,12 +384,61 @@
                       }
                     }
                   }
+                },
+                "example": {
+                  "id": "516c4b59-96c3-4bc9-8694-477890fc2543",
+                  "phase": "finished",
+                  "requestForProposals": {
+                    "requestItems": [
+                      {
+                        "title": "Office Chairs",
+                        "amount": 20,
+                        "unitOfMeasure": "piece",
+                        "demandIds": ["83da61b6-e11e-495d-9808-3e1ff7869c19"],
+                        "customFields": {
+                          "internalId": "some-internal-id",
+                          "delivery-date": "2032-01-21"
+                        }
+                      },
+                      {
+                        "title": "White Boards",
+                        "amount": 2,
+                        "unitOfMeasure": 2,
+                        "demandIds": [],
+                        "customFields": {
+
+                        }
+                      }
+                    ]
+                  }
                 }
               }
             }
           }
         }
       }
+    }
+  },
+  "components": {
+    "schemas": {
+      "demandFields": {
+        "description": "An array of user provided key-value pairs describing the demand. The keys within the array must be unique.",
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "key": {
+              "type": "string"
+            },
+            "value": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "examples": {
+
     }
   }
 }
