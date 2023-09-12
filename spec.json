@@ -104,11 +104,17 @@
                       "type": "string",
                       "description": "The mysupply ID of the demand.",
                       "readOnly": true
+                    },
+                    "workflowId": {
+                      "type": "string",
+                      "nullable": true,
+                      "description": "If the demand is being processed in a workflow, this will be the mysupply ID of the workflow processing the demand. Null otherwise."
                     }
                   }
                 },
                 "example": {
                   "id": "83da61b6-e11e-495d-9808-3e1ff7869c19",
+                  "workflowId": "516c4b59-96c3-4bc9-8694-477890fc2543",
                   "title": "Office Chairs",
                   "quantity": 20,
                   "unitOfMeasure": "piece",
