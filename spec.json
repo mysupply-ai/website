@@ -24,7 +24,12 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/demand"
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/demand"
+                  }
+                ],
+                "required": ["title", "quantity", "unitOfMeasure"]
               },
               "example": {
                 "title": "Office Chairs",
@@ -434,16 +439,13 @@
         "properties": {
           "title": {
             "type": "string",
-            "required": true,
             "description": "A brief explanation of the item."
           },
           "quantity": {
             "type": "number",
-            "required": true,
             "description": "The quantity needed."
           },
           "unitOfMeasure": {
-            "required": true,
             "allOf": [ { "$ref": "#/components/schemas/unitOfMeasure" } ]
           },
           "extraFields": {
