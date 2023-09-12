@@ -20,55 +20,23 @@
           "content": {
             "application/json": {
               "schema": {
-                "type": "object",
-                "properties": {
-                  "fields": {
-                    "description": "An array of user provided key-value pairs describing the demand. The keys within the array must be unique.",
-                    "type": "array",
-                    "items": {
-                      "type": "object",
-                      "properties": {
-                        "key": {
-                          "type": "string"
-                        },
-                        "value": {
-                          "type": "string"
-                        }
-                      }
-                    }
-                  }
-                }
+                "$ref": "#/components/schemas/demand"
               },
               "example": {
-                "fields": [
-                  {
-                    "key": "internalId",
-                    "value": "some-internal-id"
-                  },
-                  {
-                    "key": "name",
-                    "value": "Office Chairs"
-                  },
-                  {
-                    "key": "quantity",
-                    "value": "20"
-                  },
-                  {
-                    "key": "unit-of-measure",
-                    "value": "piece"
-                  },
-                  {
-                    "key": "delivery-date",
-                    "value": "2032-01-21"
-                  }
-                ]
+                "title": "Office Chairs",
+                "quantity": 20,
+                "unitOfMeasure": "piece",
+                "extraFields": {
+                  "internalId": "8937182",
+                  "deliveryDate": "2043-06-25"
+                }
               }
             }
           }
         },
         "responses": {
-          "200": {
-            "description": "Demand was received",
+          "201": {
+            "description": "Demand was created",
             "content": {
               "application/json": {
                 "schema": {
@@ -85,6 +53,12 @@
                 }
               }
             }
+          },
+          "400": {
+            "description": "Invalid input"
+          },
+          "422": {
+            "description": "Unprocessable entity"
           }
         }
       }
@@ -112,48 +86,24 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
+                  "allOf": [{ "$ref": "#/components/schemas/demand" } ],
                   "properties": {
                     "id": {
                       "type": "string",
-                      "description": "The mysupply ID of a demand"
-                    },
-                    "workflowId": {
-                      "type": "string",
-                      "nullable": true,
-                      "description": "The ID of the workflow to which the demand has been assigned. Null if the demand has not yet been assigned to a workflow."
-                    },
-                    "fields": {
-                      "type": "array",
-                      "description": "An array of user provided key-value pairs describing the demand. The keys within the array must be unique."
+                      "description": "The mysupply ID of the demand.",
+                      "readOnly": true
                     }
                   }
                 },
                 "example": {
                   "id": "83da61b6-e11e-495d-9808-3e1ff7869c19",
-                  "workflowId": "516c4b59-96c3-4bc9-8694-477890fc2543",
-                  "fields": [
-                    {
-                      "key": "internalId",
-                      "value": "some-internal-id"
-                    },
-                    {
-                      "key": "name",
-                      "value": "Office Chairs"
-                    },
-                    {
-                      "key": "quantity",
-                      "value": "20"
-                    },
-                    {
-                      "key": "unit-of-measure",
-                      "value": "piece"
-                    },
-                    {
-                      "key": "delivery-date",
-                      "value": "2032-01-21"
-                    }
-                  ]
+                  "title": "Office Chairs",
+                  "quantity": 20,
+                  "unitOfMeasure": "piece",
+                  "extraFields": {
+                    "internalId": "8937182",
+                    "deliveryDate": "2043-06-25"
+                  }
                 }
               }
             }
@@ -197,7 +147,7 @@
                     },
                     "phase": {
                       "type": "string",
-                      "description": "The current state of the workflow.<ul><li>setup - The workflow is still being prepared and an RFP is has not yet been published.</li><li>collecting offers - An RFP has been published and offers are being collected.</li><li>negotiations - At least one negotiation has been published and has not yet ended or there are requested items which have not been assigned to a negotiation.</li><li>finished - All negotiations have finished and there are no request items not assigned to a negotiation.</li><li>archived - The workflow has been archived.</li></ul>",
+                      "description": "The current state of the workflow.<ul><li>setup - The workflow is still being prepared and an RFP is has not yet been published.</li><li>collecting offers - An RFP has been published and offers are being collected.</li><li>negotiations - At least one negotiation has been published and has not yet ended or there are requested items which have not been assigned to a negotiation.</li><li>finished - All requested items are included in a deal.</li><li>archived - The workflow has been archived.</li></ul>",
                       "enum": [
                         "setup",
                         "collecting offers",
@@ -215,6 +165,10 @@
                           "items": {
                             "type": "object",
                             "properties": {
+                              "id": {
+                                "type": "string",
+                                "description": "The mysupply ID or this request item for reference in the workflow."
+                              },
                               "title": {
                                 "type": "string",
                                 "description": "The title/name of the item"
@@ -224,32 +178,13 @@
                                 "description": "The number/amount of the item sought to be procured"
                               },
                               "unitOfMeasure": {
-                                "type": "string",
-                                "description": "The unit in which the amount is measured"
+                                "$ref": "#/components/schemas/unitOfMeasure"
                               },
                               "demandIds": {
                                 "type": "array",
                                 "description": "The IDs of the demands from which this request item has been derived from if any.",
                                 "items": {
                                   "type": "string"
-                                }
-                              },
-                              "customFields": {
-                                "type": "array",
-                                "description": "Custom fields with arbitrary data",
-                                "items": {
-                                  "type": "object",
-                                  "description": "A custom field",
-                                  "properties": {
-                                    "label": {
-                                      "type": "string",
-                                      "description": "The label of the field"
-                                    },
-                                    "value": {
-                                      "type": "string",
-                                      "description": "The value of the field"
-                                    }
-                                  }
                                 }
                               }
                             }
@@ -299,21 +234,9 @@
                                   "type": "string",
                                   "description": "The mysupply ID of the requested item"
                                 },
-                                "price": {
-                                  "description": "The quotation price for the item",
-                                  "type": "object",
-                                  "properties": {
-                                    "amount": {
-                                      "type": "number",
-                                      "description": "The value of the price in its currency.",
-                                      "example": "17.05"
-                                    },
-                                    "currency": {
-                                      "type": "string",
-                                      "description": "The currency code for the price.",
-                                      "example": "EUR"
-                                    }
-                                  }
+                                "totalPrice": {
+                                  "description": "Quoted price for the requested quantity of the request item.",
+                                  "allOf": [ { "$ref": "#/components/schemas/price" } ]
                                 }
                               }
                             }
@@ -336,24 +259,16 @@
                             "description": "The mysupply ID of the invited supplier"
                           },
                           "totalPrice": {
-                            "type": "object",
                             "description": "The negotiated total price for the items in this deal.",
-                            "properties": {
-                              "amount": {
-                                "type": "number",
-                                "description": "The value of the price in its currency.",
-                                "example": "17.05"
-                              },
-                              "currency": {
-                                "type": "string",
-                                "description": "The currency code for the price.",
-                                "example": "EUR"
+                            "allOf": [
+                              {
+                                "$ref": "#/components/schemas/price"
                               }
-                            }
+                            ]
                           },
                           "dealItems": {
                             "type": "array",
-                            "description": "The request items for which are included in this deal along with their negotiated single unit prices.",
+                            "description": "The request items included in this deal along with their negotiated single unit prices.",
                             "items": {
                               "type": "object",
                               "properties": {
@@ -362,20 +277,12 @@
                                   "description": "The mysuply ID of the requested item"
                                 },
                                 "singleUnitPrice": {
-                                  "type": "object",
                                   "description": "The negotiated single unit price for the item.",
-                                  "properties": {
-                                    "amount": {
-                                      "type": "number",
-                                      "description": "The value of the price in its currency.",
-                                      "example": "17.05"
-                                    },
-                                    "currency": {
-                                      "type": "string",
-                                      "description": "The currency code for the price.",
-                                      "example": "EUR"
+                                  "allOf": [
+                                    {
+                                      "$ref": "#/components/schemas/price"
                                     }
-                                  }
+                                  ]
                                 }
                               }
                             }
@@ -391,26 +298,102 @@
                   "requestForProposals": {
                     "requestItems": [
                       {
+                        "id": "af33094c-3e19-42e7-9af0-4a488f841ec7",
                         "title": "Office Chairs",
                         "amount": 20,
                         "unitOfMeasure": "piece",
-                        "demandIds": ["83da61b6-e11e-495d-9808-3e1ff7869c19"],
-                        "customFields": {
-                          "internalId": "some-internal-id",
-                          "delivery-date": "2032-01-21"
-                        }
+                        "demandIds": ["83da61b6-e11e-495d-9808-3e1ff7869c19"]
                       },
                       {
+                        "id": "cd75b234-23cb-4b65-86e3-8c2181328f64",
                         "title": "White Boards",
                         "amount": 2,
                         "unitOfMeasure": 2,
-                        "demandIds": [],
-                        "customFields": {
-
-                        }
+                        "demandIds": []
                       }
                     ]
-                  }
+                  },
+                  "invitedSuppliers": [
+                    {
+                      "id": "0ca6d249-1617-4835-83c6-1b4a87a9cfa8",
+                      "supplierNumber": "355612",
+                      "inviteeEmail": "sup1@example.com"
+                    },
+                    {
+                      "id": "61521fad-dbcf-44c7-9113-58caf9aa3f85",
+                      "supplierNumber": "556319",
+                      "inviteeEmail": "sup_good@example.com"
+                    }
+                  ],
+                  "responses": [
+                    {
+                      "supplierId": "0ca6d249-1617-4835-83c6-1b4a87a9cfa8",
+                      "quotations": [
+                        {
+                          "requestItemId": "af33094c-3e19-42e7-9af0-4a488f841ec7",
+                          "totalPrice": {
+                            "amount": "20000",
+                            "currency": "EUR"
+                          }
+                        },
+                        {
+                          "requestItemId": "cd75b234-23cb-4b65-86e3-8c2181328f64",
+                          "totalPrice": {
+                            "amount": "200",
+                            "currency": "EUR"
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "supplierId": "61521fad-dbcf-44c7-9113-58caf9aa3f85",
+                      "quotations": [
+                        {
+                          "requestItemId": "af33094c-3e19-42e7-9af0-4a488f841ec7",
+                          "totalPrice": {
+                            "amount": "21000",
+                            "currency": "EUR"
+                          }
+                        }
+                      ]
+                    }
+                  ],
+                  "deals": [
+                    {
+                      "dealId": "086ba482-a179-4eec-9603-5bea04df3eea",
+                      "supplierId": "61521fad-dbcf-44c7-9113-58caf9aa3f85",
+                      "totalPrice": {
+                        "amount": "1900",
+                        "currency": "EUR"
+                      },
+                      "dealItems": [
+                        {
+                          "requestItemId": "af33094c-3e19-42e7-9af0-4a488f841ec7",
+                          "singleUnitPrice": {
+                            "amount": "950",
+                            "currency": "EUR"
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "dealId": "dfea1579-ea6f-4600-a96e-fdb4034bea87",
+                      "supplierId": "0ca6d249-1617-4835-83c6-1b4a87a9cfa8",
+                      "totalPrice": {
+                        "amount": "200",
+                        "currency": "EUR"
+                      },
+                      "dealItems": [
+                        {
+                          "requestItemId": "cd75b234-23cb-4b65-86e3-8c2181328f64",
+                          "totalPrice": {
+                            "amount": "100",
+                            "currency": "EUR"
+                          }
+                        }
+                      ]
+                    }
+                  ]
                 }
               }
             }
@@ -421,24 +404,71 @@
   },
   "components": {
     "schemas": {
-      "demandFields": {
-        "description": "An array of user provided key-value pairs describing the demand. The keys within the array must be unique.",
-        "type": "array",
-        "items": {
-          "type": "object",
-          "properties": {
-            "key": {
-              "type": "string"
-            },
-            "value": {
-              "type": "string"
-            }
+      "demand":  {
+        "type": "object",
+        "description": "An item which needs to be procured.",
+        "properties": {
+          "title": {
+            "type": "string",
+            "required": true,
+            "description": "A brief explanation of the item."
+          },
+          "quantity": {
+            "type": "number",
+            "required": true,
+            "description": "The quantity needed."
+          },
+          "unitOfMeasure": {
+            "required": true,
+            "allOf": [ { "$ref": "#/components/schemas/unitOfMeasure" } ]
+          },
+          "extraFields": {
+            "description": "Arbitrary data related to the item.",
+            "type": "object"
+          }
+        }
+      },
+      "unitOfMeasure": {
+        "type": "string",
+        "description": "The unit of measure for the quantity needed.",
+        "enum": [
+          "centimeter",
+          "cubic-centimeter",
+          "cubic-meter",
+          "gram",
+          "meter",
+          "millimeter",
+          "square-meter",
+          "kilogram",
+          "kilowatt-hour",
+          "liter",
+          "piece",
+          "square-centimeter",
+          "ton",
+          "minute",
+          "hour",
+          "day",
+          "month",
+          "other"
+        ]
+      },
+      "price": {
+        "type": "object",
+        "description": "A monetary value.",
+        "properties": {
+          "amount": {
+            "type": "string",
+            "format": "{1,9}+(\\.\\d+)?",
+            "description": "A decimal string representation of the amount of the monetary value.",
+            "example": "17.05"
+          },
+          "currency": {
+            "type": "string",
+            "description": "The currency code of the monetary value.",
+            "example": "EUR"
           }
         }
       }
-    },
-    "examples": {
-
     }
   }
 }
