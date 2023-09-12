@@ -2,7 +2,6 @@
   "openapi": "3.0.3",
   "info": {
     "title": "mysupply Public API",
-    "description": "TODO: Write a description",
     "version": "0.1.0"
   },
   "servers": [
