@@ -202,7 +202,7 @@
                         }
                       }
                     },
-                    "invitedSuppliers": {
+                    "suppliers": {
                       "type": "array",
                       "description": "The suppliers which have been invited to submit responses to the request.",
                       "items": {
@@ -322,7 +322,7 @@
                       }
                     ]
                   },
-                  "invitedSuppliers": [
+                  "suppliers": [
                     {
                       "id": "0ca6d249-1617-4835-83c6-1b4a87a9cfa8",
                       "supplierNumber": "355612",
