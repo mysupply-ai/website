@@ -224,36 +224,6 @@
                         }
                       }
                     },
-                    "responses": {
-                      "type": "array",
-                      "description": "The received responses to the request",
-                      "items": {
-                        "type": "object",
-                        "properties": {
-                          "supplierId": {
-                            "type": "string",
-                            "description": "The mysupply ID of the invited supplier who submitted this response"
-                          },
-                          "quotations": {
-                            "type": "array",
-                            "description": "Price quotations for the requested items which the supplier can deliver. A missing quotation for a request item indicates that the supplier is not able to deliver the requested item.",
-                            "items": {
-                              "type": "object",
-                              "properties": {
-                                "requestItemId": {
-                                  "type": "string",
-                                  "description": "The mysupply ID of the requested item"
-                                },
-                                "totalPrice": {
-                                  "description": "Quoted price for the requested quantity of the request item.",
-                                  "allOf": [ { "$ref": "#/components/schemas/price" } ]
-                                }
-                              }
-                            }
-                          }
-                        }
-                      }
-                    },
                     "deals": {
                       "type": "array",
                       "description": "The deals made with suppliers after the end of the respective negotiations",
@@ -332,39 +302,6 @@
                       "id": "61521fad-dbcf-44c7-9113-58caf9aa3f85",
                       "supplierNumber": "556319",
                       "inviteeEmail": "sup_good@example.com"
-                    }
-                  ],
-                  "responses": [
-                    {
-                      "supplierId": "0ca6d249-1617-4835-83c6-1b4a87a9cfa8",
-                      "quotations": [
-                        {
-                          "requestItemId": "af33094c-3e19-42e7-9af0-4a488f841ec7",
-                          "totalPrice": {
-                            "amount": "20000",
-                            "currency": "EUR"
-                          }
-                        },
-                        {
-                          "requestItemId": "cd75b234-23cb-4b65-86e3-8c2181328f64",
-                          "totalPrice": {
-                            "amount": "200",
-                            "currency": "EUR"
-                          }
-                        }
-                      ]
-                    },
-                    {
-                      "supplierId": "61521fad-dbcf-44c7-9113-58caf9aa3f85",
-                      "quotations": [
-                        {
-                          "requestItemId": "af33094c-3e19-42e7-9af0-4a488f841ec7",
-                          "totalPrice": {
-                            "amount": "21000",
-                            "currency": "EUR"
-                          }
-                        }
-                      ]
                     }
                   ],
                   "deals": [
