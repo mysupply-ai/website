@@ -166,17 +166,6 @@
                       "type": "string",
                       "description": "The mysupply ID of the worklfow"
                     },
-                    "phase": {
-                      "type": "string",
-                      "description": "The current state of the workflow.<ul><li>setup - The workflow is still being prepared and an RFP is has not yet been published.</li><li>collecting offers - An RFP has been published and offers are being collected.</li><li>negotiations - At least one negotiation has been published and has not yet ended or there are requested items which have not been assigned to a negotiation.</li><li>finished - All requested items are included in a deal.</li><li>archived - The workflow has been archived.</li></ul>",
-                      "enum": [
-                        "setup",
-                        "collecting offers",
-                        "negotiations",
-                        "finished",
-                        "archived"
-                      ]
-                    },
                     "requestFroProposals": {
                       "type": "object",
                       "properties": {
@@ -315,7 +304,6 @@
                 },
                 "example": {
                   "id": "516c4b59-96c3-4bc9-8694-477890fc2543",
-                  "phase": "finished",
                   "requestForProposals": {
                     "requestItems": [
                       {
