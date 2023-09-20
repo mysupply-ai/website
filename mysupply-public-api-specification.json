@@ -18,7 +18,6 @@
     "/demands": {
       "post": {
         "summary": "Submit a new demand",
-        "description": "",
         "tags": ["Demands"],
         "requestBody": {
           "content": {
@@ -26,19 +25,27 @@
               "schema": {
                 "allOf": [
                   {
-                    "$ref": "#/components/schemas/demand"
+                    "$ref": "#/components/schemas/newDemand"
                   }
-                ],
-                "required": ["title", "quantity", "unitOfMeasure"]
+                ]
               },
               "example": {
                 "title": "Office Chairs",
                 "quantity": 20,
                 "unitOfMeasure": "piece",
-                "extraFields": {
-                  "internalId": "8937182",
-                  "deliveryDate": "2043-06-25"
-                }
+                "fields": [
+                  {
+                    "name": "internalId",
+                    "value": "8937182",
+                    "public": false
+                  },
+                  {
+                    "name": "Delivery Date",
+                    "value": "Wed Sep 20 2023 03:00:00 GMT+0300 (Eastern European Summer Time)",
+                    "public": true,
+                    "type": "date"
+                  }
+                ]
               }
             }
           }
@@ -73,6 +80,36 @@
             "$ref": "#/components/responses/UnauthorizedError"
           }
         }
+      },
+      "get": {
+        "summary": "Fetch a paginated list of demands",
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "schema": {
+              "type": "integer"
+            },
+            "description": "The number of the page to fetch starting at 1"
+          }
+        ],
+        "tags": ["Demands"],
+        "responses": {
+          "200": {
+            "description": "A list of demands",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": { "$ref": "#/components/schemas/savedDemand" }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedError"
+          }
+        }
       }
     },
     "/demands/{id}": {
@@ -97,30 +134,36 @@
             "description": "Information for the demand",
             "content": {
               "application/json": {
-                "schema": {
-                  "allOf": [{ "$ref": "#/components/schemas/demand" } ],
-                  "properties": {
-                    "id": {
-                      "type": "string",
-                      "description": "The mysupply ID of the demand.",
-                      "readOnly": true
-                    },
-                    "workflowId": {
-                      "type": "string",
-                      "nullable": true,
-                      "description": "If the demand is being processed in a workflow, this will be the mysupply ID of the workflow processing the demand. Null otherwise."
-                    }
-                  }
-                },
+                "schema": { "$ref": "#/components/schemas/savedDemand"},
                 "example": {
                   "id": "83da61b6-e11e-495d-9808-3e1ff7869c19",
-                  "workflowId": "516c4b59-96c3-4bc9-8694-477890fc2543",
                   "title": "Office Chairs",
                   "quantity": 20,
                   "unitOfMeasure": "piece",
-                  "extraFields": {
-                    "internalId": "8937182",
-                    "deliveryDate": "2043-06-25"
+                  "fields": [
+                    {
+                      "name": "internalId",
+                      "value": "8937182",
+                      "public": false
+                    },
+                    {
+                      "name": "Delivery Date",
+                      "value": "Wed Sep 20 2023 03:00:00 GMT+0300 (Eastern European Summer Time)",
+                      "public": true,
+                      "type": "date"
+                    }
+                  ],
+                  "status": "processed",
+                  "deal": {
+                    "unitPrice": {
+                      "amount": 200,
+                      "currency": "EUR"
+                    },
+                    "supplier": {
+                      "email": "the-winner@chairs.com",
+                      "supplierNumber": "ex-993841",
+                      "companyName": "The Best Chairs & Sons Ltd."
+                    }
                   }
                 }
               }
@@ -131,221 +174,6 @@
           },
           "404": {
             "description": "A demand with such ID has not been found"
-          }
-        }
-      }
-    },
-    "/workflow/{id}": {
-      "parameters": [
-        {
-          "name": "id",
-          "in": "path",
-          "description": "The mysupply ID of a workflow",
-          "required": true,
-          "allowEmptyValue": false,
-          "schema": {
-            "type": "string"
-          },
-          "example": "/workflow/516c4b59-96c3-4bc9-8694-477890fc2543"
-        }
-      ],
-      "get": {
-        "tags": ["Workflow"],
-        "responses": {
-          "404": {
-            "description": "A workflow with this ID was not found"
-          },
-          "200": {
-            "description": "Information for the workflow",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "id": {
-                      "type": "string",
-                      "description": "The mysupply ID of the worklfow"
-                    },
-                    "requestFroProposals": {
-                      "type": "object",
-                      "properties": {
-                        "requestItems": {
-                          "type": "array",
-                          "description": "An array of items sought to be procured with this request",
-                          "items": {
-                            "type": "object",
-                            "properties": {
-                              "id": {
-                                "type": "string",
-                                "description": "The mysupply ID or this request item for reference in the workflow."
-                              },
-                              "title": {
-                                "type": "string",
-                                "description": "The title/name of the item"
-                              },
-                              "amount": {
-                                "type": "number",
-                                "description": "The number/amount of the item sought to be procured"
-                              },
-                              "unitOfMeasure": {
-                                "$ref": "#/components/schemas/unitOfMeasure"
-                              },
-                              "demandIds": {
-                                "type": "array",
-                                "description": "The IDs of the demands from which this request item has been derived from if any.",
-                                "items": {
-                                  "type": "string"
-                                }
-                              }
-                            }
-                          }
-                        }
-                      }
-                    },
-                    "suppliers": {
-                      "type": "array",
-                      "description": "The suppliers which have been invited to submit responses to the request.",
-                      "items": {
-                        "type": "object",
-                        "properties": {
-                          "id": {
-                            "type": "string",
-                            "description": "A mysupply ID of the supplier for reference in the workflow"
-                          },
-                          "supplierNumber": {
-                            "type": "string",
-                            "description": "A client provided supplier number/identificator. Null if non is provided.",
-                            "nullable": true
-                          },
-                          "inviteeEmail": {
-                            "type": "string",
-                            "description": "The email which was used to send the invitation to."
-                          }
-                        }
-                      }
-                    },
-                    "deals": {
-                      "type": "array",
-                      "description": "The deals made with suppliers after the end of the respective negotiations",
-                      "items": {
-                        "type": "object",
-                        "properties": {
-                          "dealId": {
-                            "type": "string",
-                            "description": "The mysupply ID of the deal"
-                          },
-                          "supplierId": {
-                            "type": "string",
-                            "description": "The mysupply ID of the invited supplier"
-                          },
-                          "totalPrice": {
-                            "description": "The negotiated total price for the items in this deal.",
-                            "allOf": [
-                              {
-                                "$ref": "#/components/schemas/price"
-                              }
-                            ]
-                          },
-                          "dealItems": {
-                            "type": "array",
-                            "description": "The request items included in this deal along with their negotiated single unit prices.",
-                            "items": {
-                              "type": "object",
-                              "properties": {
-                                "requestItemId": {
-                                  "type": "string",
-                                  "description": "The mysuply ID of the requested item"
-                                },
-                                "singleUnitPrice": {
-                                  "description": "The negotiated single unit price for the item.",
-                                  "allOf": [
-                                    {
-                                      "$ref": "#/components/schemas/price"
-                                    }
-                                  ]
-                                }
-                              }
-                            }
-                          }
-                        }
-                      }
-                    }
-                  }
-                },
-                "example": {
-                  "id": "516c4b59-96c3-4bc9-8694-477890fc2543",
-                  "requestForProposals": {
-                    "requestItems": [
-                      {
-                        "id": "af33094c-3e19-42e7-9af0-4a488f841ec7",
-                        "title": "Office Chairs",
-                        "amount": 20,
-                        "unitOfMeasure": "piece",
-                        "demandIds": ["83da61b6-e11e-495d-9808-3e1ff7869c19"]
-                      },
-                      {
-                        "id": "cd75b234-23cb-4b65-86e3-8c2181328f64",
-                        "title": "White Boards",
-                        "amount": 2,
-                        "unitOfMeasure": 2,
-                        "demandIds": []
-                      }
-                    ]
-                  },
-                  "suppliers": [
-                    {
-                      "id": "0ca6d249-1617-4835-83c6-1b4a87a9cfa8",
-                      "supplierNumber": "355612",
-                      "inviteeEmail": "sup1@example.com"
-                    },
-                    {
-                      "id": "61521fad-dbcf-44c7-9113-58caf9aa3f85",
-                      "supplierNumber": "556319",
-                      "inviteeEmail": "sup_good@example.com"
-                    }
-                  ],
-                  "deals": [
-                    {
-                      "dealId": "086ba482-a179-4eec-9603-5bea04df3eea",
-                      "supplierId": "61521fad-dbcf-44c7-9113-58caf9aa3f85",
-                      "totalPrice": {
-                        "amount": "1900",
-                        "currency": "EUR"
-                      },
-                      "dealItems": [
-                        {
-                          "requestItemId": "af33094c-3e19-42e7-9af0-4a488f841ec7",
-                          "singleUnitPrice": {
-                            "amount": "950",
-                            "currency": "EUR"
-                          }
-                        }
-                      ]
-                    },
-                    {
-                      "dealId": "dfea1579-ea6f-4600-a96e-fdb4034bea87",
-                      "supplierId": "0ca6d249-1617-4835-83c6-1b4a87a9cfa8",
-                      "totalPrice": {
-                        "amount": "200",
-                        "currency": "EUR"
-                      },
-                      "dealItems": [
-                        {
-                          "requestItemId": "cd75b234-23cb-4b65-86e3-8c2181328f64",
-                          "totalPrice": {
-                            "amount": "100",
-                            "currency": "EUR"
-                          }
-                        }
-                      ]
-                    }
-                  ]
-                }
-              }
-            }
-          },
-          "401": {
-            "$ref": "#/components/responses/UnauthorizedError"
           }
         }
       }
@@ -364,24 +192,125 @@
       }
     },
     "schemas": {
-      "demand":  {
+      "newDemand": {
         "type": "object",
-        "description": "An item which needs to be procured.",
+        "description": "An item which needs to be procured (a purchase requisition).",
         "properties": {
           "title": {
             "type": "string",
-            "description": "A brief explanation of the item."
+            "description": "A brief explanation of the demand.",
+            "required": true,
+            "example": "Office Chairs"
           },
           "quantity": {
             "type": "number",
-            "description": "The quantity needed."
+            "description": "The quantity needed.",
+            "required": true,
+            "example": 20
           },
           "unitOfMeasure": {
-            "allOf": [ { "$ref": "#/components/schemas/unitOfMeasure" } ]
+            "allOf": [ { "$ref": "#/components/schemas/unitOfMeasure" } ],
+            "required": true,
+            "example": "piece"
           },
-          "extraFields": {
+          "fields": {
             "description": "Arbitrary data related to the item.",
-            "type": "object"
+            "type": "array",
+            "items": {
+              "type": "object",
+              "description": "A single field with extra information about the demand.",
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "required": true,
+                  "description": "The name of the field.",
+                  "example": "lastPrice"
+                },
+                "value": {
+                  "type": "string",
+                  "required": true,
+                  "description": "The value of the field.",
+                  "example": "{\"amoutn\": \"219.99\", \"currency\": \"EUR\"}"
+                },
+                "public": {
+                  "type": "boolean",
+                  "required": true,
+                  "description": "If ture - the field will be displayed to supplier. Otherwise, the field will be visible only to members of the purchasing organization.",
+                  "example": false
+                },
+                "type": {
+                  "enum": ["text", "date", "number", "price", "address"],
+                  "required": false,
+                  "default": "text",
+                  "description": "A hint on how to render the value to users. If the type is price and the value must conform to the Price schema of the current API. If the type is date, the value must be an ISO 8601 date.",
+                  "example": "price"
+                }
+              }
+            }
+          }
+        }
+      },
+      "savedDemand": {
+        "type": "object",
+        "allOf": [ { "$ref": "#/components/schemas/newDemand"} ],
+        "description": "A demand which has been saved in the mysupply DB",
+        "properties": {
+          "id": {
+            "type": "string",
+            "required": true,
+            "readOnly": true,
+            "description": "The mysupply ID of the demand",
+            "example": "83da61b6-e11e-495d-9808-3e1ff7869c19"
+          },
+          "status": {
+            "enum": ["awaiting", "processing", "processed", "archived"],
+            "required": true,
+            "readOnly": true,
+            "description": "The status of the demand.",
+            "example": "processed"
+          },
+          "deal": {
+            "type": "object",
+            "required": true,
+            "readOnly": true,
+            "nullable": true,
+            "description": "Information about the supplier delivering the item and the price of the deal",
+            "properties": {
+              "unitPrice": {
+                "required": true,
+                "readOnly": true,
+                "description": "The price for a single unit of the demand.",
+                "allOf": [ { "$ref": "#/components/schemas/price" } ]
+              },
+              "supplier": {
+                "required": true,
+                "readOnly": true,
+                "type": "object",
+                "description": "Information about the supplier delivering the demand",
+                "properties": {
+                  "email": {
+                    "type": "string",
+                    "required": true,
+                    "readOnly": true,
+                    "example": "the-best@chairs.com"
+                  },
+                  "supplierNumber": {
+                    "type": "string",
+                    "required": true,
+                    "readOnly": true,
+                    "description": "The supplier number provided by the purchaser's organization. If no such number is provided, a default one will be set",
+                    "example": "sup-99310"
+                  },
+                  "companyName": {
+                    "type": "string",
+                    "required": true,
+                    "readOnly": true,
+                    "description": "The name of the company of the supplier as provided by the supplier.",
+                    "example": "The Best Chairs & Sons Ltd."
+                  }
+                }
+              }
+            }
           }
         }
       },
@@ -407,7 +336,8 @@
           "day",
           "month",
           "other"
-        ]
+        ],
+        "example": "piece"
       },
       "price": {
         "type": "object",
