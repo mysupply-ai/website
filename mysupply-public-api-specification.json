@@ -177,6 +177,52 @@
           }
         }
       }
+    },
+    "/demands/{id}/deal": {
+      "parameters": [
+        {
+          "name": "id",
+          "in": "path",
+          "description": "The mysupply ID of the demand",
+          "required": true,
+          "allowEmptyValue": false,
+          "schema": {
+            "type": "string"
+          },
+          "example": "/demands/83da61b6-e11e-495d-9808-3e1ff7869c19/deal"
+        }
+      ],
+      "get": {
+        "tags": ["Demands"],
+        "summary": "Returns information for a deal made for a demand",
+        "responses": {
+          "200": {
+            "description": "Information for deal",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/deal"},
+                "example": {
+                  "unitPrice": {
+                    "amount": "200",
+                    "currency": "EUR"
+                  },
+                  "supplier": {
+                    "email": "the-winner@chairs.com",
+                    "supplierNumber": "ex-993841",
+                    "companyName": "The Best Chairs & Sons Ltd."
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedError"
+          },
+          "404": {
+            "description": "A demand with such ID has not been found"
+          }
+        }
+      }
     }
   },
   "components": {
@@ -261,43 +307,6 @@
             "readOnly": true,
             "description": "The status of the demand.",
             "example": "processed"
-          },
-          "deal": {
-            "type": "object",
-            "readOnly": true,
-            "nullable": true,
-            "description": "Information about the supplier delivering the item and the price of the deal",
-            "properties": {
-              "unitPrice": {
-                "readOnly": true,
-                "description": "The price for a single unit of the demand.",
-                "allOf": [ { "$ref": "#/components/schemas/price" } ]
-              },
-              "supplier": {
-                "readOnly": true,
-                "type": "object",
-                "description": "Information about the supplier delivering the demand",
-                "properties": {
-                  "email": {
-                    "type": "string",
-                    "readOnly": true,
-                    "example": "the-best@chairs.com"
-                  },
-                  "supplierNumber": {
-                    "type": "string",
-                    "readOnly": true,
-                    "description": "The supplier number provided by the purchaser's organization. If no such number is provided, a default one will be set",
-                    "example": "sup-99310"
-                  },
-                  "companyName": {
-                    "type": "string",
-                    "readOnly": true,
-                    "description": "The name of the company of the supplier as provided by the supplier.",
-                    "example": "The Best Chairs & Sons Ltd."
-                  }
-                }
-              }
-            }
           }
         }
       },
@@ -325,6 +334,44 @@
           "other"
         ],
         "example": "piece"
+      },
+      "deal": {
+        "type": "object",
+        "readOnly": true,
+        "nullable": true,
+        "description": "Information about the supplier delivering the item and the price of the deal",
+        "properties": {
+          "unitPrice": {
+            "readOnly": true,
+            "description": "The price for a single unit of the demand.",
+            "allOf": [ { "$ref": "#/components/schemas/price" } ]
+          },
+          "supplier": {
+            "nullable": true,
+            "readOnly": true,
+            "type": "object",
+            "description": "Information about the supplier delivering the demand",
+            "properties": {
+              "email": {
+                "type": "string",
+                "readOnly": true,
+                "example": "the-best@chairs.com"
+              },
+              "supplierNumber": {
+                "type": "string",
+                "readOnly": true,
+                "description": "The supplier number provided by the purchaser's organization. If no such number is provided, a default one will be set",
+                "example": "sup-99310"
+              },
+              "companyName": {
+                "type": "string",
+                "readOnly": true,
+                "description": "The name of the company of the supplier as provided by the supplier.",
+                "example": "The Best Chairs & Sons Ltd."
+              }
+            }
+          }
+        }
       },
       "price": {
         "type": "object",
