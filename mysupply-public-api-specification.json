@@ -115,15 +115,7 @@
     "/demands/{id}": {
       "parameters": [
         {
-          "name": "id",
-          "in": "path",
-          "description": "The mysupply ID of the demand",
-          "required": true,
-          "allowEmptyValue": false,
-          "schema": {
-            "type": "string"
-          },
-          "example": "/demands/83da61b6-e11e-495d-9808-3e1ff7869c19"
+          "$ref": "#/components/parameters/demandId"
         }
       ],
       "get": {
@@ -181,15 +173,7 @@
     "/demands/{id}/deal": {
       "parameters": [
         {
-          "name": "id",
-          "in": "path",
-          "description": "The mysupply ID of the demand",
-          "required": true,
-          "allowEmptyValue": false,
-          "schema": {
-            "type": "string"
-          },
-          "example": "/demands/83da61b6-e11e-495d-9808-3e1ff7869c19/deal"
+          "$ref": "#/components/parameters/demandId"
         }
       ],
       "get": {
@@ -235,6 +219,19 @@
     "responses": {
       "UnauthorizedError": {
         "description": "Access token is missing or invalid"
+      }
+    },
+    "parameters": {
+      "demandId": {
+        "name": "id",
+        "in": "path",
+        "description": "The mysupply ID of the demand",
+        "required": true,
+        "allowEmptyValue": false,
+        "schema": {
+          "type": "string"
+        },
+        "example": "83da61b6-e11e-495d-9808-3e1ff7869c19"
       }
     },
     "schemas": {
