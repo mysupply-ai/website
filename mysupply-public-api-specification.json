@@ -138,7 +138,7 @@
                 "example": {
                   "id": "83da61b6-e11e-495d-9808-3e1ff7869c19",
                   "title": "Office Chairs",
-                  "quantity": 20,
+                  "quantity": "20",
                   "unitOfMeasure": "piece",
                   "fields": [
                     {
@@ -202,7 +202,7 @@
             "example": "Office Chairs"
           },
           "quantity": {
-            "type": "number",
+            "allOf": [ { "$ref": "#/components/schemas/decimal" } ],
             "description": "The quantity needed.",
             "example": 20
           },
@@ -330,18 +330,19 @@
         "type": "object",
         "description": "A monetary value.",
         "properties": {
-          "amount": {
-            "type": "string",
-            "format": "{1,9}+(\\.\\d+)?",
-            "description": "A decimal string representation of the amount of the monetary value.",
-            "example": "17.05"
-          },
+          "amount": { "$ref": "#/components/schemas/decimal" },
           "currency": {
             "type": "string",
             "description": "The currency code of the monetary value.",
             "example": "EUR"
           }
         }
+      },
+      "decimal": {
+        "type": "string",
+        "format": "{1,9}+(\\.\\d+)?",
+        "description": "A decimal string representation of a number with fixed precision.",
+        "example": "17.05"
       }
     }
   }
