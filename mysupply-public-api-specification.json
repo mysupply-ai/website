@@ -199,18 +199,15 @@
           "title": {
             "type": "string",
             "description": "A brief explanation of the demand.",
-            "required": true,
             "example": "Office Chairs"
           },
           "quantity": {
             "type": "number",
             "description": "The quantity needed.",
-            "required": true,
             "example": 20
           },
           "unitOfMeasure": {
             "allOf": [ { "$ref": "#/components/schemas/unitOfMeasure" } ],
-            "required": true,
             "example": "piece"
           },
           "fields": {
@@ -222,33 +219,31 @@
               "properties": {
                 "name": {
                   "type": "string",
-                  "required": true,
                   "description": "The name of the field.",
                   "example": "lastPrice"
                 },
                 "value": {
                   "type": "string",
-                  "required": true,
                   "description": "The value of the field.",
                   "example": "{\"amoutn\": \"219.99\", \"currency\": \"EUR\"}"
                 },
                 "public": {
                   "type": "boolean",
-                  "required": true,
                   "description": "If ture - the field will be displayed to supplier. Otherwise, the field will be visible only to members of the purchasing organization.",
                   "example": false
                 },
                 "type": {
                   "enum": ["text", "date", "number", "price", "address"],
-                  "required": false,
                   "default": "text",
                   "description": "A hint on how to render the value to users. If the type is price and the value must conform to the Price schema of the current API. If the type is date, the value must be an ISO 8601 date.",
                   "example": "price"
                 }
-              }
+              },
+              "required": ["name", "value", "public"]
             }
           }
-        }
+        },
+        "required": ["title", "quantity", "unitOfMeasure", "fields"]
       },
       "savedDemand": {
         "type": "object",
@@ -257,53 +252,45 @@
         "properties": {
           "id": {
             "type": "string",
-            "required": true,
             "readOnly": true,
             "description": "The mysupply ID of the demand",
             "example": "83da61b6-e11e-495d-9808-3e1ff7869c19"
           },
           "status": {
             "enum": ["awaiting", "processing", "processed", "archived"],
-            "required": true,
             "readOnly": true,
             "description": "The status of the demand.",
             "example": "processed"
           },
           "deal": {
             "type": "object",
-            "required": true,
             "readOnly": true,
             "nullable": true,
             "description": "Information about the supplier delivering the item and the price of the deal",
             "properties": {
               "unitPrice": {
-                "required": true,
                 "readOnly": true,
                 "description": "The price for a single unit of the demand.",
                 "allOf": [ { "$ref": "#/components/schemas/price" } ]
               },
               "supplier": {
-                "required": true,
                 "readOnly": true,
                 "type": "object",
                 "description": "Information about the supplier delivering the demand",
                 "properties": {
                   "email": {
                     "type": "string",
-                    "required": true,
                     "readOnly": true,
                     "example": "the-best@chairs.com"
                   },
                   "supplierNumber": {
                     "type": "string",
-                    "required": true,
                     "readOnly": true,
                     "description": "The supplier number provided by the purchaser's organization. If no such number is provided, a default one will be set",
                     "example": "sup-99310"
                   },
                   "companyName": {
                     "type": "string",
-                    "required": true,
                     "readOnly": true,
                     "description": "The name of the company of the supplier as provided by the supplier.",
                     "example": "The Best Chairs & Sons Ltd."
