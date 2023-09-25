@@ -268,7 +268,7 @@
                 "value": {
                   "type": "string",
                   "description": "The value of the field.",
-                  "example": "{\"amoutn\": \"219.99\", \"currency\": \"EUR\"}"
+                  "example": "{\"amount\": \"219.99\", \"currency\": \"EUR\"}"
                 },
                 "public": {
                   "type": "boolean",
