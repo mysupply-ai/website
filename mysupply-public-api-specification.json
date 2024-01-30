@@ -175,6 +175,11 @@
               "application/json": {
                 "schema": { "$ref": "#/components/schemas/deal"},
                 "example": {
+                  "hasDeal": true,
+                  "totalPrice": {
+                    "amount": "600",
+                    "currency": "EUR"
+                  },
                   "unitPrice": {
                     "amount": "200",
                     "currency": "EUR"
@@ -327,9 +332,21 @@
         "nullable": true,
         "description": "Information about the supplier delivering the item and the price of the deal",
         "properties": {
+          "hasDeal": {
+            "type": "boolean",
+            "readOnly": true,
+            "description": "Deal existing"
+          },
           "unitPrice": {
             "readOnly": true,
+            "nullable": true,
             "description": "The price for a single unit of the demand.",
+            "allOf": [ { "$ref": "#/components/schemas/price" } ]
+          },
+          "totalPrice": {
+            "readOnly": true,
+            "nullable": true,
+            "description": "The price for the demand.",
             "allOf": [ { "$ref": "#/components/schemas/price" } ]
           },
           "supplier": {
