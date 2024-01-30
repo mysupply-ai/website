@@ -45,6 +45,14 @@
                     "public": true,
                     "type": "date"
                   }
+                ],
+                "demandSuppliers": [
+                  {
+                    "email": "supplier1@example.com"
+                  },
+                  {
+                    "email": "supplier2@example.com"
+                  }
                 ]
               }
             }
@@ -143,6 +151,14 @@
                       "value": "2023-11-22",
                       "public": true,
                       "type": "date"
+                    }
+                  ],
+                  "demandSuppliers": [
+                    {
+                      "email": "supplier1@example.com"
+                    },
+                    {
+                      "email": "supplier2@example.com"
                     }
                   ],
                   "status": "processed"
@@ -246,6 +262,20 @@
           "unitOfMeasure": {
             "allOf": [ { "$ref": "#/components/schemas/unitOfMeasure" } ],
             "example": "piece"
+          },
+          "demandSuppliers":{
+            "type": "array",
+            "description": "Suppliers list",
+            "items": {
+              "type": "object",
+              "properties": {
+                "email" : {
+                  "type": "string",
+                  "description": "Supplier email address",
+                  "example": "supplier@email.com"
+                }
+              }
+            }
           },
           "fields": {
             "description": "Arbitrary data related to the item.",
