@@ -191,6 +191,7 @@
               "application/json": {
                 "schema": { "$ref": "#/components/schemas/deal"},
                 "example": {
+                  "demandId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
                   "hasDeal": true,
                   "totalPrice": {
                     "amount": "600",
@@ -362,6 +363,12 @@
         "nullable": true,
         "description": "Information about the supplier delivering the item and the price of the deal",
         "properties": {
+          "demandId": {
+            "type": "string",
+            "readOnly": true,
+            "description": "Demand ID",
+            "format": "uuid"
+          },
           "hasDeal": {
             "type": "boolean",
             "readOnly": true,
