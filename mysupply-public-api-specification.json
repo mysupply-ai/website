@@ -53,6 +53,19 @@
                   {
                     "email": "supplier2@example.com"
                   }
+                ],
+                "demandsOffers": [
+                  {
+                    "supplier": {
+                      "email": "supplier3@example.com",
+                      "number": "1234",
+                      "name": "Supplier"
+                    },
+                    "unitPrice": {
+                      "amount": "125",
+                      "currency": "EUR"
+                    }
+                  }
                 ]
               }
             }
@@ -159,6 +172,202 @@
                     },
                     {
                       "email": "supplier2@example.com"
+                    }
+                  ],
+                  "demandsOffers": [
+                    {
+                      "supplier": {
+                        "email": "supplier3@example.com",
+                        "number": "1234",
+                        "name": "Supplier"
+                      },
+                      "unitPrice": {
+                        "amount": "125",
+                        "currency": "EUR"
+                      }
+                    }
+                  ],
+                  "status": "processed"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedError"
+          },
+          "404": {
+            "description": "A demand with such ID has not been found"
+          }
+        }
+      }
+    },
+    "/demands/{id}/add-offer": {
+      "parameters": [
+        {
+          "$ref": "#/components/parameters/demandId"
+        }
+      ],
+      "put": {
+        "tags": ["Demands"],
+        "summary": "Add offer for a specific demand",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/addOffer"
+                  }
+                ]
+              },
+              "example": {
+                "demandsOffer": {
+                  "supplier": {
+                    "email": "supplier3@example.com",
+                    "number": "1234",
+                    "name": "Supplier"
+                  },
+                  "unitPrice": {
+                    "amount": "125",
+                    "currency": "EUR"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Information for the demand",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/savedDemand"},
+                "example": {
+                  "id": "83da61b6-e11e-495d-9808-3e1ff7869c19",
+                  "title": "Office Chairs",
+                  "quantity": "20",
+                  "unitOfMeasure": "piece",
+                  "fields": [
+                    {
+                      "name": "internalId",
+                      "value": "8937182",
+                      "public": false
+                    },
+                    {
+                      "name": "Delivery Date",
+                      "value": "2023-11-22",
+                      "public": true,
+                      "type": "date"
+                    }
+                  ],
+                  "demandSuppliers": [
+                    {
+                      "email": "supplier1@example.com"
+                    },
+                    {
+                      "email": "supplier2@example.com"
+                    }
+                  ],
+                  "demandsOffers": [
+                    {
+                      "supplier": {
+                        "email": "supplier3@example.com",
+                        "number": "1234",
+                        "name": "Supplier"
+                      },
+                      "unitPrice": {
+                        "amount": "125",
+                        "currency": "EUR"
+                      }
+                    }
+                  ],
+                  "status": "processed"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedError"
+          },
+          "404": {
+            "description": "A demand with such ID has not been found"
+          }
+        }
+      }
+    },
+    "/demands/{id}/remove-offer": {
+      "parameters": [
+        {
+          "$ref": "#/components/parameters/demandId"
+        }
+      ],
+      "put": {
+        "tags": ["Demands"],
+        "summary": "Remove offer from a specific demand",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "description": "An item which needs to be procured (a purchase requisition).",
+                "properties": {
+                  "email": {
+                    "type": "string",
+                    "required": true,
+                    "description": "Supplier email address",
+                    "example": "supplier3@email.com"
+                  }
+                }
+              },
+              "example": {
+                "email": "supplier3@example.com"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Information for the demand",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/savedDemand"},
+                "example": {
+                  "id": "83da61b6-e11e-495d-9808-3e1ff7869c19",
+                  "title": "Office Chairs",
+                  "quantity": "20",
+                  "unitOfMeasure": "piece",
+                  "fields": [
+                    {
+                      "name": "internalId",
+                      "value": "8937182",
+                      "public": false
+                    },
+                    {
+                      "name": "Delivery Date",
+                      "value": "2023-11-22",
+                      "public": true,
+                      "type": "date"
+                    }
+                  ],
+                  "demandSuppliers": [
+                    {
+                      "email": "supplier1@example.com"
+                    },
+                    {
+                      "email": "supplier2@example.com"
+                    }
+                  ],
+                  "demandsOffers": [
+                    {
+                      "supplier": {
+                        "email": "supplier3@example.com",
+                        "number": "1234",
+                        "name": "Supplier"
+                      },
+                      "unitPrice": {
+                        "amount": "125",
+                        "currency": "EUR"
+                      }
                     }
                   ],
                   "status": "processed"
@@ -278,6 +487,37 @@
               }
             }
           },
+          "demandOffers":{
+            "type": "object",
+            "description": "Demand offers list",
+            "properties": {
+              "supplier": {
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "type": "string",
+                    "required": true,
+                    "description": "Supplier email address",
+                    "example": "supplier@email.com"
+                  },
+                  "number": {
+                    "type": "string",
+                    "description": "Supplier number"
+                  },
+                  "name": {
+                    "type": "string",
+                    "nullable": true,
+                    "description": "Supplier name"
+                  }
+                }
+              },
+              "unitPrice": {
+                "required": true,
+                "description": "The price for a single unit of the demand.",
+                "allOf": [ { "$ref": "#/components/schemas/price" } ]
+              }
+            }
+          },
           "fields": {
             "description": "Arbitrary data related to the item.",
             "type": "array",
@@ -312,6 +552,45 @@
           }
         },
         "required": ["title", "quantity", "unitOfMeasure", "fields"]
+      },
+      "addOffer": {
+        "type": "object",
+        "description": "An item which needs to be procured (a purchase requisition).",
+        "properties": {
+          "demandOffer":{
+            "type": "object",
+            "description": "Demand offers list",
+            "properties": {
+              "supplier": {
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "type": "string",
+                    "required": true,
+                    "description": "Supplier email address",
+                    "example": "supplier@email.com"
+                  },
+                  "number": {
+                    "type": "string",
+                    "nullable": true,
+                    "description": "Supplier number"
+                  },
+                  "name": {
+                    "type": "string",
+                    "nullable": true,
+                    "description": "Supplier name"
+                  }
+                }
+              },
+              "unitPrice": {
+                "required": true,
+                "description": "The price for a single unit of the demand.",
+                "allOf": [ { "$ref": "#/components/schemas/price" } ]
+              }
+            }
+          }
+        },
+        "required": ["demandOffer"]
       },
       "savedDemand": {
         "type": "object",
