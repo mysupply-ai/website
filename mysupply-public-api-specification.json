@@ -28,45 +28,6 @@
                     "$ref": "#/components/schemas/newDemand"
                   }
                 ]
-              },
-              "example": {
-                "title": "Office Chairs",
-                "quantity": "20",
-                "unitOfMeasure": "piece",
-                "fields": [
-                  {
-                    "name": "internalId",
-                    "value": "8937182",
-                    "public": false
-                  },
-                  {
-                    "name": "Delivery Date",
-                    "value": "2023-11-22",
-                    "public": true,
-                    "type": "date"
-                  }
-                ],
-                "demandSuppliers": [
-                  {
-                    "email": "supplier1@example.com"
-                  },
-                  {
-                    "email": "supplier2@example.com"
-                  }
-                ],
-                "demandsOffers": [
-                  {
-                    "supplier": {
-                      "email": "supplier3@example.com",
-                      "number": "1234",
-                      "name": "Supplier"
-                    },
-                    "unitPrice": {
-                      "amount": "125",
-                      "currency": "EUR"
-                    }
-                  }
-                ]
               }
             }
           }
@@ -147,48 +108,7 @@
             "description": "Information for the demand",
             "content": {
               "application/json": {
-                "schema": { "$ref": "#/components/schemas/savedDemand"},
-                "example": {
-                  "id": "83da61b6-e11e-495d-9808-3e1ff7869c19",
-                  "title": "Office Chairs",
-                  "quantity": "20",
-                  "unitOfMeasure": "piece",
-                  "fields": [
-                    {
-                      "name": "internalId",
-                      "value": "8937182",
-                      "public": false
-                    },
-                    {
-                      "name": "Delivery Date",
-                      "value": "2023-11-22",
-                      "public": true,
-                      "type": "date"
-                    }
-                  ],
-                  "demandSuppliers": [
-                    {
-                      "email": "supplier1@example.com"
-                    },
-                    {
-                      "email": "supplier2@example.com"
-                    }
-                  ],
-                  "demandsOffers": [
-                    {
-                      "supplier": {
-                        "email": "supplier3@example.com",
-                        "number": "1234",
-                        "name": "Supplier"
-                      },
-                      "unitPrice": {
-                        "amount": "125",
-                        "currency": "EUR"
-                      }
-                    }
-                  ],
-                  "status": "processed"
-                }
+                "schema": { "$ref": "#/components/schemas/savedDemand"}
               }
             }
           },
@@ -219,19 +139,6 @@
                     "$ref": "#/components/schemas/addOffer"
                   }
                 ]
-              },
-              "example": {
-                "demandsOffer": {
-                  "supplier": {
-                    "email": "supplier3@example.com",
-                    "number": "1234",
-                    "name": "Supplier"
-                  },
-                  "unitPrice": {
-                    "amount": "125",
-                    "currency": "EUR"
-                  }
-                }
               }
             }
           }
@@ -241,48 +148,7 @@
             "description": "Information for the demand",
             "content": {
               "application/json": {
-                "schema": { "$ref": "#/components/schemas/savedDemand"},
-                "example": {
-                  "id": "83da61b6-e11e-495d-9808-3e1ff7869c19",
-                  "title": "Office Chairs",
-                  "quantity": "20",
-                  "unitOfMeasure": "piece",
-                  "fields": [
-                    {
-                      "name": "internalId",
-                      "value": "8937182",
-                      "public": false
-                    },
-                    {
-                      "name": "Delivery Date",
-                      "value": "2023-11-22",
-                      "public": true,
-                      "type": "date"
-                    }
-                  ],
-                  "demandSuppliers": [
-                    {
-                      "email": "supplier1@example.com"
-                    },
-                    {
-                      "email": "supplier2@example.com"
-                    }
-                  ],
-                  "demandsOffers": [
-                    {
-                      "supplier": {
-                        "email": "supplier3@example.com",
-                        "number": "1234",
-                        "name": "Supplier"
-                      },
-                      "unitPrice": {
-                        "amount": "125",
-                        "currency": "EUR"
-                      }
-                    }
-                  ],
-                  "status": "processed"
-                }
+                "schema": { "$ref": "#/components/schemas/savedDemand"}
               }
             }
           },
@@ -330,48 +196,7 @@
             "description": "Information for the demand",
             "content": {
               "application/json": {
-                "schema": { "$ref": "#/components/schemas/savedDemand"},
-                "example": {
-                  "id": "83da61b6-e11e-495d-9808-3e1ff7869c19",
-                  "title": "Office Chairs",
-                  "quantity": "20",
-                  "unitOfMeasure": "piece",
-                  "fields": [
-                    {
-                      "name": "internalId",
-                      "value": "8937182",
-                      "public": false
-                    },
-                    {
-                      "name": "Delivery Date",
-                      "value": "2023-11-22",
-                      "public": true,
-                      "type": "date"
-                    }
-                  ],
-                  "demandSuppliers": [
-                    {
-                      "email": "supplier1@example.com"
-                    },
-                    {
-                      "email": "supplier2@example.com"
-                    }
-                  ],
-                  "demandsOffers": [
-                    {
-                      "supplier": {
-                        "email": "supplier3@example.com",
-                        "number": "1234",
-                        "name": "Supplier"
-                      },
-                      "unitPrice": {
-                        "amount": "125",
-                        "currency": "EUR"
-                      }
-                    }
-                  ],
-                  "status": "processed"
-                }
+                "schema": { "$ref": "#/components/schemas/savedDemand"}
               }
             }
           },
@@ -492,66 +317,44 @@
             "description": "Demand offers list",
             "properties": {
               "supplier": {
-                "type": "object",
-                "properties": {
-                  "email": {
-                    "type": "string",
-                    "required": true,
-                    "description": "Supplier email address",
-                    "example": "supplier@email.com"
-                  },
-                  "number": {
-                    "type": "string",
-                    "description": "Supplier number"
-                  },
-                  "name": {
-                    "type": "string",
-                    "nullable": true,
-                    "description": "Supplier name"
+                "required": true,
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/supplier"
                   }
-                }
+                ]
               },
               "unitPrice": {
                 "required": true,
                 "description": "The price for a single unit of the demand.",
                 "allOf": [ { "$ref": "#/components/schemas/price" } ]
+              },
+              "attachments": {
+                "description": "Attachments list",
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "content": {
+                      "type": "string",
+                      "format": "base64",
+                      "example": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABoAAAAcCAYAAAB"
+                    },
+                    "name": {
+                      "type": "string",
+                      "example": "example.pdf"
+                    }
+                  }
+                }
               }
             }
           },
           "fields": {
-            "description": "Arbitrary data related to the item.",
-            "type": "array",
-            "items": {
-              "type": "object",
-              "description": "A single field with extra information about the demand.",
-              "properties": {
-                "name": {
-                  "type": "string",
-                  "description": "The name of the field.",
-                  "example": "lastPrice"
-                },
-                "value": {
-                  "type": "string",
-                  "description": "The value of the field.",
-                  "example": "{\"amount\": \"219.99\", \"currency\": \"EUR\"}"
-                },
-                "public": {
-                  "type": "boolean",
-                  "description": "If ture - the field will be displayed to supplier. Otherwise, the field will be visible only to members of the purchasing organization.",
-                  "example": false
-                },
-                "type": {
-                  "enum": ["text", "date", "number", "price", "address"],
-                  "default": "text",
-                  "description": "A hint on how to render the value to users. If the type is price and the value must conform to the Price schema of the current API. If the type is date, the value must be an ISO 8601 date.",
-                  "example": "price"
-                }
-              },
-              "required": ["name", "value", "public"]
-            }
+            "description": "Custom fields list",
+            "allOf": [ { "$ref": "#/components/schemas/fields" } ]
           }
         },
-        "required": ["title", "quantity", "unitOfMeasure", "fields"]
+        "required": ["title", "quantity", "unitOfMeasure"]
       },
       "addOffer": {
         "type": "object",
@@ -562,30 +365,35 @@
             "description": "Demand offers list",
             "properties": {
               "supplier": {
-                "type": "object",
-                "properties": {
-                  "email": {
-                    "type": "string",
-                    "required": true,
-                    "description": "Supplier email address",
-                    "example": "supplier@email.com"
-                  },
-                  "number": {
-                    "type": "string",
-                    "nullable": true,
-                    "description": "Supplier number"
-                  },
-                  "name": {
-                    "type": "string",
-                    "nullable": true,
-                    "description": "Supplier name"
+                "required": true,
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/supplier"
                   }
-                }
+                ]
               },
               "unitPrice": {
                 "required": true,
                 "description": "The price for a single unit of the demand.",
                 "allOf": [ { "$ref": "#/components/schemas/price" } ]
+              },
+              "attachments": {
+                "description": "Attachments list",
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "content": {
+                      "type": "string",
+                      "format": "base64",
+                      "example": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABoAAAAcCAYAAAB"
+                    },
+                    "name": {
+                      "type": "string",
+                      "example": "example.pdf"
+                    }
+                  }
+                }
               }
             }
           }
@@ -594,7 +402,6 @@
       },
       "savedDemand": {
         "type": "object",
-        "allOf": [ { "$ref": "#/components/schemas/newDemand"} ],
         "description": "A demand which has been saved in the mysupply DB",
         "properties": {
           "id": {
@@ -603,11 +410,62 @@
             "description": "The mysupply ID of the demand",
             "example": "83da61b6-e11e-495d-9808-3e1ff7869c19"
           },
+          "title": {
+            "type": "string",
+            "description": "A brief explanation of the demand.",
+            "example": "Office Chairs"
+          },
+          "quantity": {
+            "allOf": [ { "$ref": "#/components/schemas/decimal" } ],
+            "description": "The quantity needed.",
+            "example": 20
+          },
+          "unitOfMeasure": {
+            "allOf": [ { "$ref": "#/components/schemas/unitOfMeasure" } ],
+            "example": "piece"
+          },
           "status": {
             "enum": ["awaiting", "processing", "processed", "archived"],
             "readOnly": true,
             "description": "The status of the demand.",
             "example": "processed"
+          },
+          "demandSuppliers":{
+            "type": "array",
+            "description": "Suppliers list",
+            "items": {
+              "type": "object",
+              "properties": {
+                "email" : {
+                  "type": "string",
+                  "description": "Supplier email address",
+                  "example": "supplier@email.com"
+                }
+              }
+            }
+          },
+          "demandOffers":{
+            "type": "object",
+            "description": "Demand offers list",
+            "properties": {
+              "supplier": {
+                "required": true,
+                "allOf": [ { "$ref": "#/components/schemas/supplier" } ]
+              },
+              "unitPrice": {
+                "required": true,
+                "description": "The price for a single unit of the demand.",
+                "allOf": [ { "$ref": "#/components/schemas/price" } ]
+              },
+              "attachments": {
+                "description": "Attachments list",
+                "allOf": [ { "$ref": "#/components/schemas/attachments" } ]
+              }
+            }
+          },
+          "fields": {
+            "description": "Custom fields list",
+            "allOf": [ { "$ref": "#/components/schemas/fields" } ]
           }
         }
       },
@@ -709,6 +567,84 @@
         "format": "{1,9}+(\\.\\d+)?",
         "description": "A decimal string representation of a number with fixed precision.",
         "example": "17.05"
+      },
+      "supplier": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "required": true,
+            "description": "Supplier email address",
+            "example": "supplier@email.com"
+          },
+          "number": {
+            "type": "string",
+            "description": "Supplier number"
+          },
+          "name": {
+            "type": "string",
+            "nullable": true,
+            "description": "Supplier name"
+          }
+        }
+      },
+      "attachments": {
+        "description": "Attachments list",
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string",
+              "format": "uuid",
+              "example": "38beff27-33ed-4ee0-bd17-fd75a6f9db3c"
+            },
+            "fileName": {
+              "type": "string",
+              "example": "example.pdf"
+            },
+            "mimeType": {
+              "type": "string",
+              "example": "image/png"
+            },
+            "size": {
+              "type": "integer",
+              "example": 500
+            }
+          }
+        }
+      },
+      "fields": {
+        "description": "Arbitrary data related to the item.",
+        "type": "array",
+        "items": {
+          "type": "object",
+          "description": "A single field with extra information about the demand.",
+          "properties": {
+            "name": {
+              "type": "string",
+              "description": "The name of the field.",
+              "example": "lastPrice"
+            },
+            "value": {
+              "type": "string",
+              "description": "The value of the field.",
+              "example": "{\"amount\": \"219.99\", \"currency\": \"EUR\"}"
+            },
+            "public": {
+              "type": "boolean",
+              "description": "If ture - the field will be displayed to supplier. Otherwise, the field will be visible only to members of the purchasing organization.",
+              "example": false
+            },
+            "type": {
+              "enum": ["text", "date", "number", "price", "address"],
+              "default": "text",
+              "description": "A hint on how to render the value to users. If the type is price and the value must conform to the Price schema of the current API. If the type is date, the value must be an ISO 8601 date.",
+              "example": "price"
+            }
+          },
+          "required": ["name", "value", "public"]
+        }
       }
     }
   }
