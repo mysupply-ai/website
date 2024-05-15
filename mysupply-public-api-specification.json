@@ -94,6 +94,43 @@
         }
       }
     },
+    "/demands/archive": {
+      "post": {
+        "summary": "Archive demands",
+        "tags": ["Demands"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/archiveDemand"
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "204": {
+            "description": "Demands successfully archived."
+          },
+          "400": {
+            "description": "Invalid input"
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedError"
+          },
+          "409": {
+            "description": "Conflict occurred (e.g., demand is already archived)."
+          },
+          "422": {
+            "description": "Unprocessable entity"
+          }
+        }
+      }
+    },
     "/demands/{id}": {
       "parameters": [
         {
@@ -355,6 +392,20 @@
           }
         },
         "required": ["title", "quantity", "unitOfMeasure"]
+      },
+      "archiveDemand": {
+        "type": "object",
+        "properties": {
+          "demandIds": {
+            "type": "array",
+            "description": "An array of demand IDs to be archived",
+            "items": {
+              "type": "string",
+              "format": "uuid",
+              "example": "83da61b6-e11e-495d-9808-3e1ff7869c19"
+            }
+          }
+        }
       },
       "addOffer": {
         "type": "object",
