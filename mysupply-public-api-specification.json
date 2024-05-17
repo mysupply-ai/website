@@ -156,6 +156,38 @@
             "description": "A demand with such ID has not been found"
           }
         }
+      },
+      "patch": {
+        "tags": ["Demands"],
+        "summary": "Edit a specific demand",
+        "description": "",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/editDemand"
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "A list of demands",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": { "$ref": "#/components/schemas/editedDemand" }
+                }
+              }
+            }
+          }
+        }
       }
     },
     "/demands/{id}/add-offer": {
@@ -399,6 +431,49 @@
         },
         "required": ["title", "quantity", "unitOfMeasure"]
       },
+      "editDemand": {
+        "type": "object",
+        "description": "The new values for the item which needs to be edited",
+        "properties": {
+          "title": {
+            "type": "string",
+            "description": "A brief explanation of the demand.",
+            "example": "Office Chairs"
+          },
+          "quantity": {
+            "allOf": [ { "$ref": "#/components/schemas/decimal" } ],
+            "description": "The quantity needed.",
+            "example": 20
+          },
+          "unit": {
+            "allOf": [ { "$ref": "#/components/schemas/unitOfMeasure" } ],
+            "example": "piece"
+          },
+          "fields": {
+            "description": "Custom fields list",
+            "allOf": [ { "$ref": "#/components/schemas/editRequestFields" } ]
+          },
+          "demandSuppliers": {
+            "type": "array",
+            "description": "Suppliers list",
+            "items": {
+              "type": "object",
+              "properties": {
+                "email" : {
+                  "type": "string",
+                  "description": "Supplier email address",
+                  "example": "supplier@email.com"
+                }
+              }
+            }
+          },
+          "description": {
+            "type": "string",
+            "description": "A brief explanation of the demand.",
+            "example": "Office Chairs which are best for use in a big room"
+          }
+        }
+      },
       "archiveDemand": {
         "type": "object",
         "properties": {
@@ -485,6 +560,62 @@
             "readOnly": true,
             "description": "The status of the demand.",
             "example": "processed"
+          },
+          "demandSuppliers":{
+            "type": "array",
+            "description": "Suppliers list",
+            "items": {
+              "type": "object",
+              "properties": {
+                "email" : {
+                  "type": "string",
+                  "description": "Supplier email address",
+                  "example": "supplier@email.com"
+                }
+              }
+            }
+          },
+          "demandOffers":{
+            "type": "object",
+            "description": "Demand offers list",
+            "required": ["supplier", "unitPrice"],
+            "properties": {
+              "supplier": {
+                "allOf": [ { "$ref": "#/components/schemas/supplier" } ]
+              },
+              "unitPrice": {
+                "description": "The price for a single unit of the demand.",
+                "allOf": [ { "$ref": "#/components/schemas/price" } ]
+              },
+              "attachments": {
+                "description": "Attachments list",
+                "allOf": [ { "$ref": "#/components/schemas/attachments" } ]
+              }
+            }
+          },
+          "fields": {
+            "description": "Custom fields list",
+            "allOf": [ { "$ref": "#/components/schemas/responseFields" } ]
+          }
+        }
+      },
+      "editedDemand": {
+        "type": "object",
+        "description": "A demand which has been edited in the mysupply DB",
+        "properties": {
+          "title": {
+            "type": "string",
+            "description": "A brief explanation of the demand.",
+            "example": "Office Chairs"
+          },
+          "quantity": {
+            "allOf": [ { "$ref": "#/components/schemas/decimal" } ],
+            "description": "The quantity needed.",
+            "example": 20
+          },
+          "unitOfMeasure": {
+            "allOf": [ { "$ref": "#/components/schemas/unitOfMeasure" } ],
+            "example": "piece"
           },
           "demandSuppliers":{
             "type": "array",
@@ -683,7 +814,7 @@
               "example": "lastPrice"
             },
             "value": {
-              "description": "The value of the field, which can vary significantly depending on the type. It can be a simple string, a complex structured object, a specific schema-defined object (like price, address, or attachment), or an array containing any combination of strings, objects, or arrays.",
+              "description": "The value of the field, which can vary significantly depending on the type. It can be a simple string, a complex structured object, a specific schema-defined object (like price, address, or attachment), or an array containing any combination of strings, objects, or arrays."
             },
             "public": {
               "type": "boolean",
@@ -726,6 +857,22 @@
           }
         ]
       },
+      "editRequestFields": {
+        "allOf": [
+          { "$ref": "#/components/schemas/requestFields" },
+          {
+            "items": {
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "description": "the id",
+                  "example": "b97d2783-d1d5-4947-ac7d-0e3182b9d6fb"
+                }
+              }
+            }
+          }
+        ]
+      },
       "responseFields": {
         "allOf": [
           { "$ref": "#/components/schemas/baseFields" },
@@ -753,7 +900,6 @@
           }
         ]
       },
-
       "address": {
         "type": "object",
         "description": "The address.",
