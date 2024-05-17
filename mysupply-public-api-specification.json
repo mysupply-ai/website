@@ -213,10 +213,10 @@
               "schema": {
                 "type": "object",
                 "description": "An item which needs to be procured (a purchase requisition).",
+                "required": ["email"],
                 "properties": {
                   "email": {
                     "type": "string",
-                    "required": true,
                     "description": "Supplier email address",
                     "example": "supplier3@email.com"
                   }
@@ -350,36 +350,42 @@
             }
           },
           "demandOffers":{
-            "type": "object",
+            "type": "array",
             "description": "Demand offers list",
-            "properties": {
-              "supplier": {
-                "required": true,
-                "allOf": [
-                  {
-                    "$ref": "#/components/schemas/supplier"
-                  }
-                ]
-              },
-              "unitPrice": {
-                "required": true,
-                "description": "The price for a single unit of the demand.",
-                "allOf": [ { "$ref": "#/components/schemas/price" } ]
-              },
-              "attachments": {
-                "description": "Attachments list",
-                "type": "array",
-                "items": {
-                  "type": "object",
-                  "properties": {
-                    "content": {
-                      "type": "string",
-                      "format": "base64",
-                      "example": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABoAAAAcCAYAAAB"
-                    },
-                    "name": {
-                      "type": "string",
-                      "example": "example.pdf"
+            "items": {
+              "type": "object",
+              "required": ["supplier", "unitPrice"],
+              "properties": {
+                "supplier": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/supplier"
+                    }
+                  ]
+                },
+                "unitPrice": {
+                  "description": "The price for a single unit of the demand.",
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/price"
+                    }
+                  ]
+                },
+                "attachments": {
+                  "description": "Attachments list",
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "content": {
+                        "type": "string",
+                        "format": "base64",
+                        "example": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABoAAAAcCAYAAAB"
+                      },
+                      "name": {
+                        "type": "string",
+                        "example": "example.pdf"
+                      }
                     }
                   }
                 }
@@ -388,7 +394,7 @@
           },
           "fields": {
             "description": "Custom fields list",
-            "allOf": [ { "$ref": "#/components/schemas/fields" } ]
+            "allOf": [ { "$ref": "#/components/schemas/requestFields" } ]
           }
         },
         "required": ["title", "quantity", "unitOfMeasure"]
@@ -414,9 +420,9 @@
           "demandOffer":{
             "type": "object",
             "description": "Demand offers list",
+            "required": ["supplier", "unitPrice"],
             "properties": {
               "supplier": {
-                "required": true,
                 "allOf": [
                   {
                     "$ref": "#/components/schemas/supplier"
@@ -424,7 +430,6 @@
                 ]
               },
               "unitPrice": {
-                "required": true,
                 "description": "The price for a single unit of the demand.",
                 "allOf": [ { "$ref": "#/components/schemas/price" } ]
               },
@@ -498,13 +503,12 @@
           "demandOffers":{
             "type": "object",
             "description": "Demand offers list",
+            "required": ["supplier", "unitPrice"],
             "properties": {
               "supplier": {
-                "required": true,
                 "allOf": [ { "$ref": "#/components/schemas/supplier" } ]
               },
               "unitPrice": {
-                "required": true,
                 "description": "The price for a single unit of the demand.",
                 "allOf": [ { "$ref": "#/components/schemas/price" } ]
               },
@@ -516,7 +520,7 @@
           },
           "fields": {
             "description": "Custom fields list",
-            "allOf": [ { "$ref": "#/components/schemas/fields" } ]
+            "allOf": [ { "$ref": "#/components/schemas/responseFields" } ]
           }
         }
       },
@@ -621,10 +625,10 @@
       },
       "supplier": {
         "type": "object",
+        "required": [ "email" ],
         "properties": {
           "email": {
             "type": "string",
-            "required": true,
             "description": "Supplier email address",
             "example": "supplier@email.com"
           },
@@ -665,12 +669,13 @@
           }
         }
       },
-      "fields": {
+      "baseFields": {
         "description": "Arbitrary data related to the item.",
         "type": "array",
         "items": {
           "type": "object",
           "description": "A single field with extra information about the demand.",
+          "required": ["name", "value", "public"],
           "properties": {
             "name": {
               "type": "string",
@@ -678,9 +683,7 @@
               "example": "lastPrice"
             },
             "value": {
-              "type": "string",
-              "description": "The value of the field.",
-              "example": "{\"amount\": \"219.99\", \"currency\": \"EUR\"}"
+              "description": "The value of the field, which can vary significantly depending on the type. It can be a simple string, a complex structured object, a specific schema-defined object (like price, address, or attachment), or an array containing any combination of strings, objects, or arrays.",
             },
             "public": {
               "type": "boolean",
@@ -688,13 +691,137 @@
               "example": false
             },
             "type": {
-              "enum": ["text", "date", "number", "price", "address"],
+              "enum": ["text", "date", "number", "total_price", "unit_price", "address", "attachment"],
               "default": "text",
-              "description": "A hint on how to render the value to users. If the type is price and the value must conform to the Price schema of the current API. If the type is date, the value must be an ISO 8601 date.",
+              "description": "Specifies the expected data type of the 'value' field and determines how the system renders and validates the input. This property guides the format and validation rules for the 'value'. Each predefined type has specific requirements:\n- **text**: Expect a simple string. Suitable for general text.\n- **date**: The 'value' should be a string formatted as an ISO 8601 date.\n- **number**: Expect a numeric value formatted as a string.\n- **total_price**, **unit_price**: The 'value' should conform to the 'price' schema, typically including properties like 'amount' and 'currency'.\n- **address**: The 'value' must match the 'address' schema, including details such as country, region, city, etc.\n- **attachment**: Expect an 'attachment' object containing properties like 'fileName' and 'data', where 'data' is base64-encoded content of the file.\n- **custom**: Any other type of data defined by the user, allowing for maximum flexibility. The system will accept any valid JSON value (string, number, object, array, boolean, or null) based on user needs and context. This setting should be used when the data does not fit any other predefined types and requires custom handling.",
               "example": "price"
             }
+          }
+        }
+      },
+      "requestFields": {
+        "allOf": [
+          { "$ref": "#/components/schemas/baseFields" },
+          {
+            "items": {
+              "properties": {
+                "value": {
+                  "oneOf": [
+                    {
+                      "type": "string",
+                      "description": "Used for text, date, and number types."
+                    },
+                    { "$ref": "#/components/schemas/price" },
+                    { "$ref": "#/components/schemas/address" },
+                    { "$ref": "#/components/schemas/requestAttachment" },
+                    {
+                      "type": "object",
+                      "additionalProperties": true,
+                      "description": "Any other object with free-form properties."
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        ]
+      },
+      "responseFields": {
+        "allOf": [
+          { "$ref": "#/components/schemas/baseFields" },
+          {
+            "items": {
+              "properties": {
+                "value": {
+                  "oneOf": [
+                    {
+                      "type": "string",
+                      "description": "Used for text, date, and number types."
+                    },
+                    { "$ref": "#/components/schemas/price" },
+                    { "$ref": "#/components/schemas/address" },
+                    { "$ref": "#/components/schemas/responseAttachment" },
+                    {
+                      "type": "object",
+                      "additionalProperties": true,
+                      "description": "Any other object with free-form properties."
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        ]
+      },
+
+      "address": {
+        "type": "object",
+        "description": "The address.",
+        "properties": {
+          "country": {
+            "type": "string",
+            "description": "Country",
+            "example": "Germany"
           },
-          "required": ["name", "value", "public"]
+          "region": {
+            "type": "string",
+            "description": "Region"
+          },
+          "city": {
+            "type": "string",
+            "description": "The city of the address",
+            "example": "Berlin"
+          },
+          "postalCode": {
+            "type": "string",
+            "description": "The postal code of the address",
+            "example": "1142"
+          },
+          "streetAddress1": {
+            "type": "string",
+            "description": "The street address"
+          },
+          "streetAddress2": {
+            "type": "string",
+            "description": "The street address"
+          }
+        }
+      },
+      "requestAttachment": {
+        "type": "object",
+        "description": "An attachment object representing a file to be associated with a request or data entry. The file data is expected to be in base64-encoded format, which allows binary data to be transmitted as a string. This format supports a wide range of file types, from plain text documents to images and complex binary files. The 'fileName' property should provide the original file name, helping to identify the file type and intended use. The 'data' property should contain the actual file content encoded in base64, suitable for transmission and storage in JSON.",
+        "properties": {
+          "fileName": {
+            "type": "string",
+            "description": "The name of the attachment",
+            "example": "AttachmentName.txt"
+          },
+          "data": {
+            "type": "string",
+            "description": "The file content encoded in base64. This encoding ensures that binary data can be safely transmitted over media that are designed to deal with textual data. It allows complex files such as images or PDFs to be transferred as part of the JSON object.",
+            "example": "data:text/plain;base64,VGhpcyBpcyBhIG5ldyB0ZXN0IGZpbGUgd2l0aCBzb21lIGNvbnRlbnQuIEl0IHNob3VsZCBiZSBkaWZmZXJlbnQgZnJvbSB0aGUgb25lIHdlIGhhdmUgYWxyZWFkeQ=="
+          }
+        }
+      },
+      "responseAttachment": {
+        "type": "object",
+        "description": "An attachment object representing a file to be associated with a request or data entry. The file data is expected to be in base64-encoded format, which allows binary data to be transmitted as a string. This format supports a wide range of file types, from plain text documents to images and complex binary files. The 'fileName' property should provide the original file name, helping to identify the file type and intended use. The 'data' property should contain the actual file content encoded in base64, suitable for transmission and storage in JSON.",
+        "properties": {
+          "fileName": {
+            "type": "string",
+            "description": "The name of the attachment",
+            "example": "AttachmentName.txt"
+          },
+          "mimeType": {
+            "type": "string",
+            "description": "The file content encoded in base64. This encoding ensures that binary data can be safely transmitted over media that are designed to deal with textual data. It allows complex files such as images or PDFs to be transferred as part of the JSON object.",
+            "example": "text/plain"
+          },
+          "size": {
+            "type": "integer",
+            "description": "The size of the file",
+            "example": "94"
+          }
         }
       }
     }
