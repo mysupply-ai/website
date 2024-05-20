@@ -903,7 +903,7 @@
             "enum": ["text", "date", "number", "total_price", "unit_price", "address", "attachment"],
             "default": "text",
             "description": "Specifies the expected data type of the 'value' field and determines how the system renders and validates the input. This property guides the format and validation rules for the 'value'. Each predefined type has specific requirements:\n- **text**: Expect a simple string. Suitable for general text.\n- **date**: The 'value' should be a string formatted as an ISO 8601 date.\n- **number**: Expect a numeric value formatted as a string.\n- **total_price**, **unit_price**: The 'value' should conform to the 'price' schema, typically including properties like 'amount' and 'currency'.\n- **address**: The 'value' must match the 'address' schema, including details such as country, region, city, etc.\n- **attachment**: Expect an 'attachment' object containing properties like 'fileName' and 'data', where 'data' is base64-encoded content of the file.\n- **custom**: Any other type of data defined by the user, allowing for maximum flexibility. The system will accept any valid JSON value (string, number, object, array, boolean, or null) based on user needs and context. This setting should be used when the data does not fit any other predefined types and requires custom handling.",
-            "example": "price"
+            "example": "total_price"
           }
         }
       },
@@ -928,7 +928,8 @@
                     "additionalProperties": true,
                     "description": "Any other object with free-form properties."
                   }
-                ]
+                ],
+                "example": "{\"amount\": \"219.99\", \"currency\": \"EUR\"}"
               }
             }
           }
@@ -971,7 +972,8 @@
                     "additionalProperties": true,
                     "description": "Any other object with free-form properties."
                   }
-                ]
+                ],
+                "example": "{\"amount\": \"219.99\", \"currency\": \"EUR\"}"
               },
               "id": {
                 "type": "string",
