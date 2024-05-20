@@ -183,6 +183,15 @@
                 "schema": { "$ref": "#/components/schemas/editedDemand"}
               }
             }
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedError"
+          },
+          "404": {
+            "description": "A demand with such ID has not been found"
+          },
+          "422": {
+            "description": "Unprocessable entity"
           }
         }
       }
@@ -351,6 +360,12 @@
                 "schema": { "$ref": "#/components/schemas/editedDemand"}
               }
             }
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedError"
+          },
+          "422": {
+            "description": "Unprocessable entity"
           }
         }
       }
@@ -390,6 +405,25 @@
                 "schema": { "$ref": "#/components/schemas/responseField"}
               }
             }
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedError"
+          },
+          "422": {
+            "description": "Unprocessable entity"
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Demands"],
+        "summary": "Delete a specific custom field from a specific demand",
+        "description": "",
+        "responses": {
+          "204": {
+            "description": "Demands successfully deleted."
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedError"
           }
         }
       }
