@@ -177,13 +177,10 @@
         },
         "responses": {
           "200": {
-            "description": "A list of demands",
+            "description": "Information for the demand",
             "content": {
               "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": { "$ref": "#/components/schemas/editedDemand" }
-                }
+                "schema": { "$ref": "#/components/schemas/editedDemand"}
               }
             }
           }
@@ -531,16 +528,10 @@
         },
         "required": ["demandOffer"]
       },
-      "savedDemand": {
+      "baseResponseDemand": {
         "type": "object",
         "description": "A demand which has been saved in the mysupply DB",
         "properties": {
-          "id": {
-            "type": "string",
-            "readOnly": true,
-            "description": "The mysupply ID of the demand",
-            "example": "83da61b6-e11e-495d-9808-3e1ff7869c19"
-          },
           "title": {
             "type": "string",
             "description": "A brief explanation of the demand.",
@@ -554,12 +545,6 @@
           "unitOfMeasure": {
             "allOf": [ { "$ref": "#/components/schemas/unitOfMeasure" } ],
             "example": "piece"
-          },
-          "status": {
-            "enum": ["awaiting", "processing", "processed", "archived"],
-            "readOnly": true,
-            "description": "The status of the demand.",
-            "example": "processed"
           },
           "demandSuppliers":{
             "type": "array",
@@ -599,61 +584,37 @@
           }
         }
       },
-      "editedDemand": {
-        "type": "object",
-        "description": "A demand which has been edited in the mysupply DB",
-        "properties": {
-          "title": {
-            "type": "string",
-            "description": "A brief explanation of the demand.",
-            "example": "Office Chairs"
-          },
-          "quantity": {
-            "allOf": [ { "$ref": "#/components/schemas/decimal" } ],
-            "description": "The quantity needed.",
-            "example": 20
-          },
-          "unitOfMeasure": {
-            "allOf": [ { "$ref": "#/components/schemas/unitOfMeasure" } ],
-            "example": "piece"
-          },
-          "demandSuppliers":{
-            "type": "array",
-            "description": "Suppliers list",
-            "items": {
-              "type": "object",
-              "properties": {
-                "email" : {
-                  "type": "string",
-                  "description": "Supplier email address",
-                  "example": "supplier@email.com"
-                }
-              }
-            }
-          },
-          "demandOffers":{
+      "savedDemand": {
+        "allOf": [
+          { "$ref": "#/components/schemas/baseResponseDemand" },
+          {
             "type": "object",
-            "description": "Demand offers list",
-            "required": ["supplier", "unitPrice"],
+            "description": "A demand which has been saved in the mysupply DB",
             "properties": {
-              "supplier": {
-                "allOf": [ { "$ref": "#/components/schemas/supplier" } ]
+              "id": {
+                "type": "string",
+                "readOnly": true,
+                "description": "The mysupply ID of the demand",
+                "example": "83da61b6-e11e-495d-9808-3e1ff7869c19"
               },
-              "unitPrice": {
-                "description": "The price for a single unit of the demand.",
-                "allOf": [ { "$ref": "#/components/schemas/price" } ]
-              },
-              "attachments": {
-                "description": "Attachments list",
-                "allOf": [ { "$ref": "#/components/schemas/attachments" } ]
+              "status": {
+                "enum": ["awaiting", "processing", "processed", "archived"],
+                "readOnly": true,
+                "description": "The status of the demand.",
+                "example": "processed"
               }
             }
-          },
-          "fields": {
-            "description": "Custom fields list",
-            "allOf": [ { "$ref": "#/components/schemas/responseFields" } ]
           }
-        }
+        ]
+      },
+      "editedDemand": {
+        "allOf": [
+          { "$ref": "#/components/schemas/baseResponseDemand" },
+          {
+            "type": "object",
+            "description": "A demand which has been edited in the mysupply DB"
+          }
+        ]
       },
       "unitOfMeasure": {
         "type": "string",
@@ -894,6 +855,11 @@
                       "description": "Any other object with free-form properties."
                     }
                   ]
+                },
+                "id": {
+                  "type": "string",
+                  "description": "The id of the field saved in the database",
+                  "example": "b97d2783-d1d5-4947-ac7d-0e3182b9d6fb"
                 }
               }
             }
