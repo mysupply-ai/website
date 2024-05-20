@@ -318,6 +318,81 @@
           }
         }
       }
+    },
+    "/demands/{id}/fields": {
+      "parameters": [
+        {
+          "$ref": "#/components/parameters/demandId"
+        }
+      ],
+      "post": {
+        "tags": ["Demands"],
+        "summary": "Create a custom field to a specific demand",
+        "description": "",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/requestField"
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Information for the demand",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/editedDemand"}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/demands/{id}/fields/{fieldId}": {
+      "parameters": [
+        {
+          "$ref": "#/components/parameters/demandId"
+        },
+        {
+          "$ref": "#/components/parameters/fieldId"
+        }
+      ],
+      "patch": {
+        "tags": ["Demands"],
+        "summary": "Edit a specific custom field to a specific demand",
+        "description": "",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/requestField"
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Information for the demand",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/responseField"}
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
@@ -337,6 +412,17 @@
         "name": "id",
         "in": "path",
         "description": "The mysupply ID of the demand",
+        "required": true,
+        "allowEmptyValue": false,
+        "schema": {
+          "type": "string"
+        },
+        "example": "83da61b6-e11e-495d-9808-3e1ff7869c19"
+      },
+      "fieldId": {
+        "name": "fieldId",
+        "in": "path",
+        "description": "The mysupply ID of the custom field of the demand",
         "required": true,
         "allowEmptyValue": false,
         "schema": {
@@ -761,110 +847,127 @@
           }
         }
       },
-      "baseFields": {
-        "description": "Arbitrary data related to the item.",
-        "type": "array",
-        "items": {
-          "type": "object",
-          "description": "A single field with extra information about the demand.",
-          "required": ["name", "value", "public"],
-          "properties": {
-            "name": {
-              "type": "string",
-              "description": "The name of the field.",
-              "example": "lastPrice"
-            },
-            "value": {
-              "description": "The value of the field, which can vary significantly depending on the type. It can be a simple string, a complex structured object, a specific schema-defined object (like price, address, or attachment), or an array containing any combination of strings, objects, or arrays."
-            },
-            "public": {
-              "type": "boolean",
-              "description": "If ture - the field will be displayed to supplier. Otherwise, the field will be visible only to members of the purchasing organization.",
-              "example": false
-            },
-            "type": {
-              "enum": ["text", "date", "number", "total_price", "unit_price", "address", "attachment"],
-              "default": "text",
-              "description": "Specifies the expected data type of the 'value' field and determines how the system renders and validates the input. This property guides the format and validation rules for the 'value'. Each predefined type has specific requirements:\n- **text**: Expect a simple string. Suitable for general text.\n- **date**: The 'value' should be a string formatted as an ISO 8601 date.\n- **number**: Expect a numeric value formatted as a string.\n- **total_price**, **unit_price**: The 'value' should conform to the 'price' schema, typically including properties like 'amount' and 'currency'.\n- **address**: The 'value' must match the 'address' schema, including details such as country, region, city, etc.\n- **attachment**: Expect an 'attachment' object containing properties like 'fileName' and 'data', where 'data' is base64-encoded content of the file.\n- **custom**: Any other type of data defined by the user, allowing for maximum flexibility. The system will accept any valid JSON value (string, number, object, array, boolean, or null) based on user needs and context. This setting should be used when the data does not fit any other predefined types and requires custom handling.",
-              "example": "price"
-            }
+      "baseField": {
+        "type": "object",
+        "description": "A single field with extra information about the demand.",
+        "required": ["name", "value", "public"],
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "The name of the field.",
+            "example": "lastPrice"
+          },
+          "value": {
+            "description": "The value of the field, which can vary significantly depending on the type. It can be a simple string, a complex structured object, a specific schema-defined object (like price, address, or attachment), or an array containing any combination of strings, objects, or arrays."
+          },
+          "public": {
+            "type": "boolean",
+            "description": "If ture - the field will be displayed to supplier. Otherwise, the field will be visible only to members of the purchasing organization.",
+            "example": false
+          },
+          "type": {
+            "enum": ["text", "date", "number", "total_price", "unit_price", "address", "attachment"],
+            "default": "text",
+            "description": "Specifies the expected data type of the 'value' field and determines how the system renders and validates the input. This property guides the format and validation rules for the 'value'. Each predefined type has specific requirements:\n- **text**: Expect a simple string. Suitable for general text.\n- **date**: The 'value' should be a string formatted as an ISO 8601 date.\n- **number**: Expect a numeric value formatted as a string.\n- **total_price**, **unit_price**: The 'value' should conform to the 'price' schema, typically including properties like 'amount' and 'currency'.\n- **address**: The 'value' must match the 'address' schema, including details such as country, region, city, etc.\n- **attachment**: Expect an 'attachment' object containing properties like 'fileName' and 'data', where 'data' is base64-encoded content of the file.\n- **custom**: Any other type of data defined by the user, allowing for maximum flexibility. The system will accept any valid JSON value (string, number, object, array, boolean, or null) based on user needs and context. This setting should be used when the data does not fit any other predefined types and requires custom handling.",
+            "example": "price"
           }
         }
       },
-      "requestFields": {
+      "requestField": {
         "allOf": [
-          { "$ref": "#/components/schemas/baseFields" },
+          { "$ref": "#/components/schemas/baseField" },
           {
-            "items": {
-              "properties": {
-                "value": {
-                  "oneOf": [
-                    {
-                      "type": "string",
-                      "description": "Used for text, date, and number types."
-                    },
-                    { "$ref": "#/components/schemas/price" },
-                    { "$ref": "#/components/schemas/address" },
-                    { "$ref": "#/components/schemas/requestAttachment" },
-                    {
-                      "type": "object",
-                      "additionalProperties": true,
-                      "description": "Any other object with free-form properties."
-                    }
-                  ]
-                }
+            "type": "object",
+            "description": "A single field with extra information about the demand.",
+            "properties": {
+              "value": {
+                "oneOf": [
+                  {
+                    "type": "string",
+                    "description": "Used for text, date, and number types."
+                  },
+                  { "$ref": "#/components/schemas/price" },
+                  { "$ref": "#/components/schemas/address" },
+                  { "$ref": "#/components/schemas/requestAttachment" },
+                  {
+                    "type": "object",
+                    "additionalProperties": true,
+                    "description": "Any other object with free-form properties."
+                  }
+                ]
               }
             }
           }
         ]
+      },
+      "editRequestField": {
+        "allOf": [
+          { "$ref": "#/components/schemas/requestField" },
+          {
+            "type": "object",
+            "description": "A single field with extra information about the demand.",
+            "properties": {
+              "id": {
+                "type": "string",
+                "description": "The custom field id (optional) - use it only if edit existing field",
+                "example": "b97d2783-d1d5-4947-ac7d-0e3182b9d6fb"
+              }
+            }
+          }
+        ]
+      },
+      "responseField": {
+        "allOf": [
+          { "$ref": "#/components/schemas/baseField" },
+          {
+            "type": "object",
+            "description": "A single field with extra information about the demand.",
+            "properties": {
+              "value": {
+                "oneOf": [
+                  {
+                    "type": "string",
+                    "description": "Used for text, date, and number types."
+                  },
+                  { "$ref": "#/components/schemas/price" },
+                  { "$ref": "#/components/schemas/address" },
+                  { "$ref": "#/components/schemas/responseAttachment" },
+                  {
+                    "type": "object",
+                    "additionalProperties": true,
+                    "description": "Any other object with free-form properties."
+                  }
+                ]
+              },
+              "id": {
+                "type": "string",
+                "description": "The id of the field saved in the database",
+                "example": "b97d2783-d1d5-4947-ac7d-0e3182b9d6fb"
+              }
+            }
+          }
+        ]
+      },
+      "requestFields": {
+        "description": "Arbitrary data related to the item.",
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/requestField"
+        }
       },
       "editRequestFields": {
-        "allOf": [
-          { "$ref": "#/components/schemas/requestFields" },
-          {
-            "items": {
-              "properties": {
-                "id": {
-                  "type": "string",
-                  "description": "the id",
-                  "example": "b97d2783-d1d5-4947-ac7d-0e3182b9d6fb"
-                }
-              }
-            }
-          }
-        ]
+        "description": "Arbitrary data related to the item.",
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/editRequestField"
+        }
       },
       "responseFields": {
-        "allOf": [
-          { "$ref": "#/components/schemas/baseFields" },
-          {
-            "items": {
-              "properties": {
-                "value": {
-                  "oneOf": [
-                    {
-                      "type": "string",
-                      "description": "Used for text, date, and number types."
-                    },
-                    { "$ref": "#/components/schemas/price" },
-                    { "$ref": "#/components/schemas/address" },
-                    { "$ref": "#/components/schemas/responseAttachment" },
-                    {
-                      "type": "object",
-                      "additionalProperties": true,
-                      "description": "Any other object with free-form properties."
-                    }
-                  ]
-                },
-                "id": {
-                  "type": "string",
-                  "description": "The id of the field saved in the database",
-                  "example": "b97d2783-d1d5-4947-ac7d-0e3182b9d6fb"
-                }
-              }
-            }
-          }
-        ]
+        "description": "Arbitrary data related to the item.",
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/responseField"
+        }
       },
       "address": {
         "type": "object",
