@@ -688,6 +688,11 @@
                   "type": "string",
                   "description": "Supplier email address",
                   "example": "supplier@email.com"
+                },
+                "number" : {
+                  "type": "string",
+                  "description": "Supplier number",
+                  "example": "rsw1234vd"
                 }
               }
             }
