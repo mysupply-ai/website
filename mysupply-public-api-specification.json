@@ -489,11 +489,17 @@
             "description": "Suppliers list",
             "items": {
               "type": "object",
+              "required": ["email"],
               "properties": {
                 "email" : {
                   "type": "string",
                   "description": "Supplier email address",
                   "example": "supplier@email.com"
+                },
+                "number" : {
+                  "type": "string",
+                  "description": "Supplier number",
+                  "example": "rsw1234vd"
                 }
               }
             }
@@ -575,11 +581,17 @@
             "description": "Suppliers list",
             "items": {
               "type": "object",
+              "required": ["email"],
               "properties": {
                 "email" : {
                   "type": "string",
                   "description": "Supplier email address",
                   "example": "supplier@email.com"
+                },
+                "number" : {
+                  "type": "string",
+                  "description": "Supplier number",
+                  "example": "qqwer11234sdsvv"
                 }
               }
             }
