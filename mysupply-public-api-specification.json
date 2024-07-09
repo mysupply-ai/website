@@ -427,6 +427,42 @@
           }
         }
       }
+    },
+    "/demands/{id}/request": {
+      "parameters": [
+        {
+          "$ref": "#/components/parameters/demandId"
+        }
+      ],
+      "get": {
+        "tags": ["Demands"],
+        "summary": "Returns request information for a specific demand",
+        "responses": {
+          "200": {
+            "description": "Information for the request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "requestData": {
+                      "oneOf": [
+                        {"$ref": "#/components/schemas/requestData"}
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedError"
+          },
+          "404": {
+            "description": "A demand with such ID has not been found"
+          }
+        }
+      }
     }
   },
   "components": {
@@ -739,6 +775,12 @@
                 "readOnly": true,
                 "description": "The status of the demand.",
                 "example": "processed"
+              },
+              "processingPhase": {
+                "enum": ["", "setup", "awaiting-offers", "evaluation", "negotiation-setup", "awaiting-awarding", "finished", "deleted"],
+                "readOnly": true,
+                "description": "The phase of the workflow.",
+                "example": "setup"
               }
             }
           }
@@ -1091,6 +1133,125 @@
             "example": "94"
           }
         }
+      },
+      "requestData": {
+        "allOf": [
+          {
+            "type": "object",
+            "description": "A request which is connected to demand",
+            "properties": {
+              "title": {
+                "type": "string",
+                "readOnly": true,
+                "description": "The title of the request",
+                "example": "title"
+              },
+              "description": {
+                "type": "string",
+                "readOnly": true,
+                "description": "The description of the request",
+                "example": "description"
+              },
+              "startDate": {
+                "type": "string",
+                "format": "date-time",
+                "nullable": true,
+                "readOnly": true,
+                "description": "The startDate of the request",
+                "example": "2024-07-09"
+              },
+              "finishDate": {
+                "type": "string",
+                "format": "date-time",
+                "nullable": true,
+                "readOnly": true,
+                "description": "The finishDate of the request",
+                "example": "2024-07-09"
+              },
+              "termsOfDelivery": {
+                "type": "string",
+                "readOnly": true,
+                "description": "The termsOfDelivery of the request",
+                "example": "ex-works",
+                "enum": [
+                  "ex-works",
+                  "free-carrier",
+                  "free-alongside-ship",
+                  "free-on-board",
+                  "cost-and-freight",
+                  "cost-insurance-and-freight",
+                  "carriage-paid-to",
+                  "carriage-insurance-paid-to",
+                  "delivered-at-place",
+                  "delivered-at-place-unloaded",
+                  "delivered-duty-paid",
+                  "services",
+                  "other"
+                ]
+              },
+              "termsOfPayment": {
+                "type": "string",
+                "readOnly": true,
+                "description": "The termsOfPayment of the request",
+                "example": "payment-in-advance",
+                "enum": [
+                  "payment-in-advance",
+                  "payment-seven-days-after-invoice-date",
+                  "payment-ten-days-after-invoice-date",
+                  "payment-30-days-after-invoice-date",
+                  "payment-60-days-after-invoice-date",
+                  "payment-90-days-after-invoice-date",
+                  "end-of-month",
+                  "21-st-of-the-month-following-invoice-date",
+                  "one-percent-discount-if-payment-received-within-ten-days-otherwise-payment-30-days-after-invoice-date",
+                  "cash-on-delivery",
+                  "account-conducted-on-a-cash-basis-no-credit",
+                  "a-documentary-credit-confirmed-by-a-bank-often-used-for-export",
+                  "a-promise-to-pay-at-a-later-date-usually-supported-by-a-bank",
+                  "cash-next-delivery",
+                  "cash-before-shipment",
+                  "cash-in-advance",
+                  "cash-with-order",
+                  "monthly-credit-payment-of-a-full-months-supply",
+                  "as-above-plus-an-extra-calendar-month",
+                  "payment-from-the-customer-offset-against-the-value-of-supplies-purchased-from-the-customer",
+                  "payment-of-agreed-amounts-at-stage",
+                  "two-percent-discount-if-payment-received-within-fourteen-days-otherwise-payment-30-days-after-invoice-date",
+                  "three-percent-discount-if-payment-received-within-fourteen-days-otherwise-payment-30-days-after-invoice-date",
+                  "four-percent-discount-if-payment-received-within-fourteen-days-otherwise-payment-30-days-after-invoice-date",
+                  "three-percent-discount-if-payment-received-within-30-days-otherwise-payment-45-days-after-invoice-date",
+                  "other"
+                ]
+              },
+              "currency": {
+                "type": "string",
+                "readOnly": true,
+                "maxLength": 3,
+                "minLength": 3,
+                "description": "A 3 character ISO 4217 currency code",
+                "example": "EUR"
+              },
+              "deliveryAddress": {
+                "description": "The deliveryAddress of the request",
+                "oneOf": [
+                  {"$ref": "#/components/schemas/address"}
+                ]
+              },
+              "invitations": {
+                "type": "array",
+                "example": ["example1@email.com", "example2@email.com"],
+                "readOnly": true,
+                "description": "The invitations of the request",
+                "items": [
+                  {
+                    "type": "string",
+                    "format": "email"
+                  }
+                ]
+              }
+            }
+          }
+        ]
       }
     }
   }
