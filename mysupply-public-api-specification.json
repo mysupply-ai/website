@@ -655,6 +655,15 @@
               "format": "uuid",
               "example": "83da61b6-e11e-495d-9808-3e1ff7869c19"
             }
+          },
+          "reason": {
+            "type": "string",
+            "nullable": true,
+            "description": "Archived reason"
+          },
+          "notifyRequestors": {
+            "type": "boolean",
+            "default": false
           }
         }
       },
@@ -764,6 +773,11 @@
             "allOf": [
               {"$ref": "#/components/schemas/requestor"}
             ]
+          },
+          "archivedReason": {
+            "type": "string",
+            "nullable": true,
+            "description": "Archived reason. Exists only if demand is archived."
           }
         }
       },
