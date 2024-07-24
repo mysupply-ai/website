@@ -591,6 +591,12 @@
             "allOf": [
               {"$ref": "#/components/schemas/requestor"}
             ]
+          },
+          "ownerId": {
+            "type": "string",
+            "format": "uuid",
+            "nullable": true,
+            "description": "Category owner"
           }
         },
         "required": ["title", "quantity", "unitOfMeasure"]
