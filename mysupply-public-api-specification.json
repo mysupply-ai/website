@@ -313,6 +313,7 @@
                   "supplier": {
                     "email": "the-winner@chairs.com",
                     "supplierNumber": "ex-993841",
+                    "supplierDomain": "sap",
                     "companyName": "The Best Chairs & Sons Ltd."
                   }
                 }
@@ -536,6 +537,11 @@
                   "type": "string",
                   "description": "Supplier number",
                   "example": "rsw1234vd"
+                },
+                "domain" : {
+                  "type": "string",
+                  "description": "Supplier domain",
+                  "example": "sap"
                 }
               }
             }
@@ -639,6 +645,12 @@
                   "type": "string",
                   "description": "Supplier number",
                   "example": "qqwer11234sdsvv"
+                },
+                "domain" : {
+                  "type": "string",
+                  "description": "Supplier domain",
+                  "example": "sap",
+                  "nullable": true
                 }
               }
             }
@@ -749,6 +761,12 @@
                   "type": "string",
                   "description": "Supplier number",
                   "example": "rsw1234vd"
+                },
+                "domain" : {
+                  "type": "string",
+                  "description": "Supplier domain",
+                  "example": "sap",
+                  "nullable": true
                 }
               }
             }
@@ -896,6 +914,13 @@
                 "description": "The supplier number provided by the purchaser's organization. If no such number is provided, a default one will be set",
                 "example": "sup-99310"
               },
+              "supplierDomain": {
+                "type": "string",
+                "readOnly": true,
+                "description": "The supplier domain provided by the purchaser's organization.",
+                "example": "sap",
+                "nullable": true
+              },
               "companyName": {
                 "type": "string",
                 "readOnly": true,
@@ -941,6 +966,11 @@
             "type": "string",
             "nullable": true,
             "description": "Supplier name"
+          },
+          "domain": {
+            "type": "string",
+            "nullable": true,
+            "description": "Supplier domain"
           }
         }
       },
