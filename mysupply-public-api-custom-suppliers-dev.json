@@ -13,6 +13,9 @@
   "security": [
     {
       "BearerAuth": []
+    },
+    {
+      "OAuth2ClientCredentials": []
     }
   ],
   "paths": {
@@ -191,6 +194,16 @@
       "BearerAuth": {
         "type": "http",
         "scheme": "bearer"
+      },
+      "OAuth2ClientCredentials": {
+        "type": "oauth2",
+        "description": "Issues an access token using the **Client Credentials** grant type.\n\n client_id: The unique UUID of your organization\n\n client_secret: The secret API token assigned to your organization",
+        "flows": {
+          "clientCredentials": {
+            "tokenUrl": "/oauth/token",
+            "scopes": {}
+          }
+        }
       }
     },
     "responses": {
