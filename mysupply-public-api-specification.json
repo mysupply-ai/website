@@ -6,7 +6,7 @@
   },
   "servers": [
     {
-      "url": "/v1"
+      "url": "https://{env}-api.mysupply.io"
     }
   ],
   "security": [
@@ -467,6 +467,187 @@
           }
         }
       }
+    },
+    "/historical-prices": {
+      "get": {
+        "summary": "Fetch a paginated list of historical prices",
+        "tags": ["Historical Prices"],
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "default": 1
+            },
+            "description": "The number of the page to fetch starting at 1"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A list of historical prices",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/historicalPrice"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedError"
+          }
+        }
+      },
+      "post": {
+        "summary": "Create a new historical price record",
+        "tags": ["Historical Prices"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/newHistoricalPrice"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Historical price record was created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/historicalPrice"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input"
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedError"
+          },
+          "422": {
+            "description": "Unprocessable entity"
+          }
+        }
+      }
+    },
+    "/historical-prices/clear": {
+      "post": {
+        "summary": "Clear all historical prices for an organization",
+        "tags": ["Historical Prices"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "204": {
+            "description": "Historical prices successfully cleared"
+          },
+          "400": {
+            "description": "Invalid input"
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedError"
+          }
+        }
+      }
+    },
+    "/historical-prices/{id}": {
+      "parameters": [
+        {
+          "$ref": "#/components/parameters/historicalPriceId"
+        }
+      ],
+      "get": {
+        "summary": "Returns information for a specific historical price",
+        "tags": ["Historical Prices"],
+        "responses": {
+          "200": {
+            "description": "Information for the historical price",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/historicalPrice"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedError"
+          },
+          "404": {
+            "description": "A historical price with such ID has not been found"
+          }
+        }
+      },
+      "patch": {
+        "summary": "Update a specific historical price",
+        "tags": ["Historical Prices"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/newHistoricalPrice"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Historical price was updated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/historicalPrice"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input"
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedError"
+          },
+          "404": {
+            "description": "A historical price with such ID has not been found"
+          },
+          "422": {
+            "description": "Unprocessable entity"
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete a specific historical price",
+        "tags": ["Historical Prices"],
+        "responses": {
+          "204": {
+            "description": "Historical price successfully deleted"
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedError"
+          },
+          "404": {
+            "description": "A historical price with such ID has not been found"
+          }
+        }
+      }
     }
   },
   "components": {
@@ -492,6 +673,18 @@
       }
     },
     "parameters": {
+      "historicalPriceId": {
+        "name": "id",
+        "in": "path",
+        "description": "The mysupply ID of the historical price",
+        "required": true,
+        "allowEmptyValue": false,
+        "schema": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "example": "83da61b6-e11e-495d-9808-3e1ff7869c19"
+      },
       "demandId": {
         "name": "id",
         "in": "path",
@@ -516,6 +709,179 @@
       }
     },
     "schemas": {
+      "historicalPrice": {
+        "type": "object",
+        "description": "A historical price record for purchased materials",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "description": "The mysupply ID of the historical price",
+            "example": "83da61b6-e11e-495d-9808-3e1ff7869c19"
+          },
+          "productOrderNumber": {
+            "type": "string",
+            "description": "Product order number",
+            "example": "PO-2024-001234"
+          },
+          "materialNumber": {
+            "type": "string",
+            "description": "Material number from ERP system",
+            "example": "MAT-789456"
+          },
+          "materialGroup": {
+            "type": "string",
+            "description": "Material group classification",
+            "example": "MG-ELECTRONICS"
+          },
+          "materialNumberDescription": {
+            "type": "string",
+            "nullable": true,
+            "description": "Description of the material number",
+            "example": "High-performance microprocessor unit"
+          },
+          "materialGroupDescription": {
+            "type": "string",
+            "nullable": true,
+            "description": "Description of the material group",
+            "example": "Electronic components and semiconductors"
+          },
+          "demandTitle": {
+            "type": "string",
+            "description": "Title of the demand/requisition",
+            "example": "Office Electronics Q1 2024"
+          },
+          "demandDescription": {
+            "type": "string",
+            "nullable": true,
+            "description": "Detailed description of the demand",
+            "example": "Procurement of electronic components for office equipment upgrade"
+          },
+          "demandQuantity": {
+            "type": "string",
+            "nullable": true,
+            "description": "Quantity ordered",
+            "example": "50"
+          },
+          "price": {
+            "$ref": "#/components/schemas/price"
+          },
+          "supplierNumber": {
+            "type": "string",
+            "description": "Supplier number from ERP system",
+            "example": "SUP-456789"
+          },
+          "orderDate": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Date when the order was placed",
+            "example": "2024-01-15T10:30:00Z"
+          },
+          "contractId": {
+            "type": "string",
+            "nullable": true,
+            "description": "The number of the contract if one with which the PO was made."
+          }
+        }
+      },
+      "newHistoricalPrice": {
+        "type": "object",
+        "description": "Data required to create a new historical price record",
+        "required": [
+          "productOrderNumber",
+          "materialNumber",
+          "materialGroup",
+          "demandTitle",
+          "price",
+          "supplierNumber",
+          "orderDate"
+        ],
+        "properties": {
+          "productOrderNumber": {
+            "type": "string",
+            "description": "Product order number",
+            "example": "PO-2024-001234"
+          },
+          "materialNumber": {
+            "type": "string",
+            "description": "Material number from ERP system",
+            "example": "MAT-789456"
+          },
+          "materialGroup": {
+            "type": "string",
+            "description": "Material group classification",
+            "example": "MG-ELECTRONICS"
+          },
+          "materialNumberDescription": {
+            "type": "string",
+            "nullable": true,
+            "description": "Description of the material number",
+            "example": "High-performance microprocessor unit"
+          },
+          "materialGroupDescription": {
+            "type": "string",
+            "nullable": true,
+            "description": "Description of the material group",
+            "example": "Electronic components and semiconductors"
+          },
+          "demandTitle": {
+            "type": "string",
+            "description": "Title of the demand/requisition",
+            "example": "Office Electronics Q1 2024"
+          },
+          "demandDescription": {
+            "type": "string",
+            "nullable": true,
+            "description": "Detailed description of the demand",
+            "example": "Procurement of electronic components for office equipment upgrade"
+          },
+          "demandQuantity": {
+            "type": "string",
+            "nullable": true,
+            "description": "Quantity ordered",
+            "example": "50"
+          },
+          "price": {
+            "$ref": "#/components/schemas/price"
+          },
+          "supplierNumber": {
+            "type": "string",
+            "description": "Supplier number from ERP system",
+            "example": "SUP-456789"
+          },
+          "orderDate": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Date when the order was placed",
+            "example": "2024-01-15T10:30:00Z"
+          },
+          "contractId": {
+            "type": "string",
+            "nullable": true,
+            "description": "The number of the contract if one with which the PO was made."
+          }
+        }
+      },
+      "price": {
+        "type": "object",
+        "description": "A monetary value (unit price)",
+        "required": ["amount", "currency"],
+        "properties": {
+          "amount": {
+            "type": "string",
+            "format": "{1,9}+(\\.\\d+)?",
+            "description": "A decimal string representation of the price amount with fixed precision",
+            "example": "17.05"
+          },
+          "currency": {
+            "type": "string",
+            "description": "The currency code of the monetary value (ISO 4217)",
+            "example": "EUR",
+            "minLength": 3,
+            "maxLength": 3
+          }
+        }
+      },
       "newDemand": {
         "type": "object",
         "description": "An item which needs to be procured (a purchase requisition).",
@@ -941,18 +1307,6 @@
                 "example": "The Best Chairs & Sons Ltd."
               }
             }
-          }
-        }
-      },
-      "price": {
-        "type": "object",
-        "description": "A monetary value.",
-        "properties": {
-          "amount": { "$ref": "#/components/schemas/decimal" },
-          "currency": {
-            "type": "string",
-            "description": "The currency code of the monetary value.",
-            "example": "EUR"
           }
         }
       },
