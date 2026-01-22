@@ -648,6 +648,163 @@
           }
         }
       }
+    },
+    "/custom-suppliers": {
+      "get": {
+        "summary": "Fetch a paginated list of custom suppliers",
+        "tags": ["Custom Suppliers"],
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "default": 1
+            },
+            "description": "The number of the page to fetch starting at 1"
+          },
+          {
+            "name": "q",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "description": "Search query parameter by all fields"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A list of custom suppliers",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/customSupplierListResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedError"
+          }
+        }
+      },
+      "post": {
+        "summary": "Create a new custom supplier",
+        "tags": ["Custom Suppliers"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/newCustomSupplier"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Custom supplier was created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/customSupplier"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input"
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedError"
+          },
+          "422": {
+            "description": "Unprocessable entity"
+          }
+        }
+      }
+    },
+    "/custom-suppliers/{id}": {
+      "parameters": [
+        {
+          "$ref": "#/components/parameters/customSupplierId"
+        }
+      ],
+      "get": {
+        "summary": "Returns information for a specific custom supplier",
+        "tags": ["Custom Suppliers"],
+        "responses": {
+          "200": {
+            "description": "Information for the custom supplier",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/customSupplier"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedError"
+          },
+          "404": {
+            "description": "A custom supplier with such ID has not been found"
+          }
+        }
+      },
+      "patch": {
+        "summary": "Update a specific custom supplier",
+        "tags": ["Custom Suppliers"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/updateCustomSupplier"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Custom supplier was updated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/customSupplier"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input"
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedError"
+          },
+          "404": {
+            "description": "A custom supplier with such ID has not been found"
+          },
+          "422": {
+            "description": "Unprocessable entity"
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete a specific custom supplier",
+        "tags": ["Custom Suppliers"],
+        "responses": {
+          "204": {
+            "description": "Custom supplier successfully deleted"
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedError"
+          },
+          "404": {
+            "description": "A custom supplier with such ID has not been found"
+          }
+        }
+      }
     }
   },
   "components": {
@@ -673,6 +830,18 @@
       }
     },
     "parameters": {
+      "customSupplierId": {
+        "name": "id",
+        "in": "path",
+        "description": "The mysupply ID of the custom supplier",
+        "required": true,
+        "allowEmptyValue": false,
+        "schema": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "example": "83da61b6-e11e-495d-9808-3e1ff7869c19"
+      },
       "historicalPriceId": {
         "name": "id",
         "in": "path",
@@ -1687,6 +1856,290 @@
           "email": {
             "type": "string",
             "format": "email"
+          }
+        }
+      },
+      "customSupplier": {
+        "type": "object",
+        "description": "A custom supplier in the organization's supplier database",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "description": "The mysupply ID of the custom supplier",
+            "example": "83da61b6-e11e-495d-9808-3e1ff7869c19"
+          },
+          "number": {
+            "type": "string",
+            "description": "Supplier number",
+            "example": "SUP-12345"
+          },
+          "domain": {
+            "type": "string",
+            "nullable": true,
+            "description": "Supplier domain",
+            "example": "sap"
+          },
+          "name": {
+            "type": "string",
+            "description": "Supplier company name",
+            "example": "ACME Corporation"
+          },
+          "email": {
+            "type": "string",
+            "format": "email",
+            "description": "Supplier email address",
+            "example": "contact@acme.com"
+          },
+          "website": {
+            "type": "string",
+            "nullable": true,
+            "description": "Supplier website URL",
+            "example": "https://www.acme.com"
+          },
+          "info": {
+            "type": "string",
+            "nullable": true,
+            "description": "Additional information about the supplier"
+          },
+          "keywords": {
+            "type": "array",
+            "description": "Keywords associated with the supplier",
+            "items": {
+              "type": "string"
+            },
+            "example": ["electronics", "manufacturing", "wholesale"]
+          },
+          "customData": {
+            "type": "object",
+            "description": "Custom data fields",
+            "additionalProperties": {
+              "type": "string"
+            }
+          },
+          "address": {
+            "$ref": "#/components/schemas/address"
+          },
+          "information": {
+            "type": "string",
+            "nullable": true,
+            "description": "Additional information about the supplier"
+          },
+          "contacts": {
+            "$ref": "#/components/schemas/contacts"
+          }
+        }
+      },
+      "newCustomSupplier": {
+        "type": "object",
+        "description": "Data required to create a new custom supplier",
+        "required": ["name", "email", "number"],
+        "properties": {
+          "number": {
+            "type": "string",
+            "description": "Supplier number",
+            "example": "SUP-12345"
+          },
+          "domain": {
+            "type": "string",
+            "nullable": true,
+            "description": "Supplier domain",
+            "example": "sap"
+          },
+          "name": {
+            "type": "string",
+            "description": "Supplier company name",
+            "example": "ACME Corporation"
+          },
+          "email": {
+            "type": "string",
+            "format": "email",
+            "description": "Supplier email address",
+            "example": "contact@acme.com"
+          },
+          "website": {
+            "type": "string",
+            "nullable": true,
+            "description": "Supplier website URL",
+            "example": "https://www.acme.com"
+          },
+          "info": {
+            "type": "string",
+            "nullable": true,
+            "description": "Additional information about the supplier"
+          },
+          "keywords": {
+            "type": "array",
+            "description": "Keywords associated with the supplier",
+            "items": {
+              "type": "string"
+            },
+            "example": ["electronics", "manufacturing", "wholesale"]
+          },
+          "customData": {
+            "type": "object",
+            "description": "Custom data fields",
+            "additionalProperties": {
+              "type": "string"
+            }
+          },
+          "address": {
+            "$ref": "#/components/schemas/address"
+          },
+          "contacts": {
+            "$ref": "#/components/schemas/contacts"
+          }
+        }
+      },
+      "updateCustomSupplier": {
+        "type": "object",
+        "description": "Data for updating an existing custom supplier",
+        "properties": {
+          "number": {
+            "type": "string",
+            "nullable": true,
+            "description": "Supplier number"
+          },
+          "domain": {
+            "type": "string",
+            "nullable": true,
+            "description": "Supplier domain"
+          },
+          "name": {
+            "type": "string",
+            "nullable": true,
+            "description": "Supplier company name"
+          },
+          "email": {
+            "type": "string",
+            "format": "email",
+            "nullable": true,
+            "description": "Supplier email address"
+          },
+          "website": {
+            "type": "string",
+            "nullable": true,
+            "description": "Supplier website URL"
+          },
+          "info": {
+            "type": "string",
+            "nullable": true,
+            "description": "Additional information about the supplier"
+          },
+          "keywords": {
+            "type": "array",
+            "nullable": true,
+            "description": "Keywords associated with the supplier",
+            "items": {
+              "type": "string"
+            }
+          },
+          "customData": {
+            "type": "object",
+            "description": "Custom data fields",
+            "additionalProperties": {
+              "type": "string"
+            }
+          },
+          "address": {
+            "$ref": "#/components/schemas/address"
+          },
+          "contacts": {
+            "$ref": "#/components/schemas/contacts"
+          }
+        }
+      },
+      "deleteCustomSupplierList": {
+        "type": "object",
+        "description": "List of custom supplier IDs to delete",
+        "properties": {
+          "supplierIds": {
+            "type": "array",
+            "description": "Array of custom supplier IDs to be deleted",
+            "items": {
+              "type": "string",
+              "format": "uuid",
+              "example": "83da61b6-e11e-495d-9808-3e1ff7869c19"
+            }
+          }
+        }
+      },
+      "customSupplierListResponse": {
+        "type": "object",
+        "required": ["data", "pagination"],
+        "properties": {
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/customSupplier"
+            }
+          },
+          "pagination": {
+            "$ref": "#/components/schemas/pagination"
+          }
+        }
+      },
+      "contacts": {
+        "type": "array",
+        "description": "Multiple contacts for one supplier",
+        "items": {
+          "description": "Contact information for a supplier",
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string",
+              "nullable": true,
+              "description": "Contact name"
+            },
+            "email": {
+              "type": "string",
+              "format": "email",
+              "description": "Contact email address"
+            }
+          }
+        }
+      },
+      "pagination": {
+        "type": "object",
+        "required": [
+          "first",
+          "current",
+          "last",
+          "previous",
+          "next",
+          "totalItems",
+          "parPage"
+        ],
+        "properties": {
+          "first": {
+            "type": "integer",
+            "example": 1
+          },
+          "current": {
+            "type": "integer",
+            "example": 36
+          },
+          "last": {
+            "type": "integer",
+            "example": 36
+          },
+          "previous": {
+            "type": "integer",
+            "nullable": true,
+            "example": 35
+          },
+          "next": {
+            "type": "integer",
+            "nullable": true,
+            "example": 36
+          },
+          "totalItems": {
+            "type": "integer",
+            "example": 1065
+          },
+          "parPage": {
+            "type": "integer",
+            "example": 15
           }
         }
       }
