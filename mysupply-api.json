@@ -2102,15 +2102,24 @@
           "description": "Contact information for a supplier",
           "type": "object",
           "properties": {
-            "name": {
-              "type": "string",
-              "nullable": true,
-              "description": "Contact name"
-            },
             "email": {
               "type": "string",
               "format": "email",
-              "description": "Contact email address"
+              "description": "Contact email address",
+              "required": true,
+              "nullable": false
+            },
+            "name": {
+              "type": "string",
+              "nullable": true,
+              "description": "Contact name",
+              "required": false
+            },
+            "notes": {
+              "type": "string",
+              "nullable": true,
+              "description": "Notes for the contact",
+              "required": false
             }
           }
         }
