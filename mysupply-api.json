@@ -2113,11 +2113,13 @@
               "type": "string",
               "nullable": true,
               "description": "Contact name",
-              "required": false
+              "required": false,
+              "default": null
             },
             "notes": {
               "type": "string",
-              "nullable": true,
+              "nullable": false,
+              "default": "",
               "description": "Notes for the contact",
               "required": false
             }
