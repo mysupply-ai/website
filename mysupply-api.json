@@ -76,6 +76,37 @@
               "type": "integer"
             },
             "description": "The number of the page to fetch starting at 1"
+          },
+          {
+            "name": "q",
+            "in": "query",
+            "required": false,
+            "description": "Advanced search filter expressed as a JSON object.\n\nStructure:\n- type: `query`\n- operator: `and | or`\n- elements: array of filter elements\n\nEach element:\n- type: `element`\n- field: string\n- operator: `eq | neq | lt | lte | gt | gte | contains | not-contains | blank | not-blank`\n- value: string (optional for blank / not-blank)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AdvancedSearchQuery"
+                },
+                "example": {
+                  "type": "query",
+                  "operator": "and",
+                  "elements": [
+                    {
+                      "type": "element",
+                      "field": "title",
+                      "operator": "eq",
+                      "value": "base"
+                    },
+                    {
+                      "type": "element",
+                      "field": "requestor",
+                      "operator": "contains",
+                      "value": "mysupply"
+                    }
+                  ]
+                }
+              }
+            }
           }
         ],
         "tags": ["Demands"],
@@ -2165,6 +2196,59 @@
           "parPage": {
             "type": "integer",
             "example": 15
+          }
+        }
+      },
+      "AdvancedSearchQuery": {
+        "type": "object",
+        "required": ["type", "operator", "elements"],
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": ["query"]
+          },
+          "operator": {
+            "type": "string",
+            "enum": ["and", "or"]
+          },
+          "elements": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AdvancedSearchElement"
+            }
+          }
+        }
+      },
+      "AdvancedSearchElement": {
+        "type": "object",
+        "required": ["type", "field", "operator"],
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": ["element"]
+          },
+          "field": {
+            "type": "string",
+            "description": "Field name to filter on"
+          },
+          "operator": {
+            "type": "string",
+            "enum": [
+              "eq",
+              "neq",
+              "lt",
+              "lte",
+              "gt",
+              "gte",
+              "contains",
+              "not-contains",
+              "blank",
+              "not-blank"
+            ]
+          },
+          "value": {
+            "type": "string",
+            "description": "Filter value (not required for blank / not-blank operators)"
           }
         }
       }
