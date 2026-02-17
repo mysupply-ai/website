@@ -1089,7 +1089,8 @@
             "description": "The currency code of the monetary value (ISO 4217)",
             "example": "EUR",
             "minLength": 3,
-            "maxLength": 3
+            "maxLength": 3,
+            "pattern": "^[A-Z]{3}$"
           }
         }
       },
@@ -1110,6 +1111,15 @@
           "unitOfMeasure": {
             "allOf": [ { "$ref": "#/components/schemas/unitOfMeasure" } ],
             "example": "piece"
+          },
+          "currency": {
+            "type": "string",
+            "description": "Optional currency code for the demand (ISO 4217).",
+            "example": "USD",
+            "minLength": 3,
+            "maxLength": 3,
+            "pattern": "^[A-Z]{3}$",
+            "nullable": true
           },
           "demandSuppliers":{
             "type": "array",
@@ -1214,6 +1224,15 @@
           "unit": {
             "allOf": [ { "$ref": "#/components/schemas/unitOfMeasure" } ],
             "example": "piece"
+          },
+          "currency": {
+            "type": "string",
+            "description": "Optional currency code for the demand (ISO 4217).",
+            "example": "EUR",
+            "minLength": 3,
+            "maxLength": 3,
+            "pattern": "^[A-Z]{3}$",
+            "nullable": true
           },
           "fields": {
             "description": "Custom fields list",
@@ -1335,6 +1354,16 @@
           "unitOfMeasure": {
             "allOf": [ { "$ref": "#/components/schemas/unitOfMeasure" } ],
             "example": "piece"
+          },
+          "currency": {
+            "type": "string",
+            "description": "Currency code associated with the demand (ISO 4217).",
+            "example": "USD",
+            "minLength": 3,
+            "maxLength": 3,
+            "pattern": "^[A-Z]{3}$",
+            "nullable": true,
+            "readOnly": true
           },
           "demandSuppliers":{
             "type": "array",
@@ -1882,6 +1911,7 @@
                 "readOnly": true,
                 "maxLength": 3,
                 "minLength": 3,
+                "pattern": "^[A-Z]{3}$",
                 "description": "A 3 character ISO 4217 currency code",
                 "example": "EUR"
               },
