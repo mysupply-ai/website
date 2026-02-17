@@ -512,6 +512,17 @@
               "default": 1
             },
             "description": "The number of the page to fetch starting at 1"
+          },
+          {
+            "name": "productOrderNumber",
+            "in": "query",
+            "required": false,
+            "allowEmptyValue": false,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Filter results by exact product order number (exact match).",
+            "example": "PO-2024-001234"
           }
         ],
         "responses": {
