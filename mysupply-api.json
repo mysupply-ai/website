@@ -737,6 +737,29 @@
             "application/json": {
               "schema": {
                 "$ref": "#/components/schemas/newCustomSupplier"
+              },
+              "examples": {
+                "withEmail": {
+                  "summary": "Create supplier with email",
+                  "value": {
+                    "number": "SUP-12345",
+                    "name": "ACME Corporation",
+                    "email": "contact@acme.com",
+                    "contacts": [
+                      { "email": "contact@acme.com", "name": "Main contact", "note": "" }
+                    ]
+                  }
+                },
+                "withoutEmail": {
+                  "summary": "Create supplier without email (email taken from first contact)",
+                  "value": {
+                    "number": "SUP-12345",
+                    "name": "ACME Corporation",
+                    "contacts": [
+                      { "email": "contact@acme.com", "name": "Main contact", "note": "" }
+                    ]
+                  }
+                }
               }
             }
           }
@@ -2123,7 +2146,7 @@
       "newCustomSupplier": {
         "type": "object",
         "description": "Data required to create a new custom supplier",
-        "required": ["name", "email", "number"],
+        "required": ["name", "number"],
         "properties": {
           "number": {
             "type": "string",
@@ -2144,7 +2167,8 @@
           "email": {
             "type": "string",
             "format": "email",
-            "description": "Supplier email address",
+            "nullable": true,
+            "description": "Supplier email address. Optional. If omitted, you must provide at least one item in `contacts`. The supplier email will be set to the first contact’s email.",
             "example": "contact@acme.com"
           },
           "website": {
@@ -2177,7 +2201,12 @@
             "$ref": "#/components/schemas/address"
           },
           "contacts": {
-            "$ref": "#/components/schemas/contacts"
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/contacts"
+              }
+            ],
+            "description": "Multiple contacts for one supplier. Required when `email` is omitted."
           }
         }
       },
@@ -2280,8 +2309,7 @@
             "email": {
               "type": "string",
               "format": "email",
-              "description": "Contact email address",
-              "nullable": false
+              "description": "Contact email address"
             },
             "name": {
               "type": "string",
@@ -2289,11 +2317,10 @@
               "description": "Contact name",
               "default": null
             },
-            "notes": {
+            "note": {
               "type": "string",
-              "nullable": false,
               "default": "",
-              "description": "Notes for the contact"
+              "description": "Note for the contact"
             }
           }
         }
