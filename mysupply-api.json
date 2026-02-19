@@ -643,10 +643,8 @@
         "requestBody": {
           "required": true,
           "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/newHistoricalPrice"
-              }
+            "application/merge-patch+json": {
+              "schema": { "$ref": "#/components/schemas/patchHistoricalPrice" }
             }
           }
         },
@@ -992,6 +990,17 @@
             "type": "string",
             "nullable": true,
             "description": "The number of the contract if one with which the PO was made."
+          },
+          "customData": {
+            "type": "object",
+            "description": "Custom data fields (free-form JSON object).",
+            "default": {},
+            "additionalProperties": true,
+            "example": {
+              "tag": "company",
+              "category": "chemicals",
+              "note": "imported from SAP"
+            }
           }
         }
       },
@@ -1070,6 +1079,99 @@
             "type": "string",
             "nullable": true,
             "description": "The number of the contract if one with which the PO was made."
+          },
+          "customData": {
+            "type": "object",
+            "description": "Custom data fields (free-form JSON object).",
+            "additionalProperties": true,
+            "nullable": true,
+            "example": {
+              "tag": "company"
+            }
+          }
+        }
+      },
+      "patchHistoricalPrice": {
+        "type": "object",
+        "description": "Fields to patch on a historical price record (all fields optional).",
+        "properties": {
+          "productOrderNumber": {
+            "type": "string",
+            "description": "Product order number",
+            "example": "PO-2024-001234",
+            "nullable": true
+          },
+          "materialNumber": {
+            "type": "string",
+            "description": "Material number from ERP system",
+            "example": "MAT-789456",
+            "nullable": true
+          },
+          "materialGroup": {
+            "type": "string",
+            "description": "Material group classification",
+            "example": "MG-ELECTRONICS",
+            "nullable": true
+          },
+          "materialNumberDescription": {
+            "type": "string",
+            "nullable": true,
+            "description": "Description of the material number",
+            "example": "High-performance microprocessor unit"
+          },
+          "materialGroupDescription": {
+            "type": "string",
+            "nullable": true,
+            "description": "Description of the material group",
+            "example": "Electronic components and semiconductors"
+          },
+          "demandTitle": {
+            "type": "string",
+            "nullable": true
+          },
+          "demandDescription": {
+            "type": "string",
+            "nullable": true,
+            "description": "Detailed description of the demand",
+            "example": "Procurement of electronic components for office equipment upgrade"
+          },
+          "demandQuantity": {
+            "type": "string",
+            "nullable": true,
+            "description": "Quantity ordered",
+            "example": "50"
+          },
+          "price": {
+            "nullable": true,
+            "allOf": [
+              { "$ref": "#/components/schemas/price" }
+            ]
+          },
+          "supplierNumber": {
+            "type": "string",
+            "description": "Supplier number from ERP system",
+            "example": "SUP-456789",
+            "nullable": true
+          },
+          "orderDate": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Date when the order was placed",
+            "example": "2024-01-15T10:30:00Z",
+            "nullable": true
+          },
+          "contractId": {
+            "type": "string",
+            "nullable": true,
+            "description": "The number of the contract if one with which the PO was made."
+          },
+          "customData": {
+            "type": "object",
+            "additionalProperties": true,
+            "example": {
+              "tag": "company"
+            },
+            "nullable": true
           }
         }
       },
