@@ -2286,7 +2286,8 @@
             "email": {
               "type": "string",
               "format": "email",
-              "description": "Contact email address"
+              "description": "Contact email address",
+              "nullable": false
             },
             "name": {
               "type": "string",
@@ -2297,6 +2298,7 @@
             "note": {
               "type": "string",
               "default": "",
+              "nullable": false,
               "description": "Note for the contact"
             }
           }
