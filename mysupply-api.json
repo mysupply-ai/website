@@ -737,29 +737,6 @@
             "application/json": {
               "schema": {
                 "$ref": "#/components/schemas/newCustomSupplier"
-              },
-              "examples": {
-                "withEmail": {
-                  "summary": "Create supplier with email",
-                  "value": {
-                    "number": "SUP-12345",
-                    "name": "ACME Corporation",
-                    "email": "contact@acme.com",
-                    "contacts": [
-                      { "email": "contact@acme.com", "name": "Main contact", "note": "" }
-                    ]
-                  }
-                },
-                "withoutEmail": {
-                  "summary": "Create supplier without email (email taken from first contact)",
-                  "value": {
-                    "number": "SUP-12345",
-                    "name": "ACME Corporation",
-                    "contacts": [
-                      { "email": "contact@acme.com", "name": "Main contact", "note": "" }
-                    ]
-                  }
-                }
               }
             }
           }
