@@ -710,6 +710,14 @@
               "type": "string"
             },
             "description": "Search query parameter by all fields"
+          },
+          {
+            "name": "includeDeleted",
+            "in": "query",
+            "schema": {
+              "type": "boolean"
+            },
+            "description": "Include deleted custom suppliers in the response"
           }
         ],
         "responses": {
@@ -773,6 +781,16 @@
       "get": {
         "summary": "Returns information for a specific custom supplier",
         "tags": ["Custom Suppliers"],
+        "parameters": [
+          {
+            "name": "includeDeleted",
+            "in": "query",
+            "schema": {
+              "type": "boolean"
+            },
+            "description": "Include deleted custom suppliers in the response"
+          }
+        ],
         "responses": {
           "200": {
             "description": "Information for the custom supplier",
@@ -795,6 +813,16 @@
       "patch": {
         "summary": "Update a specific custom supplier",
         "tags": ["Custom Suppliers"],
+        "parameters": [
+          {
+            "name": "includeDeleted",
+            "in": "query",
+            "schema": {
+              "type": "boolean"
+            },
+            "description": "Include deleted custom suppliers in the response"
+          }
+        ],
         "requestBody": {
           "required": true,
           "content": {
@@ -2092,6 +2120,10 @@
             "nullable": true,
             "description": "Additional information about the supplier"
           },
+          "deleted": {
+            "type": "boolean",
+            "description": "Indicates whether the custom supplier is deleted"
+          },
           "keywords": {
             "type": "array",
             "description": "Keywords associated with the supplier",
@@ -2221,6 +2253,11 @@
             "type": "string",
             "nullable": true,
             "description": "Additional information about the supplier"
+          },
+          "deleted": {
+            "type": "boolean",
+            "nullable": true,
+            "description": "Mark custom supplier as deleted"
           },
           "keywords": {
             "type": "array",
