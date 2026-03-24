@@ -14380,7 +14380,7 @@
             "DefaultRequestItem"
           ],
           "responses": {
-            "204": {
+            "200": {
               "description": "Demands successfully archived.",
               "content": {
                 "application/ld+json": {
