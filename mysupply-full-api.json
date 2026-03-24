@@ -14381,25 +14381,88 @@
           ],
           "responses": {
             "204": {
-              "description": "DefaultRequestItem resource created",
+              "description": "Demands successfully archived.",
               "content": {
                 "application/ld+json": {
-                  "schema": {}
+                  "schema": {
+                    "type": "object",
+                    "required": [
+                      "error",
+                      "status"
+                    ],
+                    "properties": {
+                      "error": {
+                        "type": "boolean",
+                        "enum": [
+                          false, true
+                        ]
+                      },
+                      "status": {
+                        "type": "string",
+                        "enum": [
+                          "success", "error"
+                        ]
+                      }
+                    },
+                    "example": {
+                      "error": false,
+                      "status": "success"
+                    }
+                  }
                 },
                 "application/json": {
-                  "schema": {}
+                  "schema": {
+                    "type": "object",
+                    "required": [
+                      "error",
+                      "status"
+                    ],
+                    "properties": {
+                      "error": {
+                        "type": "boolean",
+                        "enum": [
+                          false
+                        ]
+                      },
+                      "status": {
+                        "type": "string",
+                        "enum": [
+                          "success"
+                        ]
+                      }
+                    },
+                    "example": {
+                      "error": false,
+                      "status": "success"
+                    }
+                  }
                 },
                 "text/html": {
-                  "schema": {}
-                }
-              },
-              "links": {
-                "GetDefaultRequestItemItem": {
-                  "operationId": "getDefaultRequestItemItem",
-                  "parameters": {
-                    "id": "$response.body#/id"
-                  },
-                  "description": "The `id` value returned in the response can be used as the `id` parameter in `GET /default-request-items/{id}`."
+                  "schema": {
+                    "type": "object",
+                    "required": [
+                      "error",
+                      "status"
+                    ],
+                    "properties": {
+                      "error": {
+                        "type": "boolean",
+                        "enum": [
+                          false
+                        ]
+                      },
+                      "status": {
+                        "type": "string",
+                        "enum": [
+                          "success"
+                        ]
+                      }
+                    },
+                    "example": {
+                      "error": false,
+                      "status": "success"
+                    }
+                  }
                 }
               }
             },

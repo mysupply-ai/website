@@ -148,7 +148,29 @@
         },
         "responses": {
           "204": {
-            "description": "Demands successfully archived."
+            "description": "Demands successfully archived.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": ["error", "status"],
+                  "properties": {
+                    "error": {
+                      "type": "boolean",
+                      "enum": [false, true]
+                    },
+                    "status": {
+                      "type": "string",
+                      "enum": ["success", "error"]
+                    }
+                  },
+                  "example": {
+                    "error": false,
+                    "status": "success"
+                  }
+                }
+              }
+            }
           },
           "400": {
             "description": "Invalid input"
