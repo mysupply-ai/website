@@ -1892,25 +1892,17 @@
             "description": "Country",
             "example": "Germany"
           },
-          "region": {
-            "type": "string",
-            "description": "Region"
-          },
           "city": {
             "type": "string",
             "description": "The city of the address",
             "example": "Berlin"
           },
-          "postalCode": {
+          "zip": {
             "type": "string",
             "description": "The postal code of the address",
             "example": "1142"
           },
-          "streetAddress1": {
-            "type": "string",
-            "description": "The street address"
-          },
-          "streetAddress2": {
+          "street": {
             "type": "string",
             "description": "The street address"
           }
@@ -2084,6 +2076,18 @@
                     "format": "email"
                   }
                 ]
+              },
+              "workflowId": {
+                "type": "string",
+                "format": "uuid",
+                "readOnly": true,
+                "description": "The workflow Id"
+              },
+              "requestId": {
+                "type": "string",
+                "format": "uuid",
+                "readOnly": true,
+                "description": "The request Id"
               }
             }
           }
