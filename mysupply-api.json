@@ -371,7 +371,55 @@
                     "supplierNumber": "ex-993841",
                     "supplierDomain": "sap",
                     "companyName": "The Best Chairs & Sons Ltd."
-                  }
+                  },
+                  "negotiationNotes": "Awarded based on delivery time and final price.",
+                  "requirements": [
+                    {
+                      "title": "Safety certificate",
+                      "compliant": true,
+                      "answer": null,
+                      "note": "Certificate is valid until 2027.",
+                      "description": "Supplier must provide a valid safety certificate.",
+                      "required": true
+                    }
+                  ],
+                  "questions": [
+                    {
+                      "title": "Delivery comment",
+                      "answer": "Can deliver before noon.",
+                      "note": "",
+                      "description": "Provide preferred delivery details.",
+                      "required": false
+                    }
+                  ],
+                  "rankedSupplierOffers": [
+                    {
+                      "rank": 2,
+                      "unitPrice": {
+                        "amount": "220",
+                        "currency": "EUR"
+                      },
+                      "supplier": {
+                        "email": "second-best@chairs.com",
+                        "supplierNumber": "ex-993842",
+                        "supplierDomain": "sap",
+                        "companyName": "Second Best Chairs Ltd."
+                      }
+                    },
+                    {
+                      "rank": 3,
+                      "unitPrice": {
+                        "amount": "250",
+                        "currency": "EUR"
+                      },
+                      "supplier": {
+                        "email": "third-best@chairs.com",
+                        "supplierNumber": "ex-993843",
+                        "supplierDomain": "sap",
+                        "companyName": "Third Best Chairs Ltd."
+                      }
+                    }
+                  ]
                 }
               }
             }
@@ -1671,34 +1719,154 @@
           "supplier": {
             "nullable": true,
             "readOnly": true,
-            "type": "object",
             "description": "Information about the supplier delivering the demand",
-            "properties": {
-              "email": {
-                "type": "string",
-                "readOnly": true,
-                "example": "the-best@chairs.com"
-              },
-              "supplierNumber": {
-                "type": "string",
-                "readOnly": true,
-                "description": "The supplier number provided by the purchaser's organization. If no such number is provided, a default one will be set",
-                "example": "sup-99310"
-              },
-              "supplierDomain": {
-                "type": "string",
-                "readOnly": true,
-                "description": "The supplier domain provided by the purchaser's organization.",
-                "example": "sap",
-                "nullable": true
-              },
-              "companyName": {
-                "type": "string",
-                "readOnly": true,
-                "description": "The name of the company of the supplier as provided by the supplier.",
-                "example": "The Best Chairs & Sons Ltd."
+            "allOf": [ { "$ref": "#/components/schemas/dealSupplier" } ]
+          },
+          "negotiationNotes": {
+            "type": "string",
+            "nullable": true,
+            "readOnly": true,
+            "description": "Notes provided when the deal was awarded."
+          },
+          "requirements": {
+            "type": "array",
+            "readOnly": true,
+            "description": "Answers provided by the awarded supplier for workflow requirements.",
+            "items": {
+              "type": "object",
+              "properties": {
+                "title": {
+                  "type": "string",
+                  "readOnly": true,
+                  "description": "Requirement title."
+                },
+                "compliant": {
+                  "type": "boolean",
+                  "nullable": true,
+                  "readOnly": true,
+                  "description": "Whether the supplier marked the requirement as compliant."
+                },
+                "answer": {
+                  "type": "string",
+                  "nullable": true,
+                  "readOnly": true,
+                  "description": "Answer provided for the requirement."
+                },
+                "note": {
+                  "type": "string",
+                  "nullable": true,
+                  "readOnly": true,
+                  "description": "Additional note provided for the requirement."
+                },
+                "description": {
+                  "type": "string",
+                  "nullable": true,
+                  "readOnly": true,
+                  "description": "Requirement description."
+                },
+                "required": {
+                  "type": "boolean",
+                  "readOnly": true,
+                  "description": "Whether the requirement was mandatory."
+                }
               }
             }
+          },
+          "questions": {
+            "type": "array",
+            "readOnly": true,
+            "description": "Answers provided by the awarded supplier for workflow questions.",
+            "items": {
+              "type": "object",
+              "properties": {
+                "title": {
+                  "type": "string",
+                  "readOnly": true,
+                  "description": "Question title."
+                },
+                "answer": {
+                  "type": "string",
+                  "nullable": true,
+                  "readOnly": true,
+                  "description": "Answer provided for the question."
+                },
+                "note": {
+                  "type": "string",
+                  "nullable": true,
+                  "readOnly": true,
+                  "description": "Additional note provided for the question."
+                },
+                "description": {
+                  "type": "string",
+                  "nullable": true,
+                  "readOnly": true,
+                  "description": "Question description."
+                },
+                "required": {
+                  "type": "boolean",
+                  "readOnly": true,
+                  "description": "Whether the question was mandatory."
+                }
+              }
+            }
+          },
+          "rankedSupplierOffers": {
+            "type": "array",
+            "readOnly": true,
+            "description": "Second and third ranked supplier offers, ordered by rank. The winning supplier remains available in the supplier and unitPrice fields for backward compatibility.",
+            "maxItems": 2,
+            "items": {
+              "type": "object",
+              "properties": {
+                "rank": {
+                  "type": "integer",
+                  "readOnly": true,
+                  "description": "Supplier offer rank. Values are 2 and 3."
+                },
+                "unitPrice": {
+                  "readOnly": true,
+                  "description": "The price for a single unit of the demand.",
+                  "allOf": [ { "$ref": "#/components/schemas/price" } ]
+                },
+                "supplier": {
+                  "readOnly": true,
+                  "description": "Information about the ranked supplier.",
+                  "allOf": [ { "$ref": "#/components/schemas/dealSupplier" } ]
+                }
+              }
+            }
+          }
+        }
+      },
+      "dealSupplier": {
+        "type": "object",
+        "readOnly": true,
+        "description": "Supplier information returned by the deal endpoint.",
+        "properties": {
+          "email": {
+            "type": "string",
+            "readOnly": true,
+            "example": "the-best@chairs.com"
+          },
+          "supplierNumber": {
+            "type": "string",
+            "nullable": true,
+            "readOnly": true,
+            "description": "The supplier number provided by the purchaser's organization. If no such number is provided, a default one will be set.",
+            "example": "sup-99310"
+          },
+          "supplierDomain": {
+            "type": "string",
+            "readOnly": true,
+            "description": "The supplier domain provided by the purchaser's organization.",
+            "example": "sap",
+            "nullable": true
+          },
+          "companyName": {
+            "type": "string",
+            "readOnly": true,
+            "description": "The name of the company of the supplier as provided by the supplier.",
+            "example": "The Best Chairs & Sons Ltd."
           }
         }
       },
