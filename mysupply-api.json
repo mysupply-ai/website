@@ -650,6 +650,100 @@
         }
       }
     },
+    "/historical-prices/bulk": {
+      "post": {
+        "summary": "Create multiple historical price records",
+        "description": "Creates multiple PO history (historical-price) records in one request. The single-record endpoint remains available at `POST /historical-prices`.\n\nThe endpoint requires an authenticated user authorized to manage historical prices, including public API users. A public API user can create records only for its own organization. An `organizationId` supplied by a non-admin user is ignored.\n\nEach item is validated and processed independently. Valid items are created even when other items are invalid. Invalid items are skipped and returned with field-level errors. Results appear in the same order as the submitted items, and `index` is the zero-based request position. Successful records use the same creation, organization assignment, persistence, and vectorization logic as the single-record endpoint.\n\nRequired headers: `Authorization: Bearer <token>`, `Content-Type: application/json`, and `Accept: application/json`.",
+        "tags": ["Historical Prices"],
+        "security": [
+          {
+            "BearerAuth": []
+          },
+          {
+            "OAuth2ClientCredentials": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/bulkHistoricalPriceRequest"
+              },
+              "example": {
+                "historicalPrices": [
+                  {
+                    "productOrderNumber": "PO-HOMAG-001",
+                    "materialNumber": "MAT-001",
+                    "materialGroup": "WOOD",
+                    "materialNumberDescription": "Oak panel",
+                    "materialGroupDescription": "Wood materials",
+                    "demandTitle": "Oak panels",
+                    "demandDescription": "Oak panels for production",
+                    "demandQuantity": "10",
+                    "price": {
+                      "amount": "125.0000",
+                      "currency": "EUR"
+                    },
+                    "supplierNumber": "SUP-001",
+                    "orderDate": "2026-07-01T00:00:00+00:00",
+                    "contractId": "CONTRACT-001",
+                    "customData": {
+                      "source": "Homag"
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "The batch was evaluated. Each result indicates whether the corresponding item was created or rejected.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/bulkHistoricalPriceResponse"
+                },
+                "example": {
+                  "results": [
+                    {
+                      "index": 0,
+                      "productOrderNumber": "PO-HOMAG-001",
+                      "success": true,
+                      "id": "977f8584-73ea-4318-a1d9-8f85a7ebca8d",
+                      "errors": {}
+                    },
+                    {
+                      "index": 1,
+                      "productOrderNumber": "PO-HOMAG-002",
+                      "success": false,
+                      "errors": {
+                        "materialGroup": [
+                          "This value should not be blank."
+                        ]
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Malformed JSON, missing historicalPrices, or request deserialization failure."
+          },
+          "401": {
+            "description": "Unauthenticated request."
+          },
+          "403": {
+            "description": "Authenticated user lacks permission to manage historical prices."
+          },
+          "422": {
+            "description": "historicalPrices must contain between 1 and 500 items."
+          }
+        }
+      }
+    },
     "/historical-prices/clear": {
       "post": {
         "summary": "Clear all historical prices for an organization",
@@ -1186,6 +1280,179 @@
             "example": {
               "tag": "company"
             }
+          }
+        }
+      },
+      "bulkHistoricalPriceRequest": {
+        "type": "object",
+        "description": "A batch of historical price records to validate and create independently.",
+        "required": ["historicalPrices"],
+        "properties": {
+          "historicalPrices": {
+            "type": "array",
+            "description": "Historical price records to create.",
+            "minItems": 1,
+            "maxItems": 500,
+            "items": {
+              "$ref": "#/components/schemas/bulkHistoricalPriceItem"
+            }
+          }
+        }
+      },
+      "bulkHistoricalPriceItem": {
+        "type": "object",
+        "description": "Data required to create one historical price record in a batch.",
+        "required": [
+          "productOrderNumber",
+          "materialGroup",
+          "demandTitle",
+          "price",
+          "supplierNumber",
+          "orderDate"
+        ],
+        "properties": {
+          "productOrderNumber": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Product order number.",
+            "example": "PO-HOMAG-001"
+          },
+          "materialNumber": {
+            "type": "string",
+            "description": "Material number from ERP system.",
+            "example": "MAT-001"
+          },
+          "materialGroup": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Material group classification.",
+            "example": "WOOD"
+          },
+          "materialNumberDescription": {
+            "type": "string",
+            "nullable": true,
+            "description": "Description of the material number.",
+            "example": "Oak panel"
+          },
+          "materialGroupDescription": {
+            "type": "string",
+            "nullable": true,
+            "description": "Description of the material group.",
+            "example": "Wood materials"
+          },
+          "demandTitle": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Title of the demand/requisition.",
+            "example": "Oak panels"
+          },
+          "demandDescription": {
+            "type": "string",
+            "nullable": true,
+            "description": "Detailed description of the demand.",
+            "example": "Oak panels for production"
+          },
+          "demandQuantity": {
+            "type": "string",
+            "nullable": true,
+            "pattern": "^(?:0*[1-9]\\d*(?:\\.\\d+)?|0*\\.\\d*[1-9]\\d*)$",
+            "description": "Quantity ordered. When provided, it must be numeric and greater than zero.",
+            "example": "10"
+          },
+          "price": {
+            "$ref": "#/components/schemas/price"
+          },
+          "supplierNumber": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Supplier number from ERP system.",
+            "example": "SUP-001"
+          },
+          "orderDate": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Date when the order was placed.",
+            "example": "2026-07-01T00:00:00+00:00"
+          },
+          "contractId": {
+            "type": "string",
+            "nullable": true,
+            "description": "The number of the contract if one with which the PO was made.",
+            "example": "CONTRACT-001"
+          },
+          "organizationId": {
+            "type": "string",
+            "format": "uuid",
+            "nullable": true,
+            "description": "Organization to assign the record to. Ignored when supplied by a non-admin user.",
+            "example": "83da61b6-e11e-495d-9808-3e1ff7869c19"
+          },
+          "customData": {
+            "type": "object",
+            "description": "Custom data fields (free-form JSON object).",
+            "additionalProperties": true,
+            "nullable": true,
+            "example": {
+              "source": "Homag"
+            }
+          }
+        }
+      },
+      "bulkHistoricalPriceResponse": {
+        "type": "object",
+        "required": ["results"],
+        "properties": {
+          "results": {
+            "type": "array",
+            "description": "Per-item results in the same order as the submitted historical prices.",
+            "items": {
+              "$ref": "#/components/schemas/bulkHistoricalPriceResult"
+            }
+          }
+        }
+      },
+      "bulkHistoricalPriceResult": {
+        "type": "object",
+        "required": [
+          "index",
+          "success",
+          "errors"
+        ],
+        "properties": {
+          "index": {
+            "type": "integer",
+            "minimum": 0,
+            "description": "Zero-based position of the item in the request.",
+            "example": 0
+          },
+          "productOrderNumber": {
+            "type": "string",
+            "nullable": true,
+            "description": "Product order number supplied for the item, or null when unavailable.",
+            "example": "PO-HOMAG-001"
+          },
+          "success": {
+            "type": "boolean",
+            "description": "Whether the historical price record was created.",
+            "example": true
+          },
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "nullable": true,
+            "description": "ID of the created record. Omitted or null when creation fails.",
+            "example": "977f8584-73ea-4318-a1d9-8f85a7ebca8d"
+          },
+          "errors": {
+            "type": "object",
+            "description": "Field-level or processing errors whose property values are arrays of strings. Successful results contain an empty object. Unexpected processing errors use `{ \"processing\": [\"Unable to create historical price.\"] }`.",
+            "additionalProperties": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "example": {}
           }
         }
       },
