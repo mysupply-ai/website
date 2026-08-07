@@ -1167,6 +1167,13 @@
           "price": {
             "$ref": "#/components/schemas/price"
           },
+          "totalPrice": {
+            "readOnly": true,
+            "description": "Total price calculated from the unit price and ordered quantity.",
+            "allOf": [
+              { "$ref": "#/components/schemas/price" }
+            ]
+          },
           "supplierNumber": {
             "type": "string",
             "description": "Supplier number from ERP system",
