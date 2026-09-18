@@ -370,7 +370,8 @@
                     "email": "the-winner@chairs.com",
                     "supplierNumber": "ex-993841",
                     "supplierDomain": "sap",
-                    "companyName": "The Best Chairs & Sons Ltd."
+                    "companyName": "The Best Chairs & Sons Ltd.",
+                    "externalRequestId": "4500012345"
                   },
                   "negotiationNotes": "Awarded based on delivery time and final price.",
                   "requirements": [
@@ -403,7 +404,8 @@
                         "email": "second-best@chairs.com",
                         "supplierNumber": "ex-993842",
                         "supplierDomain": "sap",
-                        "companyName": "Second Best Chairs Ltd."
+                        "companyName": "Second Best Chairs Ltd.",
+                        "externalRequestId": "4500012346"
                       }
                     },
                     {
@@ -416,7 +418,8 @@
                         "email": "third-best@chairs.com",
                         "supplierNumber": "ex-993843",
                         "supplierDomain": "sap",
-                        "companyName": "Third Best Chairs Ltd."
+                        "companyName": "Third Best Chairs Ltd.",
+                        "externalRequestId": "4500012347"
                       }
                     }
                   ]
@@ -429,6 +432,127 @@
           },
           "404": {
             "description": "A demand with such ID has not been found"
+          }
+        }
+      }
+    },
+    "/default-requests/{id}/details": {
+      "parameters": [
+        {
+          "$ref": "#/components/parameters/requestId"
+        }
+      ],
+      "get": {
+        "tags": ["Requests"],
+        "summary": "Returns Request details for an external procurement integration",
+        "responses": {
+          "200": {
+            "description": "Request details",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/defaultRequestDetails"
+                },
+                "example": {
+                  "id": "d7d4998a-6b53-4d2b-8dd2-a591dcc64f9f",
+                  "title": "Packaging machines RFQ",
+                  "workflowId": "ba68d05c-220e-475f-92f4-c41c56ae8c41",
+                  "state": "published",
+                  "invitations": [
+                    {
+                      "id": "11111111-1111-4111-8111-111111111111",
+                      "inviteesContacts": [
+                        {
+                          "email": "buyer@supplier-one.example",
+                          "name": "Supplier Contact"
+                        }
+                      ],
+                      "vendorNumber": "100045",
+                      "vendorName": "Supplier One GmbH",
+                      "externalRequestId": null
+                    }
+                  ],
+                  "demands": [
+                    {
+                      "id": "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa",
+                      "title": "Packaging machine",
+                      "quantity": "2",
+                      "unitOfMeasure": "piece",
+                      "currency": "EUR",
+                      "fields": [],
+                      "requestor": {
+                        "email": "requester@homag.example",
+                        "name": "Request Owner",
+                        "username": "request.owner"
+                      },
+                      "status": "processing",
+                      "processingPhase": "setup",
+                      "archivedReason": null
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedError"
+          },
+          "403": {
+            "description": "The user is not allowed to edit this Request"
+          },
+          "404": {
+            "description": "A Request with such ID has not been found"
+          }
+        }
+      }
+    },
+    "/default-requests/{id}/external-approval": {
+      "parameters": [
+        {
+          "$ref": "#/components/parameters/requestId"
+        }
+      ],
+      "put": {
+        "tags": ["Requests"],
+        "summary": "Assign external request IDs to Invitations",
+        "description": "Assigns the first external request ID to each matching Invitation in the Request. Existing values remain unchanged, and unknown Invitation IDs are ignored.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/externalApprovalRequest"
+              },
+              "example": {
+                "invitations": [
+                  {
+                    "invitationId": "11111111-1111-4111-8111-111111111111",
+                    "externalRequestId": "4500012345"
+                  },
+                  {
+                    "invitationId": "22222222-2222-4222-8222-222222222222",
+                    "externalRequestId": "4500012346"
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "204": {
+            "description": "External request IDs were assigned to matching Invitations"
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedError"
+          },
+          "403": {
+            "description": "The user is not allowed to edit this Request"
+          },
+          "404": {
+            "description": "A Request with such ID has not been found"
+          },
+          "422": {
+            "description": "The request body is invalid"
           }
         }
       }
@@ -1096,6 +1220,18 @@
           "type": "string"
         },
         "example": "83da61b6-e11e-495d-9808-3e1ff7869c19"
+      },
+      "requestId": {
+        "name": "id",
+        "in": "path",
+        "description": "The mysupply ID of the Request",
+        "required": true,
+        "allowEmptyValue": false,
+        "schema": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "example": "d7d4998a-6b53-4d2b-8dd2-a591dcc64f9f"
       },
       "fieldId": {
         "name": "fieldId",
@@ -2141,6 +2277,207 @@
             "readOnly": true,
             "description": "The name of the company of the supplier as provided by the supplier.",
             "example": "The Best Chairs & Sons Ltd."
+          },
+          "externalRequestId": {
+            "type": "string",
+            "nullable": true,
+            "readOnly": true,
+            "description": "External request ID assigned to the supplier's Invitation.",
+            "example": "4500012345"
+          }
+        }
+      },
+      "defaultRequestDetails": {
+        "type": "object",
+        "readOnly": true,
+        "required": ["id", "title", "workflowId", "state", "invitations", "demands"],
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "description": "The mysupply ID of the Request"
+          },
+          "title": {
+            "type": "string",
+            "description": "The Request title",
+            "example": "Packaging machines RFQ"
+          },
+          "workflowId": {
+            "type": "string",
+            "format": "uuid",
+            "description": "The mysupply ID of the Workflow"
+          },
+          "state": {
+            "type": "string",
+            "description": "The current Request state",
+            "example": "published"
+          },
+          "invitations": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/defaultRequestDetailsInvitation"
+            }
+          },
+          "demands": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/defaultRequestDetailsDemand"
+            }
+          }
+        }
+      },
+      "defaultRequestDetailsInvitation": {
+        "type": "object",
+        "readOnly": true,
+        "required": ["id", "inviteesContacts", "vendorNumber", "vendorName", "externalRequestId"],
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "description": "The mysupply ID of the Invitation"
+          },
+          "inviteesContacts": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/requestDetailsInviteeContact"
+            }
+          },
+          "vendorNumber": {
+            "type": "string",
+            "nullable": true,
+            "description": "The purchaser-side Supplier number"
+          },
+          "vendorName": {
+            "type": "string",
+            "nullable": true,
+            "description": "The Supplier name"
+          },
+          "externalRequestId": {
+            "type": "string",
+            "nullable": true,
+            "description": "External request ID assigned to the Invitation"
+          }
+        }
+      },
+      "requestDetailsInviteeContact": {
+        "type": "object",
+        "readOnly": true,
+        "required": ["email", "name"],
+        "properties": {
+          "email": {
+            "type": "string",
+            "format": "email"
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "defaultRequestDetailsDemand": {
+        "type": "object",
+        "readOnly": true,
+        "required": ["id", "title", "quantity", "unitOfMeasure", "currency", "fields", "requestor", "status", "processingPhase", "archivedReason"],
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "description": "The mysupply ID of the Demand"
+          },
+          "title": {
+            "type": "string",
+            "description": "The Demand title"
+          },
+          "quantity": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/decimal"
+              }
+            ],
+            "description": "The requested quantity"
+          },
+          "unitOfMeasure": {
+            "$ref": "#/components/schemas/unitOfMeasure"
+          },
+          "currency": {
+            "type": "string",
+            "nullable": true,
+            "minLength": 3,
+            "maxLength": 3,
+            "description": "ISO 4217 currency code"
+          },
+          "fields": {
+            "$ref": "#/components/schemas/responseFields"
+          },
+          "requestor": {
+            "nullable": true,
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/requestDetailsRequestor"
+              }
+            ]
+          },
+          "status": {
+            "type": "string",
+            "enum": ["awaiting", "processing", "processed", "archived"]
+          },
+          "processingPhase": {
+            "type": "string",
+            "enum": ["", "setup", "awaiting-offers", "evaluation", "negotiation-setup", "awaiting-awarding", "finished", "deleted"]
+          },
+          "archivedReason": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "requestDetailsRequestor": {
+        "type": "object",
+        "readOnly": true,
+        "required": ["email", "name", "username"],
+        "properties": {
+          "email": {
+            "type": "string",
+            "format": "email"
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "username": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "externalApprovalRequest": {
+        "type": "object",
+        "required": ["invitations"],
+        "properties": {
+          "invitations": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "$ref": "#/components/schemas/externalApprovalInvitation"
+            }
+          }
+        }
+      },
+      "externalApprovalInvitation": {
+        "type": "object",
+        "required": ["invitationId", "externalRequestId"],
+        "properties": {
+          "invitationId": {
+            "type": "string",
+            "format": "uuid",
+            "description": "The mysupply ID of an Invitation in the Request"
+          },
+          "externalRequestId": {
+            "type": "string",
+            "minLength": 1,
+            "pattern": ".*\\S.*",
+            "description": "Free-text external request ID to assign to the Invitation",
+            "example": "4500012345"
           }
         }
       },
