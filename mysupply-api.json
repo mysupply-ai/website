@@ -347,82 +347,958 @@
         }
       ],
       "get": {
-        "tags": ["Demands"],
+        "tags": [
+          "Demands"
+        ],
         "summary": "Returns information for a deal made for a demand",
         "responses": {
           "200": {
             "description": "Information for deal",
             "content": {
               "application/json": {
-                "schema": { "$ref": "#/components/schemas/deal"},
-                "example": {
-                  "demandId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-                  "hasDeal": true,
-                  "totalPrice": {
-                    "amount": "600",
-                    "currency": "EUR"
-                  },
-                  "unitPrice": {
-                    "amount": "200",
-                    "currency": "EUR"
-                  },
-                  "supplier": {
-                    "email": "the-winner@chairs.com",
-                    "supplierNumber": "ex-993841",
-                    "supplierDomain": "sap",
-                    "companyName": "The Best Chairs & Sons Ltd.",
-                    "externalRequestId": "4500012345"
-                  },
-                  "negotiationNotes": "Awarded based on delivery time and final price.",
-                  "requirements": [
-                    {
-                      "title": "Safety certificate",
-                      "compliant": true,
-                      "answer": null,
-                      "note": "Certificate is valid until 2027.",
-                      "description": "Supplier must provide a valid safety certificate.",
-                      "required": true
-                    }
-                  ],
-                  "questions": [
-                    {
-                      "title": "Delivery comment",
-                      "answer": "Can deliver before noon.",
-                      "note": "",
-                      "description": "Provide preferred delivery details.",
-                      "required": false
-                    }
-                  ],
-                  "rankedSupplierOffers": [
-                    {
-                      "rank": 2,
+                "schema": {
+                  "$ref": "#/components/schemas/deal"
+                },
+                "examples": {
+                  "winningAndRankedOffers": {
+                    "summary": "Winning and ranked answers, all supported types, unanswered component and discount variants",
+                    "description": "Requested quantity 3; additional Scale Price quantities 50 and 100. Existing deal and ranked offer prices are preserved. Each supplier has its own submitted answers.",
+                    "value": {
+                      "demandId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+                      "hasDeal": true,
                       "unitPrice": {
-                        "amount": "220",
+                        "amount": "200",
                         "currency": "EUR"
                       },
                       "supplier": {
-                        "email": "second-best@chairs.com",
-                        "supplierNumber": "ex-993842",
+                        "email": "the-winner@chairs.com",
+                        "supplierNumber": "ex-993841",
                         "supplierDomain": "sap",
-                        "companyName": "Second Best Chairs Ltd.",
-                        "externalRequestId": "4500012346"
-                      }
-                    },
-                    {
-                      "rank": 3,
+                        "companyName": "The Best Chairs & Sons Ltd.",
+                        "externalRequestId": "4500012345"
+                      },
+                      "negotiationNotes": "Awarded based on delivery time and final price.",
+                      "requirements": [
+                        {
+                          "title": "Safety certificate",
+                          "compliant": true,
+                          "answer": null,
+                          "note": "Certificate is valid until 2027.",
+                          "description": "Supplier must provide a valid safety certificate.",
+                          "required": true
+                        }
+                      ],
+                      "questions": [
+                        {
+                          "title": "Delivery comment",
+                          "answer": "Can deliver before noon.",
+                          "note": "",
+                          "description": "Provide preferred delivery details.",
+                          "required": false
+                        }
+                      ],
+                      "rankedSupplierOffers": [
+                        {
+                          "rank": 2,
+                          "unitPrice": {
+                            "amount": "220",
+                            "currency": "EUR"
+                          },
+                          "supplier": {
+                            "email": "second-best@chairs.com",
+                            "supplierNumber": "ex-993842",
+                            "supplierDomain": "sap",
+                            "companyName": "Second Best Chairs Ltd.",
+                            "externalRequestId": "4500012346"
+                          },
+                          "pricingComponentAnswers": [
+                            {
+                              "componentId": "9ab1d017-92a4-4f11-a01c-f651ba361751",
+                              "type": "volume_pricing",
+                              "name": "Scale Price",
+                              "responses": [
+                                {
+                                  "quantity": "3.0000",
+                                  "value": {
+                                    "unitPrice": {
+                                      "amount": "220.0000",
+                                      "currency": "EUR"
+                                    }
+                                  }
+                                },
+                                {
+                                  "quantity": "50.0000",
+                                  "value": {
+                                    "unitPrice": {
+                                      "amount": "200.0000",
+                                      "currency": "EUR"
+                                    }
+                                  }
+                                },
+                                {
+                                  "quantity": "100.0000",
+                                  "value": {
+                                    "unitPrice": {
+                                      "amount": "180.0000",
+                                      "currency": "EUR"
+                                    }
+                                  }
+                                }
+                              ]
+                            },
+                            {
+                              "componentId": "9ab1d017-92a4-4f11-a01c-f651ba361755",
+                              "type": "discount_surcharge",
+                              "name": "Discount",
+                              "responses": [
+                                {
+                                  "quantity": "3.0000",
+                                  "value": {
+                                    "percentage": "-2.5000"
+                                  }
+                                },
+                                {
+                                  "quantity": "50.0000",
+                                  "value": {
+                                    "percentage": "-2.5000"
+                                  }
+                                },
+                                {
+                                  "quantity": "100.0000",
+                                  "value": {
+                                    "percentage": "-2.5000"
+                                  }
+                                }
+                              ]
+                            },
+                            {
+                              "componentId": "9ab1d017-92a4-4f11-a01c-f651ba361752",
+                              "type": "one_time_price",
+                              "name": "Setup Fee",
+                              "responses": []
+                            },
+                            {
+                              "componentId": "9ab1d017-92a4-4f11-a01c-f651ba361753",
+                              "type": "transportation_cost",
+                              "name": "Transportation",
+                              "responses": []
+                            },
+                            {
+                              "componentId": "9ab1d017-92a4-4f11-a01c-f651ba361754",
+                              "type": "packaging_cost",
+                              "name": "Packaging",
+                              "responses": []
+                            },
+                            {
+                              "componentId": "9ab1d017-92a4-4f11-a01c-f651ba361756",
+                              "type": "delivery_time",
+                              "name": "Delivery Time",
+                              "responses": [
+                                {
+                                  "quantity": "3.0000",
+                                  "value": {
+                                    "days": "4 weeks"
+                                  }
+                                }
+                              ]
+                            },
+                            {
+                              "componentId": "9ab1d017-92a4-4f11-a01c-f651ba361757",
+                              "type": "free_text",
+                              "name": "Delivery Instructions",
+                              "responses": []
+                            },
+                            {
+                              "componentId": "9ab1d017-92a4-4f11-a01c-f651ba361758",
+                              "type": "free_text",
+                              "name": "Additional Notes",
+                              "responses": []
+                            }
+                          ]
+                        },
+                        {
+                          "rank": 3,
+                          "unitPrice": {
+                            "amount": "250",
+                            "currency": "EUR"
+                          },
+                          "supplier": {
+                            "email": "third-best@chairs.com",
+                            "supplierNumber": "ex-993843",
+                            "supplierDomain": "sap",
+                            "companyName": "Third Best Chairs Ltd.",
+                            "externalRequestId": "4500012347"
+                          },
+                          "pricingComponentAnswers": [
+                            {
+                              "componentId": "9ab1d017-92a4-4f11-a01c-f651ba361751",
+                              "type": "volume_pricing",
+                              "name": "Scale Price",
+                              "responses": [
+                                {
+                                  "quantity": "3.0000",
+                                  "value": {
+                                    "unitPrice": {
+                                      "amount": "250.0000",
+                                      "currency": "EUR"
+                                    }
+                                  }
+                                },
+                                {
+                                  "quantity": "50.0000",
+                                  "value": {
+                                    "unitPrice": {
+                                      "amount": "230.0000",
+                                      "currency": "EUR"
+                                    }
+                                  }
+                                },
+                                {
+                                  "quantity": "100.0000",
+                                  "value": {
+                                    "unitPrice": {
+                                      "amount": "210.0000",
+                                      "currency": "EUR"
+                                    }
+                                  }
+                                }
+                              ]
+                            },
+                            {
+                              "componentId": "9ab1d017-92a4-4f11-a01c-f651ba361755",
+                              "type": "discount_surcharge",
+                              "name": "Discount",
+                              "responses": [
+                                {
+                                  "quantity": "3.0000",
+                                  "value": {
+                                    "absolute": {
+                                      "amount": "-5.0000",
+                                      "currency": "EUR"
+                                    },
+                                    "percentage": "-2.5000"
+                                  }
+                                },
+                                {
+                                  "quantity": "50.0000",
+                                  "value": {
+                                    "absolute": {
+                                      "amount": "-5.0000",
+                                      "currency": "EUR"
+                                    },
+                                    "percentage": "-2.5000"
+                                  }
+                                },
+                                {
+                                  "quantity": "100.0000",
+                                  "value": {
+                                    "absolute": {
+                                      "amount": "-5.0000",
+                                      "currency": "EUR"
+                                    },
+                                    "percentage": "-2.5000"
+                                  }
+                                }
+                              ]
+                            },
+                            {
+                              "componentId": "9ab1d017-92a4-4f11-a01c-f651ba361752",
+                              "type": "one_time_price",
+                              "name": "Setup Fee",
+                              "responses": []
+                            },
+                            {
+                              "componentId": "9ab1d017-92a4-4f11-a01c-f651ba361753",
+                              "type": "transportation_cost",
+                              "name": "Transportation",
+                              "responses": []
+                            },
+                            {
+                              "componentId": "9ab1d017-92a4-4f11-a01c-f651ba361754",
+                              "type": "packaging_cost",
+                              "name": "Packaging",
+                              "responses": []
+                            },
+                            {
+                              "componentId": "9ab1d017-92a4-4f11-a01c-f651ba361756",
+                              "type": "delivery_time",
+                              "name": "Delivery Time",
+                              "responses": [
+                                {
+                                  "quantity": "3.0000",
+                                  "value": {
+                                    "days": "0"
+                                  }
+                                }
+                              ]
+                            },
+                            {
+                              "componentId": "9ab1d017-92a4-4f11-a01c-f651ba361757",
+                              "type": "free_text",
+                              "name": "Delivery Instructions",
+                              "responses": []
+                            },
+                            {
+                              "componentId": "9ab1d017-92a4-4f11-a01c-f651ba361758",
+                              "type": "free_text",
+                              "name": "Additional Notes",
+                              "responses": []
+                            }
+                          ]
+                        }
+                      ],
+                      "pricingComponentAnswers": [
+                        {
+                          "componentId": "9ab1d017-92a4-4f11-a01c-f651ba361751",
+                          "type": "volume_pricing",
+                          "name": "Scale Price",
+                          "responses": [
+                            {
+                              "quantity": "3.0000",
+                              "value": {
+                                "unitPrice": {
+                                  "amount": "200.0000",
+                                  "currency": "EUR"
+                                }
+                              }
+                            },
+                            {
+                              "quantity": "50.0000",
+                              "value": {
+                                "unitPrice": {
+                                  "amount": "180.0000",
+                                  "currency": "EUR"
+                                }
+                              }
+                            },
+                            {
+                              "quantity": "100.0000",
+                              "value": {
+                                "unitPrice": {
+                                  "amount": "160.0000",
+                                  "currency": "EUR"
+                                }
+                              }
+                            }
+                          ]
+                        },
+                        {
+                          "componentId": "9ab1d017-92a4-4f11-a01c-f651ba361752",
+                          "type": "one_time_price",
+                          "name": "Setup Fee",
+                          "responses": [
+                            {
+                              "quantity": "3.0000",
+                              "value": {
+                                "amount": "50.0000",
+                                "currency": "EUR"
+                              }
+                            },
+                            {
+                              "quantity": "50.0000",
+                              "value": {
+                                "amount": "50.0000",
+                                "currency": "EUR"
+                              }
+                            },
+                            {
+                              "quantity": "100.0000",
+                              "value": {
+                                "amount": "50.0000",
+                                "currency": "EUR"
+                              }
+                            }
+                          ]
+                        },
+                        {
+                          "componentId": "9ab1d017-92a4-4f11-a01c-f651ba361753",
+                          "type": "transportation_cost",
+                          "name": "Transportation",
+                          "responses": [
+                            {
+                              "quantity": "3.0000",
+                              "value": {
+                                "amount": "20.0000",
+                                "currency": "EUR"
+                              }
+                            },
+                            {
+                              "quantity": "50.0000",
+                              "value": {
+                                "amount": "20.0000",
+                                "currency": "EUR"
+                              }
+                            },
+                            {
+                              "quantity": "100.0000",
+                              "value": {
+                                "amount": "20.0000",
+                                "currency": "EUR"
+                              }
+                            }
+                          ]
+                        },
+                        {
+                          "componentId": "9ab1d017-92a4-4f11-a01c-f651ba361754",
+                          "type": "packaging_cost",
+                          "name": "Packaging",
+                          "responses": [
+                            {
+                              "quantity": "3.0000",
+                              "value": {
+                                "amount": "0.0000",
+                                "currency": "EUR"
+                              }
+                            },
+                            {
+                              "quantity": "50.0000",
+                              "value": {
+                                "amount": "0.0000",
+                                "currency": "EUR"
+                              }
+                            },
+                            {
+                              "quantity": "100.0000",
+                              "value": {
+                                "amount": "0.0000",
+                                "currency": "EUR"
+                              }
+                            }
+                          ]
+                        },
+                        {
+                          "componentId": "9ab1d017-92a4-4f11-a01c-f651ba361755",
+                          "type": "discount_surcharge",
+                          "name": "Discount",
+                          "responses": [
+                            {
+                              "quantity": "3.0000",
+                              "value": {
+                                "absolute": {
+                                  "amount": "-5.0000",
+                                  "currency": "EUR"
+                                }
+                              }
+                            },
+                            {
+                              "quantity": "50.0000",
+                              "value": {
+                                "absolute": {
+                                  "amount": "-5.0000",
+                                  "currency": "EUR"
+                                }
+                              }
+                            },
+                            {
+                              "quantity": "100.0000",
+                              "value": {
+                                "absolute": {
+                                  "amount": "-5.0000",
+                                  "currency": "EUR"
+                                }
+                              }
+                            }
+                          ]
+                        },
+                        {
+                          "componentId": "9ab1d017-92a4-4f11-a01c-f651ba361756",
+                          "type": "delivery_time",
+                          "name": "Delivery Time",
+                          "responses": [
+                            {
+                              "quantity": "3.0000",
+                              "value": {
+                                "days": "55"
+                              }
+                            }
+                          ]
+                        },
+                        {
+                          "componentId": "9ab1d017-92a4-4f11-a01c-f651ba361757",
+                          "type": "free_text",
+                          "name": "Delivery Instructions",
+                          "responses": [
+                            {
+                              "quantity": "3.0000",
+                              "value": {
+                                "text": "Delivery by appointment"
+                              }
+                            }
+                          ]
+                        },
+                        {
+                          "componentId": "9ab1d017-92a4-4f11-a01c-f651ba361758",
+                          "type": "free_text",
+                          "name": "Additional Notes",
+                          "responses": []
+                        }
+                      ]
+                    }
+                  },
+                  "negotiatedPrice": {
+                    "summary": "Requested quantity 10; submitted Scale Price 120.0000 and final unitPrice 100.0000",
+                    "description": "Scale Price scenarios at quantities 10, 50, and 100 are alternatives, not additive costs.",
+                    "value": {
+                      "demandId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+                      "hasDeal": true,
                       "unitPrice": {
-                        "amount": "250",
+                        "amount": "100.0000",
                         "currency": "EUR"
                       },
                       "supplier": {
-                        "email": "third-best@chairs.com",
-                        "supplierNumber": "ex-993843",
+                        "email": "the-winner@chairs.com",
+                        "supplierNumber": "ex-993841",
                         "supplierDomain": "sap",
-                        "companyName": "Third Best Chairs Ltd.",
-                        "externalRequestId": "4500012347"
-                      }
+                        "companyName": "The Best Chairs & Sons Ltd.",
+                        "externalRequestId": "4500012345"
+                      },
+                      "negotiationNotes": "Awarded based on delivery time and final price.",
+                      "requirements": [
+                        {
+                          "title": "Safety certificate",
+                          "compliant": true,
+                          "answer": null,
+                          "note": "Certificate is valid until 2027.",
+                          "description": "Supplier must provide a valid safety certificate.",
+                          "required": true
+                        }
+                      ],
+                      "questions": [
+                        {
+                          "title": "Delivery comment",
+                          "answer": "Can deliver before noon.",
+                          "note": "",
+                          "description": "Provide preferred delivery details.",
+                          "required": false
+                        }
+                      ],
+                      "rankedSupplierOffers": [
+                        {
+                          "rank": 2,
+                          "unitPrice": {
+                            "amount": "220",
+                            "currency": "EUR"
+                          },
+                          "supplier": {
+                            "email": "second-best@chairs.com",
+                            "supplierNumber": "ex-993842",
+                            "supplierDomain": "sap",
+                            "companyName": "Second Best Chairs Ltd.",
+                            "externalRequestId": "4500012346"
+                          },
+                          "pricingComponentAnswers": [
+                            {
+                              "componentId": "9ab1d017-92a4-4f11-a01c-f651ba361751",
+                              "type": "volume_pricing",
+                              "name": "Scale Price",
+                              "responses": [
+                                {
+                                  "quantity": "10.0000",
+                                  "value": {
+                                    "unitPrice": {
+                                      "amount": "220.0000",
+                                      "currency": "EUR"
+                                    }
+                                  }
+                                },
+                                {
+                                  "quantity": "50.0000",
+                                  "value": {
+                                    "unitPrice": {
+                                      "amount": "200.0000",
+                                      "currency": "EUR"
+                                    }
+                                  }
+                                },
+                                {
+                                  "quantity": "100.0000",
+                                  "value": {
+                                    "unitPrice": {
+                                      "amount": "180.0000",
+                                      "currency": "EUR"
+                                    }
+                                  }
+                                }
+                              ]
+                            },
+                            {
+                              "componentId": "9ab1d017-92a4-4f11-a01c-f651ba361755",
+                              "type": "discount_surcharge",
+                              "name": "Discount",
+                              "responses": [
+                                {
+                                  "quantity": "10.0000",
+                                  "value": {
+                                    "percentage": "-2.5000"
+                                  }
+                                },
+                                {
+                                  "quantity": "50.0000",
+                                  "value": {
+                                    "percentage": "-2.5000"
+                                  }
+                                },
+                                {
+                                  "quantity": "100.0000",
+                                  "value": {
+                                    "percentage": "-2.5000"
+                                  }
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          "rank": 3,
+                          "unitPrice": {
+                            "amount": "250",
+                            "currency": "EUR"
+                          },
+                          "supplier": {
+                            "email": "third-best@chairs.com",
+                            "supplierNumber": "ex-993843",
+                            "supplierDomain": "sap",
+                            "companyName": "Third Best Chairs Ltd.",
+                            "externalRequestId": "4500012347"
+                          },
+                          "pricingComponentAnswers": [
+                            {
+                              "componentId": "9ab1d017-92a4-4f11-a01c-f651ba361751",
+                              "type": "volume_pricing",
+                              "name": "Scale Price",
+                              "responses": [
+                                {
+                                  "quantity": "10.0000",
+                                  "value": {
+                                    "unitPrice": {
+                                      "amount": "250.0000",
+                                      "currency": "EUR"
+                                    }
+                                  }
+                                },
+                                {
+                                  "quantity": "50.0000",
+                                  "value": {
+                                    "unitPrice": {
+                                      "amount": "230.0000",
+                                      "currency": "EUR"
+                                    }
+                                  }
+                                },
+                                {
+                                  "quantity": "100.0000",
+                                  "value": {
+                                    "unitPrice": {
+                                      "amount": "210.0000",
+                                      "currency": "EUR"
+                                    }
+                                  }
+                                }
+                              ]
+                            },
+                            {
+                              "componentId": "9ab1d017-92a4-4f11-a01c-f651ba361755",
+                              "type": "discount_surcharge",
+                              "name": "Discount",
+                              "responses": [
+                                {
+                                  "quantity": "10.0000",
+                                  "value": {
+                                    "absolute": {
+                                      "amount": "-5.0000",
+                                      "currency": "EUR"
+                                    },
+                                    "percentage": "-2.5000"
+                                  }
+                                },
+                                {
+                                  "quantity": "50.0000",
+                                  "value": {
+                                    "absolute": {
+                                      "amount": "-5.0000",
+                                      "currency": "EUR"
+                                    },
+                                    "percentage": "-2.5000"
+                                  }
+                                },
+                                {
+                                  "quantity": "100.0000",
+                                  "value": {
+                                    "absolute": {
+                                      "amount": "-5.0000",
+                                      "currency": "EUR"
+                                    },
+                                    "percentage": "-2.5000"
+                                  }
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ],
+                      "pricingComponentAnswers": [
+                        {
+                          "componentId": "9ab1d017-92a4-4f11-a01c-f651ba361751",
+                          "type": "volume_pricing",
+                          "name": "Scale Price",
+                          "responses": [
+                            {
+                              "quantity": "10.0000",
+                              "value": {
+                                "unitPrice": {
+                                  "amount": "120.0000",
+                                  "currency": "EUR"
+                                }
+                              }
+                            },
+                            {
+                              "quantity": "50.0000",
+                              "value": {
+                                "unitPrice": {
+                                  "amount": "110.0000",
+                                  "currency": "EUR"
+                                }
+                              }
+                            },
+                            {
+                              "quantity": "100.0000",
+                              "value": {
+                                "unitPrice": {
+                                  "amount": "105.0000",
+                                  "currency": "EUR"
+                                }
+                              }
+                            }
+                          ]
+                        },
+                        {
+                          "componentId": "9ab1d017-92a4-4f11-a01c-f651ba361755",
+                          "type": "discount_surcharge",
+                          "name": "Discount",
+                          "responses": []
+                        }
+                      ]
                     }
-                  ]
+                  },
+                  "noConfiguredComponents": {
+                    "summary": "A deal exists, but no pricing components are configured",
+                    "value": {
+                      "demandId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+                      "hasDeal": true,
+                      "unitPrice": {
+                        "amount": "200",
+                        "currency": "EUR"
+                      },
+                      "supplier": {
+                        "email": "the-winner@chairs.com",
+                        "supplierNumber": "ex-993841",
+                        "supplierDomain": "sap",
+                        "companyName": "The Best Chairs & Sons Ltd.",
+                        "externalRequestId": "4500012345"
+                      },
+                      "negotiationNotes": "Awarded based on delivery time and final price.",
+                      "requirements": [
+                        {
+                          "title": "Safety certificate",
+                          "compliant": true,
+                          "answer": null,
+                          "note": "Certificate is valid until 2027.",
+                          "description": "Supplier must provide a valid safety certificate.",
+                          "required": true
+                        }
+                      ],
+                      "questions": [
+                        {
+                          "title": "Delivery comment",
+                          "answer": "Can deliver before noon.",
+                          "note": "",
+                          "description": "Provide preferred delivery details.",
+                          "required": false
+                        }
+                      ],
+                      "rankedSupplierOffers": [
+                        {
+                          "rank": 2,
+                          "unitPrice": {
+                            "amount": "220",
+                            "currency": "EUR"
+                          },
+                          "supplier": {
+                            "email": "second-best@chairs.com",
+                            "supplierNumber": "ex-993842",
+                            "supplierDomain": "sap",
+                            "companyName": "Second Best Chairs Ltd.",
+                            "externalRequestId": "4500012346"
+                          },
+                          "pricingComponentAnswers": []
+                        },
+                        {
+                          "rank": 3,
+                          "unitPrice": {
+                            "amount": "250",
+                            "currency": "EUR"
+                          },
+                          "supplier": {
+                            "email": "third-best@chairs.com",
+                            "supplierNumber": "ex-993843",
+                            "supplierDomain": "sap",
+                            "companyName": "Third Best Chairs Ltd.",
+                            "externalRequestId": "4500012347"
+                          },
+                          "pricingComponentAnswers": []
+                        }
+                      ],
+                      "pricingComponentAnswers": []
+                    }
+                  },
+                  "currentContract": {
+                    "summary": "Current contract: requested quantity 88, additional quantities 50 and 100",
+                    "description": "Historical supplied business values with the approved Delivery Time string mapping applied; supplier details and component IDs are illustrative. No ranked offers; this example does not establish live ranked-answer coverage.",
+                    "value": {
+                      "demandId": "4d721417-8de4-4d20-855f-0d944674dd04",
+                      "hasDeal": true,
+                      "unitPrice": {
+                        "amount": "100.0000",
+                        "currency": "EUR"
+                      },
+                      "supplier": {
+                        "email": "the-winner@chairs.com",
+                        "supplierNumber": "ex-993841",
+                        "supplierDomain": "sap",
+                        "companyName": "The Best Chairs & Sons Ltd.",
+                        "externalRequestId": "4500012345"
+                      },
+                      "negotiationNotes": null,
+                      "requirements": [],
+                      "questions": [],
+                      "rankedSupplierOffers": [],
+                      "pricingComponentAnswers": [
+                        {
+                          "componentId": "9ab1d017-92a4-4f11-a01c-f651ba361751",
+                          "type": "volume_pricing",
+                          "name": "Scale Price",
+                          "responses": [
+                            {
+                              "quantity": "88.0000",
+                              "value": {
+                                "unitPrice": {
+                                  "amount": "100.0000",
+                                  "currency": "EUR"
+                                }
+                              }
+                            },
+                            {
+                              "quantity": "50.0000",
+                              "value": {
+                                "unitPrice": {
+                                  "amount": "100.0000",
+                                  "currency": "EUR"
+                                }
+                              }
+                            },
+                            {
+                              "quantity": "100.0000",
+                              "value": {
+                                "unitPrice": {
+                                  "amount": "150.0000",
+                                  "currency": "EUR"
+                                }
+                              }
+                            }
+                          ]
+                        },
+                        {
+                          "componentId": "9ab1d017-92a4-4f11-a01c-f651ba361755",
+                          "type": "discount_surcharge",
+                          "name": "Discount",
+                          "responses": [
+                            {
+                              "quantity": "88.0000",
+                              "value": {
+                                "percentage": "100"
+                              }
+                            },
+                            {
+                              "quantity": "50.0000",
+                              "value": {
+                                "percentage": "200"
+                              }
+                            },
+                            {
+                              "quantity": "100.0000",
+                              "value": {
+                                "percentage": "300"
+                              }
+                            }
+                          ]
+                        },
+                        {
+                          "componentId": "9ab1d017-92a4-4f11-a01c-f651ba361756",
+                          "type": "delivery_time",
+                          "name": "Delivery Time",
+                          "responses": [
+                            {
+                              "quantity": "88.0000",
+                              "value": {
+                                "days": "56"
+                              }
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  },
+                  "deliveryTimeEmptyAnswer": {
+                    "summary": "An existing Delivery Time answer containing an empty string",
+                    "description": "Illustrative example: one response with days \"\" is an existing answer. An absent answer object instead has responses: []. Strings retain whitespace and leading zeros.",
+                    "value": {
+                      "demandId": "4d721417-8de4-4d20-855f-0d944674dd04",
+                      "hasDeal": true,
+                      "unitPrice": {
+                        "amount": "100.0000",
+                        "currency": "EUR"
+                      },
+                      "supplier": {
+                        "email": "the-winner@chairs.com",
+                        "supplierNumber": "ex-993841",
+                        "supplierDomain": "sap",
+                        "companyName": "The Best Chairs & Sons Ltd.",
+                        "externalRequestId": "4500012345"
+                      },
+                      "negotiationNotes": null,
+                      "requirements": [],
+                      "questions": [],
+                      "rankedSupplierOffers": [],
+                      "pricingComponentAnswers": [
+                        {
+                          "componentId": "9ab1d017-92a4-4f11-a01c-f651ba361756",
+                          "type": "delivery_time",
+                          "name": "Delivery Time",
+                          "responses": [
+                            {
+                              "quantity": "88.0000",
+                              "value": {
+                                "days": ""
+                              }
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  },
+                  "noDeal": {
+                    "summary": "No deal exists",
+                    "description": "Illustrative no-deal response with price and supplier fields omitted and empty collections.",
+                    "value": {
+                      "demandId": "4d721417-8de4-4d20-855f-0d944674dd04",
+                      "hasDeal": false,
+                      "negotiationNotes": null,
+                      "requirements": [],
+                      "questions": [],
+                      "rankedSupplierOffers": [],
+                      "pricingComponentAnswers": []
+                    }
+                  }
                 }
               }
             }
@@ -433,7 +1309,8 @@
           "404": {
             "description": "A demand with such ID has not been found"
           }
-        }
+        },
+        "description": "Returns deal information, with the winning supplier's original submitted pricing component answers at the response root and each ranked supplier's own answers in its rankedSupplierOffers entry. Existing supplier fields, unitPrice, ranking, and no-deal behavior are preserved.\n\n### Pricing component answers (MD-1129)\nEach pricingComponentAnswers item contains a stable configured componentId (UUID), the existing backend type identifier, the saved buyer-configured name preserved unchanged, and responses. Separate Free Text instances have separate component IDs even though they share type free_text. Every response has an explicit string quantity and a value typed by the component type.\n\n| type | value example |\n| --- | --- |\n| volume_pricing | {\"unitPrice\":{\"amount\":\"120.0000\",\"currency\":\"EUR\"}} |\n| one_time_price | {\"amount\":\"50.0000\",\"currency\":\"EUR\"} |\n| transportation_cost | {\"amount\":\"20.0000\",\"currency\":\"EUR\"} |\n| packaging_cost | {\"amount\":\"0.0000\",\"currency\":\"EUR\"} |\n| discount_surcharge | {\"absolute\":{\"amount\":\"-5.0000\",\"currency\":\"EUR\"},\"percentage\":\"-2.5000\"} |\n| delivery_time | {\"days\":\"55\"} |\n| free_text | {\"text\":\"Delivery by appointment\"} |\n\nComponent answers retain original submitted values. Existing unitPrice may contain the final negotiated price: a submitted Scale Price of 120.0000 remains 120.0000 when deal unitPrice is 100.0000. Values are supplier answers, not calculated TCO contributions.\n\nScale Prices (volume_pricing) include the requested quantity and configured additional quantities. For example, quantities 10, 50, and 100 are alternative quantity scenarios, not additive costs. Monetary components include explicit responses for every applicable quantity.\n\nMoney amounts use four-decimal strings. Percentages are strings: \"-2.5000\" means minus 2.5%. Preserve signed values. Absolute and percentage adjustments can appear together; omit an adjustment field when it was not supplied. Zero is a valid answer and differs from missing.\n\nA configured component without answers returns responses: []. No configured components returns pricingComponentAnswers: [] at the root and in each ranked supplier entry. These empty-array rules do not change the existing no-deal behavior.\n\nThe winningAndRankedOffers example includes all supported types, quantities 3/50/100, a zero packaging answer, two separate Free Text instances (one unanswered), and absolute-only, percentage-only, and combined discounts across the suppliers. The negotiatedPrice example shows submitted and final prices differing; noConfiguredComponents shows empty arrays without implying that no deal exists.\n\n### Supplier and item ownership\nWinning answers belong to the awarded supplier and the matching response item within the demand's Request. For legacy demands without awarding data, participation identifies the supplier/item response. Each ranked offer contains that ranked supplier's own answers for the same demand item, resolved through participation; answers are not copied from the winner.\n\n### Delivery Time\nDelivery Time and Free Text are separate component types. value.days is the original stored Delivery Time string, returned unchanged. It may contain numeric-looking text (\"55\" or \"0\"), other text (\"4 weeks\"), or an empty string (\"\"). Preserve leading zeros and whitespace; do not convert units, trim, or cast to a number. An existing empty answer has one response containing days: \"\"; a missing answer object has responses: []. This is an output mapping; supplier UI and backend input validation are unchanged.\n\n### JSON-LD\nJSON-LD preserves metadata on the deal response, configured component objects, and quantity-response objects. Value objects and nested money values retain the same plain JSON shapes and omitted adjustment fields. Blank-node @id values are not stable identifiers; use componentId to identify a configured component. See the full API's application/ld+json example for illustrative metadata.\n\nThe currentContract example illustrates the historical supplied business values with the approved Delivery Time string mapping applied at quantities 88, 50, and 100, using illustrative supplier details. Its empty rankedSupplierOffers does not demonstrate live ranked-answer coverage; winningAndRankedOffers remains an illustrative ranked-offer example.\n\nPublished IDs and supplier details are illustrative. A live request or documentation-console test requires an existing demand accessible to the authenticated account; an illustrative UUID is not a guaranteed test record. Local schema $ref values identify schema definitions, not database records. deliveryTimeEmptyAnswer distinguishes an existing empty answer from a missing answer; noDeal shows hasDeal: false and omitted price/supplier fields."
       }
     },
     "/default-requests/{id}/details": {
@@ -2097,6 +2974,287 @@
         ],
         "example": "piece"
       },
+      "pricingComponentAnswer": {
+        "type": "object",
+        "readOnly": true,
+        "description": "One configured pricing component and this supplier's original submitted answers. Values are supplier answers, not calculated TCO contributions.",
+        "required": [
+          "componentId",
+          "type",
+          "name",
+          "responses"
+        ],
+        "properties": {
+          "componentId": {
+            "type": "string",
+            "format": "uuid",
+            "description": "Stable configured component ID. Separate Free Text instances have separate IDs.",
+            "example": "9ab1d017-92a4-4f11-a01c-f651ba361756"
+          },
+          "type": {
+            "type": "string",
+            "description": "Existing backend component identifier.",
+            "enum": [
+              "volume_pricing",
+              "one_time_price",
+              "transportation_cost",
+              "packaging_cost",
+              "discount_surcharge",
+              "delivery_time",
+              "free_text"
+            ]
+          },
+          "name": {
+            "type": "string",
+            "description": "Saved buyer-configured name, preserved unchanged.",
+            "example": "Delivery Time"
+          },
+          "responses": {
+            "type": "array",
+            "description": "Answers with explicit string quantities and values typed by component type. Returns [] when unanswered.",
+            "items": {
+              "type": "object"
+            }
+          }
+        },
+        "oneOf": [
+          {
+            "type": "object",
+            "properties": {
+              "type": {
+                "type": "string",
+                "enum": [
+                  "volume_pricing"
+                ]
+              },
+              "responses": {
+                "type": "array",
+                "description": "Original answers for explicit quantities. Empty when this configured component has no answer.",
+                "items": {
+                  "type": "object",
+                  "required": [
+                    "quantity",
+                    "value"
+                  ],
+                  "properties": {
+                    "quantity": {
+                      "type": "string",
+                      "description": "Quantity scenario to which this answer applies.",
+                      "example": "10.0000"
+                    },
+                    "value": {
+                      "type": "object",
+                      "required": [
+                        "unitPrice"
+                      ],
+                      "properties": {
+                        "unitPrice": {
+                          "$ref": "#/components/schemas/pricingComponentMoney"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          {
+            "type": "object",
+            "properties": {
+              "type": {
+                "type": "string",
+                "enum": [
+                  "one_time_price",
+                  "transportation_cost",
+                  "packaging_cost"
+                ]
+              },
+              "responses": {
+                "type": "array",
+                "description": "Original answers for explicit quantities. Empty when this configured component has no answer.",
+                "items": {
+                  "type": "object",
+                  "required": [
+                    "quantity",
+                    "value"
+                  ],
+                  "properties": {
+                    "quantity": {
+                      "type": "string",
+                      "description": "Quantity scenario to which this answer applies.",
+                      "example": "10.0000"
+                    },
+                    "value": {
+                      "$ref": "#/components/schemas/pricingComponentMoney"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          {
+            "type": "object",
+            "properties": {
+              "type": {
+                "type": "string",
+                "enum": [
+                  "discount_surcharge"
+                ]
+              },
+              "responses": {
+                "type": "array",
+                "description": "Original answers for explicit quantities. Empty when this configured component has no answer.",
+                "items": {
+                  "type": "object",
+                  "required": [
+                    "quantity",
+                    "value"
+                  ],
+                  "properties": {
+                    "quantity": {
+                      "type": "string",
+                      "description": "Quantity scenario to which this answer applies.",
+                      "example": "10.0000"
+                    },
+                    "value": {
+                      "$ref": "#/components/schemas/pricingComponentAdjustment"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          {
+            "type": "object",
+            "properties": {
+              "type": {
+                "type": "string",
+                "enum": [
+                  "delivery_time"
+                ]
+              },
+              "responses": {
+                "type": "array",
+                "description": "Original answers for explicit quantities. Empty when this configured component has no answer.",
+                "items": {
+                  "type": "object",
+                  "required": [
+                    "quantity",
+                    "value"
+                  ],
+                  "properties": {
+                    "quantity": {
+                      "type": "string",
+                      "description": "Quantity scenario to which this answer applies.",
+                      "example": "10.0000"
+                    },
+                    "value": {
+                      "type": "object",
+                      "required": [
+                        "days"
+                      ],
+                      "properties": {
+                        "days": {
+                          "type": "string",
+                          "description": "Original stored Delivery Time string, returned unchanged. May contain text or be empty.",
+                          "example": "4 weeks"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          {
+            "type": "object",
+            "properties": {
+              "type": {
+                "type": "string",
+                "enum": [
+                  "free_text"
+                ]
+              },
+              "responses": {
+                "type": "array",
+                "description": "Original answers for explicit quantities. Empty when this configured component has no answer.",
+                "items": {
+                  "type": "object",
+                  "required": [
+                    "quantity",
+                    "value"
+                  ],
+                  "properties": {
+                    "quantity": {
+                      "type": "string",
+                      "description": "Quantity scenario to which this answer applies.",
+                      "example": "10.0000"
+                    },
+                    "value": {
+                      "type": "object",
+                      "required": [
+                        "text"
+                      ],
+                      "properties": {
+                        "text": {
+                          "type": "string",
+                          "example": "Delivery by appointment"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        ]
+      },
+      "pricingComponentMoney": {
+        "type": "object",
+        "description": "An original submitted monetary answer. Amounts are signed four-decimal strings; zero is a valid answer.",
+        "required": [
+          "amount",
+          "currency"
+        ],
+        "properties": {
+          "amount": {
+            "type": "string",
+            "pattern": "^-?\\d+\\.\\d{4}$",
+            "example": "120.0000"
+          },
+          "currency": {
+            "type": "string",
+            "example": "EUR"
+          }
+        }
+      },
+      "pricingComponentAdjustment": {
+        "type": "object",
+        "description": "Absolute and percentage adjustments may appear together. Omit a field when it was not supplied. Preserve signs; \"-2.5000\" means minus 2.5%. Zero differs from missing.",
+        "properties": {
+          "absolute": {
+            "$ref": "#/components/schemas/pricingComponentMoney"
+          },
+          "percentage": {
+            "type": "string",
+            "description": "Signed percentage as submitted, expressed in percent.",
+            "example": "-2.5000",
+            "pattern": "^-?[0-9]+(\\.[0-9]+)?$"
+          }
+        },
+        "anyOf": [
+          {
+            "required": [
+              "absolute"
+            ]
+          },
+          {
+            "required": [
+              "percentage"
+            ]
+          }
+        ]
+      },
       "deal": {
         "type": "object",
         "readOnly": true,
@@ -2118,19 +3276,21 @@
             "readOnly": true,
             "nullable": true,
             "description": "The price for a single unit of the demand.",
-            "allOf": [ { "$ref": "#/components/schemas/price" } ]
-          },
-          "totalPrice": {
-            "readOnly": true,
-            "nullable": true,
-            "description": "The price for the demand.",
-            "allOf": [ { "$ref": "#/components/schemas/price" } ]
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/price"
+              }
+            ]
           },
           "supplier": {
             "nullable": true,
             "readOnly": true,
             "description": "Information about the supplier delivering the demand",
-            "allOf": [ { "$ref": "#/components/schemas/dealSupplier" } ]
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/dealSupplier"
+              }
+            ]
           },
           "negotiationNotes": {
             "type": "string",
@@ -2236,17 +3396,47 @@
                 "unitPrice": {
                   "readOnly": true,
                   "description": "The price for a single unit of the demand.",
-                  "allOf": [ { "$ref": "#/components/schemas/price" } ]
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/price"
+                    }
+                  ]
                 },
                 "supplier": {
                   "readOnly": true,
                   "description": "Information about the ranked supplier.",
-                  "allOf": [ { "$ref": "#/components/schemas/dealSupplier" } ]
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/dealSupplier"
+                    }
+                  ]
+                },
+                "pricingComponentAnswers": {
+                  "type": "array",
+                  "readOnly": true,
+                  "description": "Original submitted pricing component answers for this ranked supplier. Returns [] when no components are configured; configured components without answers have responses: [].",
+                  "items": {
+                    "$ref": "#/components/schemas/pricingComponentAnswer"
+                  }
                 }
-              }
+              },
+              "required": [
+                "pricingComponentAnswers"
+              ]
+            }
+          },
+          "pricingComponentAnswers": {
+            "type": "array",
+            "readOnly": true,
+            "description": "Original submitted pricing component answers for the winning supplier. Returns [] when no components are configured; configured components without answers have responses: [].",
+            "items": {
+              "$ref": "#/components/schemas/pricingComponentAnswer"
             }
           }
-        }
+        },
+        "required": [
+          "pricingComponentAnswers"
+        ]
       },
       "dealSupplier": {
         "type": "object",

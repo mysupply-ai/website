@@ -15876,11 +15876,353 @@
                 "application/ld+json": {
                   "schema": {
                     "$ref": "#/components/schemas/DefaultRequestItem.DealInfo.jsonld-demand.deal.output_money.get.output_file.output"
+                  },
+                  "examples": {
+                    "currentContract": {
+                      "summary": "Current contract: requested quantity 88, additional quantities 50 and 100",
+                      "description": "Historical supplied business values with the approved Delivery Time string mapping applied; supplier details and component IDs are illustrative. No ranked offers; this example does not establish live ranked-answer coverage. JSON-LD metadata is illustrative; blank-node IDs are not stable.",
+                      "value": {
+                        "demandId": "4d721417-8de4-4d20-855f-0d944674dd04",
+                        "hasDeal": true,
+                        "unitPrice": {
+                          "amount": "100.0000",
+                          "currency": "EUR"
+                        },
+                        "supplier": {
+                          "email": "the-winner@chairs.com",
+                          "supplierNumber": "ex-993841",
+                          "supplierDomain": "sap",
+                          "companyName": "The Best Chairs & Sons Ltd.",
+                          "externalRequestId": "4500012345"
+                        },
+                        "negotiationNotes": null,
+                        "requirements": [],
+                        "questions": [],
+                        "rankedSupplierOffers": [],
+                        "pricingComponentAnswers": [
+                          {
+                            "componentId": "9ab1d017-92a4-4f11-a01c-f651ba361751",
+                            "type": "volume_pricing",
+                            "name": "Scale Price",
+                            "responses": [
+                              {
+                                "quantity": "88.0000",
+                                "value": {
+                                  "unitPrice": {
+                                    "amount": "100.0000",
+                                    "currency": "EUR"
+                                  }
+                                },
+                                "@id": "_:response1_1",
+                                "@type": "PricingComponentResponse"
+                              },
+                              {
+                                "quantity": "50.0000",
+                                "value": {
+                                  "unitPrice": {
+                                    "amount": "100.0000",
+                                    "currency": "EUR"
+                                  }
+                                },
+                                "@id": "_:response1_2",
+                                "@type": "PricingComponentResponse"
+                              },
+                              {
+                                "quantity": "100.0000",
+                                "value": {
+                                  "unitPrice": {
+                                    "amount": "150.0000",
+                                    "currency": "EUR"
+                                  }
+                                },
+                                "@id": "_:response1_3",
+                                "@type": "PricingComponentResponse"
+                              }
+                            ],
+                            "@id": "_:component1",
+                            "@type": "PricingComponentAnswer"
+                          },
+                          {
+                            "componentId": "9ab1d017-92a4-4f11-a01c-f651ba361755",
+                            "type": "discount_surcharge",
+                            "name": "Discount",
+                            "responses": [
+                              {
+                                "quantity": "88.0000",
+                                "value": {
+                                  "percentage": "100"
+                                },
+                                "@id": "_:response2_1",
+                                "@type": "PricingComponentResponse"
+                              },
+                              {
+                                "quantity": "50.0000",
+                                "value": {
+                                  "percentage": "200"
+                                },
+                                "@id": "_:response2_2",
+                                "@type": "PricingComponentResponse"
+                              },
+                              {
+                                "quantity": "100.0000",
+                                "value": {
+                                  "percentage": "300"
+                                },
+                                "@id": "_:response2_3",
+                                "@type": "PricingComponentResponse"
+                              }
+                            ],
+                            "@id": "_:component2",
+                            "@type": "PricingComponentAnswer"
+                          },
+                          {
+                            "componentId": "9ab1d017-92a4-4f11-a01c-f651ba361756",
+                            "type": "delivery_time",
+                            "name": "Delivery Time",
+                            "responses": [
+                              {
+                                "quantity": "88.0000",
+                                "value": {
+                                  "days": "56"
+                                },
+                                "@id": "_:response3_1",
+                                "@type": "PricingComponentResponse"
+                              }
+                            ],
+                            "@id": "_:component3",
+                            "@type": "PricingComponentAnswer"
+                          }
+                        ],
+                        "@context": {
+                          "@vocab": "https://example.com/vocab/",
+                          "hydra": "http://www.w3.org/ns/hydra/core#"
+                        },
+                        "@id": "_:deal1",
+                        "@type": "DealInfo"
+                      }
+                    },
+                    "deliveryTimeEmptyAnswer": {
+                      "summary": "An existing Delivery Time answer containing an empty string",
+                      "description": "Illustrative example: one response with days \"\" is an existing answer. An absent answer object instead has responses: []. Strings retain whitespace and leading zeros.",
+                      "value": {
+                        "demandId": "4d721417-8de4-4d20-855f-0d944674dd04",
+                        "hasDeal": true,
+                        "unitPrice": {
+                          "amount": "100.0000",
+                          "currency": "EUR"
+                        },
+                        "supplier": {
+                          "email": "the-winner@chairs.com",
+                          "supplierNumber": "ex-993841",
+                          "supplierDomain": "sap",
+                          "companyName": "The Best Chairs & Sons Ltd.",
+                          "externalRequestId": "4500012345"
+                        },
+                        "negotiationNotes": null,
+                        "requirements": [],
+                        "questions": [],
+                        "rankedSupplierOffers": [],
+                        "pricingComponentAnswers": [
+                          {
+                            "componentId": "9ab1d017-92a4-4f11-a01c-f651ba361756",
+                            "type": "delivery_time",
+                            "name": "Delivery Time",
+                            "responses": [
+                              {
+                                "quantity": "88.0000",
+                                "value": {
+                                  "days": ""
+                                },
+                                "@id": "_:response1_1",
+                                "@type": "PricingComponentResponse"
+                              }
+                            ],
+                            "@id": "_:component1",
+                            "@type": "PricingComponentAnswer"
+                          }
+                        ],
+                        "@context": {
+                          "@vocab": "https://example.com/vocab/",
+                          "hydra": "http://www.w3.org/ns/hydra/core#"
+                        },
+                        "@id": "_:deal1",
+                        "@type": "DealInfo"
+                      }
+                    },
+                    "noDeal": {
+                      "summary": "No deal exists",
+                      "description": "Illustrative no-deal response with price and supplier fields omitted and empty collections.",
+                      "value": {
+                        "demandId": "4d721417-8de4-4d20-855f-0d944674dd04",
+                        "hasDeal": false,
+                        "negotiationNotes": null,
+                        "requirements": [],
+                        "questions": [],
+                        "rankedSupplierOffers": [],
+                        "pricingComponentAnswers": [],
+                        "@context": {
+                          "@vocab": "https://example.com/vocab/",
+                          "hydra": "http://www.w3.org/ns/hydra/core#"
+                        },
+                        "@id": "_:deal1",
+                        "@type": "DealInfo"
+                      }
+                    }
                   }
                 },
                 "application/json": {
                   "schema": {
                     "$ref": "#/components/schemas/DefaultRequestItem.DealInfo-demand.deal.output_money.get.output_file.output"
+                  },
+                  "examples": {
+                    "currentContract": {
+                      "summary": "Current contract: requested quantity 88, additional quantities 50 and 100",
+                      "description": "Historical supplied business values with the approved Delivery Time string mapping applied; supplier details and component IDs are illustrative. No ranked offers; this example does not establish live ranked-answer coverage.",
+                      "value": {
+                        "demandId": "4d721417-8de4-4d20-855f-0d944674dd04",
+                        "hasDeal": true,
+                        "unitPrice": {
+                          "amount": "100.0000",
+                          "currency": "EUR"
+                        },
+                        "supplier": {
+                          "email": "the-winner@chairs.com",
+                          "supplierNumber": "ex-993841",
+                          "supplierDomain": "sap",
+                          "companyName": "The Best Chairs & Sons Ltd.",
+                          "externalRequestId": "4500012345"
+                        },
+                        "negotiationNotes": null,
+                        "requirements": [],
+                        "questions": [],
+                        "rankedSupplierOffers": [],
+                        "pricingComponentAnswers": [
+                          {
+                            "componentId": "9ab1d017-92a4-4f11-a01c-f651ba361751",
+                            "type": "volume_pricing",
+                            "name": "Scale Price",
+                            "responses": [
+                              {
+                                "quantity": "88.0000",
+                                "value": {
+                                  "unitPrice": {
+                                    "amount": "100.0000",
+                                    "currency": "EUR"
+                                  }
+                                }
+                              },
+                              {
+                                "quantity": "50.0000",
+                                "value": {
+                                  "unitPrice": {
+                                    "amount": "100.0000",
+                                    "currency": "EUR"
+                                  }
+                                }
+                              },
+                              {
+                                "quantity": "100.0000",
+                                "value": {
+                                  "unitPrice": {
+                                    "amount": "150.0000",
+                                    "currency": "EUR"
+                                  }
+                                }
+                              }
+                            ]
+                          },
+                          {
+                            "componentId": "9ab1d017-92a4-4f11-a01c-f651ba361755",
+                            "type": "discount_surcharge",
+                            "name": "Discount",
+                            "responses": [
+                              {
+                                "quantity": "88.0000",
+                                "value": {
+                                  "percentage": "100"
+                                }
+                              },
+                              {
+                                "quantity": "50.0000",
+                                "value": {
+                                  "percentage": "200"
+                                }
+                              },
+                              {
+                                "quantity": "100.0000",
+                                "value": {
+                                  "percentage": "300"
+                                }
+                              }
+                            ]
+                          },
+                          {
+                            "componentId": "9ab1d017-92a4-4f11-a01c-f651ba361756",
+                            "type": "delivery_time",
+                            "name": "Delivery Time",
+                            "responses": [
+                              {
+                                "quantity": "88.0000",
+                                "value": {
+                                  "days": "56"
+                                }
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    },
+                    "deliveryTimeEmptyAnswer": {
+                      "summary": "An existing Delivery Time answer containing an empty string",
+                      "description": "Illustrative example: one response with days \"\" is an existing answer. An absent answer object instead has responses: []. Strings retain whitespace and leading zeros.",
+                      "value": {
+                        "demandId": "4d721417-8de4-4d20-855f-0d944674dd04",
+                        "hasDeal": true,
+                        "unitPrice": {
+                          "amount": "100.0000",
+                          "currency": "EUR"
+                        },
+                        "supplier": {
+                          "email": "the-winner@chairs.com",
+                          "supplierNumber": "ex-993841",
+                          "supplierDomain": "sap",
+                          "companyName": "The Best Chairs & Sons Ltd.",
+                          "externalRequestId": "4500012345"
+                        },
+                        "negotiationNotes": null,
+                        "requirements": [],
+                        "questions": [],
+                        "rankedSupplierOffers": [],
+                        "pricingComponentAnswers": [
+                          {
+                            "componentId": "9ab1d017-92a4-4f11-a01c-f651ba361756",
+                            "type": "delivery_time",
+                            "name": "Delivery Time",
+                            "responses": [
+                              {
+                                "quantity": "88.0000",
+                                "value": {
+                                  "days": ""
+                                }
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    },
+                    "noDeal": {
+                      "summary": "No deal exists",
+                      "description": "Illustrative no-deal response with price and supplier fields omitted and empty collections.",
+                      "value": {
+                        "demandId": "4d721417-8de4-4d20-855f-0d944674dd04",
+                        "hasDeal": false,
+                        "negotiationNotes": null,
+                        "requirements": [],
+                        "questions": [],
+                        "rankedSupplierOffers": [],
+                        "pricingComponentAnswers": []
+                      }
+                    }
                   }
                 },
                 "text/html": {
@@ -15895,7 +16237,7 @@
             }
           },
           "summary": "Retrieves a DefaultRequestItem resource.",
-          "description": "Retrieves a DefaultRequestItem resource.",
+          "description": "Returns deal information and original pricing component answers for the awarded supplier and matching Request item, with participation lookup for legacy demands without awarding data and for ranked offers. Submitted answers may differ from negotiated unitPrice. Delivery Time returns the original stored string in value.days unchanged, including text or an empty string; input validation is unchanged. JSON-LD metadata is retained outside value and nested money values. See the public API documentation for detailed rules and examples.",
           "parameters": [
             {
               "name": "id",
@@ -48215,6 +48557,378 @@
             }
           }
         },
+        "pricingComponentAnswer": {
+          "type": "object",
+          "readOnly": true,
+          "description": "One configured pricing component and this supplier's original submitted answers. Values are supplier answers, not calculated TCO contributions.",
+          "required": [
+            "componentId",
+            "type",
+            "name",
+            "responses"
+          ],
+          "properties": {
+            "componentId": {
+              "type": "string",
+              "format": "uuid",
+              "description": "Stable configured component ID. Separate Free Text instances have separate IDs.",
+              "example": "9ab1d017-92a4-4f11-a01c-f651ba361756"
+            },
+            "type": {
+              "type": "string",
+              "description": "Existing backend component identifier.",
+              "enum": [
+                "volume_pricing",
+                "one_time_price",
+                "transportation_cost",
+                "packaging_cost",
+                "discount_surcharge",
+                "delivery_time",
+                "free_text"
+              ]
+            },
+            "name": {
+              "type": "string",
+              "description": "Saved buyer-configured name, preserved unchanged.",
+              "example": "Delivery Time"
+            },
+            "responses": {
+              "type": "array",
+              "description": "Answers with explicit string quantities and values typed by component type. Returns [] when unanswered.",
+              "items": {
+                "type": "object"
+              }
+            }
+          },
+          "oneOf": [
+            {
+              "type": "object",
+              "properties": {
+                "type": {
+                  "type": "string",
+                  "enum": [
+                    "volume_pricing"
+                  ]
+                },
+                "responses": {
+                  "type": "array",
+                  "description": "Original answers for explicit quantities. Empty when this configured component has no answer.",
+                  "items": {
+                    "type": "object",
+                    "required": [
+                      "quantity",
+                      "value"
+                    ],
+                    "properties": {
+                      "quantity": {
+                        "type": "string",
+                        "description": "Quantity scenario to which this answer applies.",
+                        "example": "10.0000"
+                      },
+                      "value": {
+                        "type": "object",
+                        "required": [
+                          "unitPrice"
+                        ],
+                        "properties": {
+                          "unitPrice": {
+                            "$ref": "#/components/schemas/pricingComponentMoney"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "type": "object",
+              "properties": {
+                "type": {
+                  "type": "string",
+                  "enum": [
+                    "one_time_price",
+                    "transportation_cost",
+                    "packaging_cost"
+                  ]
+                },
+                "responses": {
+                  "type": "array",
+                  "description": "Original answers for explicit quantities. Empty when this configured component has no answer.",
+                  "items": {
+                    "type": "object",
+                    "required": [
+                      "quantity",
+                      "value"
+                    ],
+                    "properties": {
+                      "quantity": {
+                        "type": "string",
+                        "description": "Quantity scenario to which this answer applies.",
+                        "example": "10.0000"
+                      },
+                      "value": {
+                        "$ref": "#/components/schemas/pricingComponentMoney"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "type": "object",
+              "properties": {
+                "type": {
+                  "type": "string",
+                  "enum": [
+                    "discount_surcharge"
+                  ]
+                },
+                "responses": {
+                  "type": "array",
+                  "description": "Original answers for explicit quantities. Empty when this configured component has no answer.",
+                  "items": {
+                    "type": "object",
+                    "required": [
+                      "quantity",
+                      "value"
+                    ],
+                    "properties": {
+                      "quantity": {
+                        "type": "string",
+                        "description": "Quantity scenario to which this answer applies.",
+                        "example": "10.0000"
+                      },
+                      "value": {
+                        "$ref": "#/components/schemas/pricingComponentAdjustment"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "type": "object",
+              "properties": {
+                "type": {
+                  "type": "string",
+                  "enum": [
+                    "delivery_time"
+                  ]
+                },
+                "responses": {
+                  "type": "array",
+                  "description": "Original answers for explicit quantities. Empty when this configured component has no answer.",
+                  "items": {
+                    "type": "object",
+                    "required": [
+                      "quantity",
+                      "value"
+                    ],
+                    "properties": {
+                      "quantity": {
+                        "type": "string",
+                        "description": "Quantity scenario to which this answer applies.",
+                        "example": "10.0000"
+                      },
+                      "value": {
+                        "type": "object",
+                        "required": [
+                          "days"
+                        ],
+                        "properties": {
+                          "days": {
+                            "type": "string",
+                            "description": "Original stored Delivery Time string, returned unchanged. May contain text or be empty.",
+                            "example": "4 weeks"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "type": "object",
+              "properties": {
+                "type": {
+                  "type": "string",
+                  "enum": [
+                    "free_text"
+                  ]
+                },
+                "responses": {
+                  "type": "array",
+                  "description": "Original answers for explicit quantities. Empty when this configured component has no answer.",
+                  "items": {
+                    "type": "object",
+                    "required": [
+                      "quantity",
+                      "value"
+                    ],
+                    "properties": {
+                      "quantity": {
+                        "type": "string",
+                        "description": "Quantity scenario to which this answer applies.",
+                        "example": "10.0000"
+                      },
+                      "value": {
+                        "type": "object",
+                        "required": [
+                          "text"
+                        ],
+                        "properties": {
+                          "text": {
+                            "type": "string",
+                            "example": "Delivery by appointment"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          ]
+        },
+        "pricingComponentMoney": {
+          "type": "object",
+          "description": "An original submitted monetary answer. Amounts are signed four-decimal strings; zero is a valid answer.",
+          "required": [
+            "amount",
+            "currency"
+          ],
+          "properties": {
+            "amount": {
+              "type": "string",
+              "pattern": "^-?\\d+\\.\\d{4}$",
+              "example": "120.0000"
+            },
+            "currency": {
+              "type": "string",
+              "example": "EUR"
+            }
+          }
+        },
+        "pricingComponentAdjustment": {
+          "type": "object",
+          "description": "Absolute and percentage adjustments may appear together. Omit a field when it was not supplied. Preserve signs; \"-2.5000\" means minus 2.5%. Zero differs from missing.",
+          "properties": {
+            "absolute": {
+              "$ref": "#/components/schemas/pricingComponentMoney"
+            },
+            "percentage": {
+              "type": "string",
+              "description": "Signed percentage as submitted, expressed in percent.",
+              "example": "-2.5000",
+              "pattern": "^-?[0-9]+(\\.[0-9]+)?$"
+            }
+          },
+          "anyOf": [
+            {
+              "required": [
+                "absolute"
+              ]
+            },
+            {
+              "required": [
+                "percentage"
+              ]
+            }
+          ]
+        },
+        "pricingComponentAnswer.jsonld": {
+          "type": "object",
+          "description": "JSON-LD pricing component. Business fields and typed value shapes are identical to JSON; metadata is retained on components and quantity-response objects, never added inside value or nested money values.",
+          "allOf": [
+            {
+              "$ref": "#/components/schemas/pricingComponentAnswer"
+            }
+          ],
+          "properties": {
+            "@context": {
+              "readOnly": true,
+              "oneOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "@vocab": {
+                      "type": "string"
+                    },
+                    "hydra": {
+                      "type": "string",
+                      "enum": [
+                        "http://www.w3.org/ns/hydra/core#"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "@vocab",
+                    "hydra"
+                  ],
+                  "additionalProperties": true
+                }
+              ]
+            },
+            "@id": {
+              "readOnly": true,
+              "type": "string",
+              "description": "JSON-LD identifier. Blank-node IDs are not stable; componentId identifies a configured component."
+            },
+            "@type": {
+              "readOnly": true,
+              "type": "string"
+            },
+            "responses": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "@context": {
+                    "readOnly": true,
+                    "oneOf": [
+                      {
+                        "type": "string"
+                      },
+                      {
+                        "type": "object",
+                        "properties": {
+                          "@vocab": {
+                            "type": "string"
+                          },
+                          "hydra": {
+                            "type": "string",
+                            "enum": [
+                              "http://www.w3.org/ns/hydra/core#"
+                            ]
+                          }
+                        },
+                        "required": [
+                          "@vocab",
+                          "hydra"
+                        ],
+                        "additionalProperties": true
+                      }
+                    ]
+                  },
+                  "@id": {
+                    "readOnly": true,
+                    "type": "string",
+                    "description": "JSON-LD identifier. Blank-node IDs are not stable; componentId identifies a configured component."
+                  },
+                  "@type": {
+                    "readOnly": true,
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
         "DefaultRequestItem.DealInfo-demand.deal.output_money.get.output_file.output": {
           "type": "object",
           "description": "DefaultRequestItem Resource",
@@ -48245,8 +48959,146 @@
             "negotiationNotes": {
               "type": "string",
               "nullable": true
+            },
+            "pricingComponentAnswers": {
+              "type": "array",
+              "readOnly": true,
+              "description": "Original submitted pricing component answers for the winning supplier. Returns [] when no components are configured; configured components without answers have responses: [].",
+              "items": {
+                "$ref": "#/components/schemas/pricingComponentAnswer"
+              }
+            },
+            "rankedSupplierOffers": {
+              "type": "array",
+              "readOnly": true,
+              "description": "Second and third ranked supplier offers, ordered by rank. The winning supplier remains available in the supplier and unitPrice fields for backward compatibility.",
+              "maxItems": 2,
+              "items": {
+                "type": "object",
+                "properties": {
+                  "rank": {
+                    "type": "integer",
+                    "readOnly": true,
+                    "description": "Supplier offer rank. Values are 2 and 3."
+                  },
+                  "unitPrice": {
+                    "readOnly": true,
+                    "description": "The price for a single unit of the demand.",
+                    "allOf": [
+                      {
+                        "$ref": "#/components/schemas/Money-demand.deal.output_money.get.output_file.output"
+                      }
+                    ]
+                  },
+                  "supplier": {
+                    "readOnly": true,
+                    "description": "Information about the ranked supplier.",
+                    "allOf": [
+                      {
+                        "$ref": "#/components/schemas/WonSupplier-demand.deal.output_money.get.output_file.output"
+                      }
+                    ]
+                  },
+                  "pricingComponentAnswers": {
+                    "type": "array",
+                    "readOnly": true,
+                    "description": "Original submitted pricing component answers for this ranked supplier. Returns [] when no components are configured; configured components without answers have responses: [].",
+                    "items": {
+                      "$ref": "#/components/schemas/pricingComponentAnswer"
+                    }
+                  }
+                },
+                "required": [
+                  "pricingComponentAnswers"
+                ]
+              }
+            },
+            "requirements": {
+              "type": "array",
+              "readOnly": true,
+              "description": "Answers provided by the awarded supplier for workflow requirements.",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "title": {
+                    "type": "string",
+                    "readOnly": true,
+                    "description": "Requirement title."
+                  },
+                  "compliant": {
+                    "type": "boolean",
+                    "nullable": true,
+                    "readOnly": true,
+                    "description": "Whether the supplier marked the requirement as compliant."
+                  },
+                  "answer": {
+                    "type": "string",
+                    "nullable": true,
+                    "readOnly": true,
+                    "description": "Answer provided for the requirement."
+                  },
+                  "note": {
+                    "type": "string",
+                    "nullable": true,
+                    "readOnly": true,
+                    "description": "Additional note provided for the requirement."
+                  },
+                  "description": {
+                    "type": "string",
+                    "nullable": true,
+                    "readOnly": true,
+                    "description": "Requirement description."
+                  },
+                  "required": {
+                    "type": "boolean",
+                    "readOnly": true,
+                    "description": "Whether the requirement was mandatory."
+                  }
+                }
+              }
+            },
+            "questions": {
+              "type": "array",
+              "readOnly": true,
+              "description": "Answers provided by the awarded supplier for workflow questions.",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "title": {
+                    "type": "string",
+                    "readOnly": true,
+                    "description": "Question title."
+                  },
+                  "answer": {
+                    "type": "string",
+                    "nullable": true,
+                    "readOnly": true,
+                    "description": "Answer provided for the question."
+                  },
+                  "note": {
+                    "type": "string",
+                    "nullable": true,
+                    "readOnly": true,
+                    "description": "Additional note provided for the question."
+                  },
+                  "description": {
+                    "type": "string",
+                    "nullable": true,
+                    "readOnly": true,
+                    "description": "Question description."
+                  },
+                  "required": {
+                    "type": "boolean",
+                    "readOnly": true,
+                    "description": "Whether the question was mandatory."
+                  }
+                }
+              }
             }
-          }
+          },
+          "required": [
+            "pricingComponentAnswers"
+          ]
         },
         "DefaultRequestItem.DealInfo.jsonld-demand.deal.output_money.get.output_file.output": {
           "type": "object",
@@ -48313,8 +49165,146 @@
             "negotiationNotes": {
               "type": "string",
               "nullable": true
+            },
+            "pricingComponentAnswers": {
+              "type": "array",
+              "readOnly": true,
+              "description": "Original submitted pricing component answers for the winning supplier. Returns [] when no components are configured; configured components without answers have responses: [].",
+              "items": {
+                "$ref": "#/components/schemas/pricingComponentAnswer.jsonld"
+              }
+            },
+            "rankedSupplierOffers": {
+              "type": "array",
+              "readOnly": true,
+              "description": "Second and third ranked supplier offers, ordered by rank. The winning supplier remains available in the supplier and unitPrice fields for backward compatibility.",
+              "maxItems": 2,
+              "items": {
+                "type": "object",
+                "properties": {
+                  "rank": {
+                    "type": "integer",
+                    "readOnly": true,
+                    "description": "Supplier offer rank. Values are 2 and 3."
+                  },
+                  "unitPrice": {
+                    "readOnly": true,
+                    "description": "The price for a single unit of the demand.",
+                    "allOf": [
+                      {
+                        "$ref": "#/components/schemas/Money.jsonld-demand.deal.output_money.get.output_file.output"
+                      }
+                    ]
+                  },
+                  "supplier": {
+                    "readOnly": true,
+                    "description": "Information about the ranked supplier.",
+                    "allOf": [
+                      {
+                        "$ref": "#/components/schemas/WonSupplier.jsonld-demand.deal.output_money.get.output_file.output"
+                      }
+                    ]
+                  },
+                  "pricingComponentAnswers": {
+                    "type": "array",
+                    "readOnly": true,
+                    "description": "Original submitted pricing component answers for this ranked supplier. Returns [] when no components are configured; configured components without answers have responses: [].",
+                    "items": {
+                      "$ref": "#/components/schemas/pricingComponentAnswer.jsonld"
+                    }
+                  }
+                },
+                "required": [
+                  "pricingComponentAnswers"
+                ]
+              }
+            },
+            "requirements": {
+              "type": "array",
+              "readOnly": true,
+              "description": "Answers provided by the awarded supplier for workflow requirements.",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "title": {
+                    "type": "string",
+                    "readOnly": true,
+                    "description": "Requirement title."
+                  },
+                  "compliant": {
+                    "type": "boolean",
+                    "nullable": true,
+                    "readOnly": true,
+                    "description": "Whether the supplier marked the requirement as compliant."
+                  },
+                  "answer": {
+                    "type": "string",
+                    "nullable": true,
+                    "readOnly": true,
+                    "description": "Answer provided for the requirement."
+                  },
+                  "note": {
+                    "type": "string",
+                    "nullable": true,
+                    "readOnly": true,
+                    "description": "Additional note provided for the requirement."
+                  },
+                  "description": {
+                    "type": "string",
+                    "nullable": true,
+                    "readOnly": true,
+                    "description": "Requirement description."
+                  },
+                  "required": {
+                    "type": "boolean",
+                    "readOnly": true,
+                    "description": "Whether the requirement was mandatory."
+                  }
+                }
+              }
+            },
+            "questions": {
+              "type": "array",
+              "readOnly": true,
+              "description": "Answers provided by the awarded supplier for workflow questions.",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "title": {
+                    "type": "string",
+                    "readOnly": true,
+                    "description": "Question title."
+                  },
+                  "answer": {
+                    "type": "string",
+                    "nullable": true,
+                    "readOnly": true,
+                    "description": "Answer provided for the question."
+                  },
+                  "note": {
+                    "type": "string",
+                    "nullable": true,
+                    "readOnly": true,
+                    "description": "Additional note provided for the question."
+                  },
+                  "description": {
+                    "type": "string",
+                    "nullable": true,
+                    "readOnly": true,
+                    "description": "Question description."
+                  },
+                  "required": {
+                    "type": "boolean",
+                    "readOnly": true,
+                    "description": "Whether the question was mandatory."
+                  }
+                }
+              }
             }
-          }
+          },
+          "required": [
+            "pricingComponentAnswers"
+          ]
         },
         "DefaultRequestItem.DemandSupplierMatchExecutionView": {
           "type": "object",
@@ -91623,7 +92613,41 @@
           }
         },
         "WonSupplier-demand.deal.output_money.get.output_file.output": {
-          "type": "object"
+          "type": "object",
+          "properties": {
+            "email": {
+              "type": "string",
+              "readOnly": true,
+              "example": "the-best@chairs.com"
+            },
+            "supplierNumber": {
+              "type": "string",
+              "nullable": true,
+              "readOnly": true,
+              "description": "The supplier number provided by the purchaser's organization. If no such number is provided, a default one will be set.",
+              "example": "sup-99310"
+            },
+            "supplierDomain": {
+              "type": "string",
+              "readOnly": true,
+              "description": "The supplier domain provided by the purchaser's organization.",
+              "example": "sap",
+              "nullable": true
+            },
+            "companyName": {
+              "type": "string",
+              "readOnly": true,
+              "description": "The name of the company of the supplier as provided by the supplier.",
+              "example": "The Best Chairs & Sons Ltd."
+            },
+            "externalRequestId": {
+              "type": "string",
+              "nullable": true,
+              "readOnly": true,
+              "description": "External request ID assigned to the supplier's Invitation.",
+              "example": "4500012345"
+            }
+          }
         },
         "WonSupplier.jsonld-demand.deal.output_money.get.output_file.output": {
           "type": "object",
@@ -91662,6 +92686,38 @@
             "@type": {
               "readOnly": true,
               "type": "string"
+            },
+            "email": {
+              "type": "string",
+              "readOnly": true,
+              "example": "the-best@chairs.com"
+            },
+            "supplierNumber": {
+              "type": "string",
+              "nullable": true,
+              "readOnly": true,
+              "description": "The supplier number provided by the purchaser's organization. If no such number is provided, a default one will be set.",
+              "example": "sup-99310"
+            },
+            "supplierDomain": {
+              "type": "string",
+              "readOnly": true,
+              "description": "The supplier domain provided by the purchaser's organization.",
+              "example": "sap",
+              "nullable": true
+            },
+            "companyName": {
+              "type": "string",
+              "readOnly": true,
+              "description": "The name of the company of the supplier as provided by the supplier.",
+              "example": "The Best Chairs & Sons Ltd."
+            },
+            "externalRequestId": {
+              "type": "string",
+              "nullable": true,
+              "readOnly": true,
+              "description": "External request ID assigned to the supplier's Invitation.",
+              "example": "4500012345"
             }
           }
         },
